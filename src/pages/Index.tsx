@@ -1,21 +1,26 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
+import { toast } from "sonner";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
-import { generateMockScript } from "@/lib/mockScript";
+import { generateScript } from "@/lib/generateScript";
 
 export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGenerate = (input: ScriptInput) => {
+  const handleGenerate = async (input: ScriptInput) => {
     setIsLoading(true);
     setResult(null);
-    setTimeout(() => {
-      setResult(generateMockScript(input));
+    try {
+      const data = await generateScript(input);
+      setResult(data);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to generate script");
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
