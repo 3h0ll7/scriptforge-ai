@@ -1,1 +1,4 @@
 project_id = "lrhrceelqnmqvyngedfs"
+
+[functions.generate-script]
+verify_jwt = false
