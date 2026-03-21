@@ -2,20 +2,43 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
-import { generateScript } from "@/lib/generateScript";
+import { generateScript, checkAndTrackUsage, incrementUsage, saveToHistory } from "@/lib/generateScript";
+import { useAuth } from "@/hooks/useAuth";
+import Navbar from "@/components/Navbar";
+import PaywallModal from "@/components/PaywallModal";
 
 export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const { user, profile, refreshUsage } = useAuth();
+  const navigate = useNavigate();
 
   const handleGenerate = async (input: ScriptInput) => {
+    if (!user || !profile) {
+      navigate("/auth");
+      return;
+    }
+
+    // Check usage
+    const { allowed, count } = await checkAndTrackUsage(user.id, profile.subscription_tier);
+    if (!allowed) {
+      setShowPaywall(true);
+      return;
+    }
+
     setIsLoading(true);
     setResult(null);
     try {
       const data = await generateScript(input);
       setResult(data);
+      // Track after successful generation
+      await incrementUsage(user.id);
+      await saveToHistory(user.id, input, data.hook?.text || input.topic);
+      await refreshUsage();
     } catch (err: any) {
       toast.error(err.message || "Failed to generate script");
     } finally {
@@ -25,18 +48,8 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="container max-w-6xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="p-2 rounded-xl gradient-primary">
-            <Zap className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-foreground tracking-tight">ScriptForge AI</h1>
-            <p className="text-xs text-muted-foreground">Video scripts that hook, retain, and convert</p>
-          </div>
-        </div>
-      </header>
+      <Navbar />
+      <PaywallModal open={showPaywall} onClose={() => setShowPaywall(false)} />
 
       {/* Hero */}
       <section className="container max-w-6xl mx-auto px-4 pt-12 pb-8">
