@@ -14,7 +14,118 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      generation_history: {
+        Row: {
+          created_at: string
+          duration: string
+          id: string
+          language: string
+          output_preview: string | null
+          platform: string
+          tone: string
+          topic: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration: string
+          id?: string
+          language: string
+          output_preview?: string | null
+          platform: string
+          tone: string
+          topic: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration?: string
+          id?: string
+          language?: string
+          output_preview?: string | null
+          platform?: string
+          tone?: string
+          topic?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generation_history_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          subscription_end_date: string | null
+          subscription_start_date: string | null
+          subscription_tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          subscription_end_date?: string | null
+          subscription_start_date?: string | null
+          subscription_tier?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          subscription_end_date?: string | null
+          subscription_start_date?: string | null
+          subscription_tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      usage_tracking: {
+        Row: {
+          created_at: string
+          generation_count: number
+          id: string
+          last_generation_at: string | null
+          month_year: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          generation_count?: number
+          id?: string
+          last_generation_at?: string | null
+          month_year: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          generation_count?: number
+          id?: string
+          last_generation_at?: string | null
+          month_year?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_tracking_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
