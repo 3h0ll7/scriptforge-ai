@@ -47,9 +47,14 @@ export default function PaywallModal({ open, onClose }: Props) {
                 Upgrade to Pro for unlimited scripts, all platforms, and advanced features
               </p>
 
-              <p className="text-4xl font-bold text-primary">
-                $3<span className="text-lg font-normal text-muted-foreground">/month</span>
-              </p>
+              <div className="space-y-1">
+                <p className="text-4xl font-bold text-primary">
+                  $3<span className="text-lg font-normal text-muted-foreground">/month</span>
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  or <span className="text-primary font-semibold">$24/year</span> (save 33%)
+                </p>
+              </div>
 
               <div className="w-full space-y-2 text-left">
                 {features.map((f) => (

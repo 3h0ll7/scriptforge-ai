@@ -43,8 +43,13 @@ export default function Pricing() {
   const navigate = useNavigate();
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 
   const isPro = profile?.subscription_tier === "pro";
+  const monthlyPrice = 3;
+  const yearlyPrice = 24;
+  const yearlyMonthly = (yearlyPrice / 12).toFixed(0);
+  const savingsPercent = Math.round((1 - yearlyPrice / (monthlyPrice * 12)) * 100);
 
   const handleUpgrade = async () => {
     if (!user) {
@@ -54,7 +59,7 @@ export default function Pricing() {
     setLoadingCheckout(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { user_id: user.id },
+        body: { user_id: user.id, billing_period: billingPeriod },
       });
       if (error) throw error;
       if (data?.url) {
@@ -73,12 +78,39 @@ export default function Pricing() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <section className="container max-w-5xl mx-auto px-4 py-16">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
             <span className="text-gradient">Simple Pricing</span>
           </h2>
           <p className="text-muted-foreground">Start free, upgrade when you need more power.</p>
         </motion.div>
+
+        {/* Billing Toggle */}
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <button
+            onClick={() => setBillingPeriod("monthly")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              billingPeriod === "monthly"
+                ? "bg-primary/15 border border-primary text-primary"
+                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setBillingPeriod("yearly")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+              billingPeriod === "yearly"
+                ? "bg-primary/15 border border-primary text-primary"
+                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+            }`}
+          >
+            Yearly
+            <span className="px-1.5 py-0.5 rounded text-xs font-bold bg-accent/20 text-accent">
+              Save {savingsPercent}%
+            </span>
+          </button>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Free */}
@@ -115,10 +147,25 @@ export default function Pricing() {
             className="rounded-2xl border-2 border-primary bg-card p-8 shadow-card relative"
           >
             <span className="absolute -top-3 left-6 px-3 py-0.5 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
-              Most Popular
+              {billingPeriod === "yearly" ? "Best Value" : "Most Popular"}
             </span>
             <h3 className="text-xl font-bold text-foreground">Pro</h3>
-            <p className="text-3xl font-bold text-primary mt-2">$3<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+            <div className="mt-2">
+              {billingPeriod === "monthly" ? (
+                <p className="text-3xl font-bold text-primary">
+                  ${monthlyPrice}<span className="text-sm font-normal text-muted-foreground">/month</span>
+                </p>
+              ) : (
+                <div>
+                  <p className="text-3xl font-bold text-primary">
+                    ${yearlyPrice}<span className="text-sm font-normal text-muted-foreground">/year</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Just ${yearlyMonthly}/mo · <span className="text-accent font-semibold">Save ${monthlyPrice * 12 - yearlyPrice}/year</span>
+                  </p>
+                </div>
+              )}
+            </div>
             <div className="mt-6 space-y-3">
               {proPlan.map((f) => (
                 <div key={f.text} className="flex items-center gap-2 text-sm">
@@ -134,7 +181,11 @@ export default function Pricing() {
             ) : (
               <Button variant="glow" size="lg" className="w-full mt-8" onClick={handleUpgrade} disabled={loadingCheckout}>
                 <Zap className="w-4 h-4" />
-                {loadingCheckout ? "Loading..." : "Upgrade to Pro"}
+                {loadingCheckout
+                  ? "Loading..."
+                  : billingPeriod === "monthly"
+                  ? `Upgrade to Pro — $${monthlyPrice}/mo`
+                  : `Upgrade to Pro — $${yearlyPrice}/yr`}
               </Button>
             )}
             <div className="flex items-center justify-center gap-2 mt-3 text-muted-foreground">
