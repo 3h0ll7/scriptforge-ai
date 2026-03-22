@@ -35,7 +35,7 @@ const faqs = [
   { q: "What payment methods do you accept?", a: "Mastercard, Visa, and all major credit/debit cards worldwide." },
   { q: "When does my billing cycle reset?", a: "Your free script count resets on the 1st of each month." },
   { q: "Do I lose my scripts if I downgrade?", a: "No, all your previously generated scripts remain in your history." },
-  { q: "Is there a money-back guarantee?", a: "Yes, 7-day money-back guarantee, no questions asked." },
+  
 ];
 
 export default function Pricing() {
