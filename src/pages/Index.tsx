@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
-import { generateScript, checkAndTrackUsage, incrementUsage, saveToHistory } from "@/lib/generateScript";
+import { generateScript, saveToHistory } from "@/lib/generateScript";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 import PaywallModal from "@/components/PaywallModal";
@@ -23,24 +23,23 @@ export default function Index() {
       return;
     }
 
-    // Check usage
-    const { allowed, count } = await checkAndTrackUsage(user.id, profile.subscription_tier);
-    if (!allowed) {
-      setShowPaywall(true);
-      return;
-    }
-
     setIsLoading(true);
     setResult(null);
     try {
       const data = await generateScript(input);
       setResult(data);
-      // Track after successful generation
-      await incrementUsage(user.id);
       await saveToHistory(user.id, input, data.hook?.text || input.topic);
       await refreshUsage();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to generate script");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to generate script";
+      const status = typeof err === "object" && err !== null && "status" in err ? Number(err.status) : undefined;
+
+      if (status === 429) {
+        setShowPaywall(true);
+        return;
+      }
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

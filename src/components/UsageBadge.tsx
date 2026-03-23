@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Infinity, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function UsageBadge() {
   const { profile, usage } = useAuth();
@@ -10,7 +11,7 @@ export default function UsageBadge() {
 
   if (!profile) return null;
 
-  const isPro = profile.subscription_tier === "pro";
+  const isPro = hasActiveProSubscription(profile);
   const count = usage?.generation_count ?? 0;
   const limit = 5;
 

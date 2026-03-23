@@ -7,6 +7,22 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+function constantTimeEqual(a: string, b: string) {
+  const encoder = new TextEncoder();
+  const first = encoder.encode(a);
+  const second = encoder.encode(b);
+  const maxLength = Math.max(first.length, second.length);
+  let result = first.length ^ second.length;
+
+  for (let index = 0; index < maxLength; index += 1) {
+    const firstByte = first[index] ?? 0;
+    const secondByte = second[index] ?? 0;
+    result |= firstByte ^ secondByte;
+  }
+
+  return result === 0;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -14,10 +30,15 @@ serve(async (req) => {
 
   try {
     const webhookSecret = Deno.env.get("GAMMAL_TECH_WEBHOOK_SECRET");
-    
-    // Verify webhook signature if secret is set
-    const signature = req.headers.get("x-webhook-signature");
-    if (webhookSecret && signature !== webhookSecret) {
+    if (!webhookSecret) {
+      return new Response(JSON.stringify({ error: "Webhook secret is not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const signature = req.headers.get("x-webhook-signature") ?? "";
+    if (!constantTimeEqual(signature, webhookSecret)) {
       return new Response(JSON.stringify({ error: "Invalid signature" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

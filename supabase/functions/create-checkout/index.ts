@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,13 +13,37 @@ serve(async (req) => {
   }
 
   try {
-    const { user_id } = await req.json();
-    if (!user_id) {
-      return new Response(JSON.stringify({ error: "user_id required" }), {
-        status: 400,
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+    const authorization = req.headers.get("Authorization");
+
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error("Supabase environment variables are not configured");
+    }
+
+    if (!authorization) {
+      return new Response(JSON.stringify({ error: "Missing authorization header" }), {
+        status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    const authClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: authorization } },
+    });
+    const {
+      data: { user },
+      error: authError,
+    } = await authClient.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { billing_period } = await req.json().catch(() => ({ billing_period: undefined }));
 
     const checkoutUrl = Deno.env.get("GAMMAL_TECH_CHECKOUT_URL");
     if (!checkoutUrl) {
@@ -28,11 +53,13 @@ serve(async (req) => {
       );
     }
 
-    // Append user_id and redirect URLs as query params
     const url = new URL(checkoutUrl);
-    url.searchParams.set("user_id", user_id);
+    url.searchParams.set("user_id", user.id);
     url.searchParams.set("success_url", "https://scriptforgeaii.lovable.app/payment-success");
     url.searchParams.set("cancel_url", "https://scriptforgeaii.lovable.app/payment-cancel");
+    if (typeof billing_period === "string" && billing_period.length > 0) {
+      url.searchParams.set("billing_period", billing_period);
+    }
 
     return new Response(JSON.stringify({ url: url.toString() }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

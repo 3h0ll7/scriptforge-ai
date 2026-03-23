@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
+import { hasActiveProSubscription } from "@/lib/subscription";
 
 const freePlan = [
   { text: "5 scripts per month", included: true },
@@ -45,7 +46,7 @@ export default function Pricing() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
 
-  const isPro = profile?.subscription_tier === "pro";
+  const isPro = hasActiveProSubscription(profile);
   const monthlyPrice = 3;
   const yearlyPrice = 24;
   const yearlyMonthly = (yearlyPrice / 12).toFixed(0);
@@ -59,7 +60,7 @@ export default function Pricing() {
     setLoadingCheckout(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { user_id: user.id, billing_period: billingPeriod },
+        body: { billing_period: billingPeriod },
       });
       if (error) throw error;
       if (data?.url) {
