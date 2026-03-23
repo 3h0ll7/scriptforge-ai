@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
+import { hasActiveProSubscription } from "@/lib/subscription";
 
 interface Profile {
   id: string;
@@ -29,6 +30,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function normalizeProfile(profile: Profile): Profile {
+  if (hasActiveProSubscription(profile)) {
+    return profile;
+  }
+
+  return {
+    ...profile,
+    subscription_tier: "free",
+  };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -47,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select("*")
       .eq("id", userId)
       .single();
-    if (data) setProfile(data as Profile);
+    if (data) setProfile(normalizeProfile(data as Profile));
   };
 
   const fetchUsage = async (userId: string) => {

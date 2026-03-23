@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Settings as SettingsIcon, CreditCard, History, LogOut, User } from "lucide-react";
 import { format } from "date-fns";
+import { hasActiveProSubscription } from "@/lib/subscription";
 
 interface HistoryItem {
   id: string;
@@ -38,7 +39,7 @@ export default function Settings() {
 
   if (!user || !profile) return null;
 
-  const isPro = profile.subscription_tier === "pro";
+  const isPro = hasActiveProSubscription(profile);
 
   const handleSignOut = async () => {
     await signOut();

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import UsageBadge from "./UsageBadge";
 import { useState } from "react";
+import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function Navbar() {
   const { user, profile, signOut, loading } = useAuth();
@@ -13,6 +14,8 @@ export default function Navbar() {
     await signOut();
     navigate("/");
   };
+
+  const isPro = hasActiveProSubscription(profile);
 
   return (
     <header className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
@@ -67,7 +70,7 @@ export default function Navbar() {
                           {profile?.email || user.email}
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {profile?.subscription_tier === "pro" ? "Pro Plan" : "Free Plan"}
+                          {isPro ? "Pro Plan" : "Free Plan"}
                         </p>
                       </div>
                       <div className="p-1">

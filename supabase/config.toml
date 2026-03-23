@@ -1,10 +1,10 @@
 project_id = "lrhrceelqnmqvyngedfs"
 
 [functions.generate-script]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-checkout]
-verify_jwt = false
+verify_jwt = true
 
 [functions.payment-webhook]
 verify_jwt = false
