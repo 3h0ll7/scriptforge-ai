@@ -98,11 +98,18 @@
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Create a local `.env` file in the root directory by copying `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the values:
 
 ```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_PROJECT_ID=your_supabase_project_id
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
 APP_BASE_URL=https://your-production-app-domain.com
 ```
 
@@ -165,7 +172,8 @@ scriptforge-ai/
 ├── supabase/
 │   ├── migrations/        # Database schema migrations
 │   └── functions/         # Edge functions
-├── .env                   # Environment variables
+├── .env.example           # Safe environment template
+├── .env                   # Local environment variables (gitignored)
 ├── vite.config.ts         # Vite configuration
 ├── tailwind.config.ts     # Tailwind configuration
 └── tsconfig.json          # TypeScript configuration

@@ -1,0 +1,13 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# local environment files
+.env
+.env.*
+!.env.example
+
+# local Supabase state
+.supabase/
