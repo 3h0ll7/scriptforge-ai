@@ -103,6 +103,7 @@ Create a `.env` file in the root directory:
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+APP_BASE_URL=https://your-production-app-domain.com
 ```
 
 ### Installation
@@ -136,6 +137,8 @@ npx supabase link --project-ref your-project-ref
 # Apply database migrations
 npx supabase db push
 ```
+
+For the `create-checkout` edge function, set `APP_BASE_URL` in your Supabase project secrets so payment success/cancel redirects return users to the correct deployed domain.
 
 ### Build for Production
 
