@@ -104,13 +104,11 @@ Create a local `.env` file in the root directory by copying `.env.example`:
 cp .env.example .env
 ```
 
-Then fill in the values:
+Then replace every placeholder with values from your own Supabase project. Keep real credentials and deployment-specific values in your local environment or Supabase secrets, and never commit them to source control.
 
 ```env
-VITE_SUPABASE_PROJECT_ID=your_supabase_project_id
-VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+VITE_SUPABASE_PUBLISHABLE_KEY=replace-with-your-supabase-publishable-key
 VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-APP_BASE_URL=https://your-production-app-domain.com
 ```
 
 ### Installation
@@ -145,7 +143,7 @@ npx supabase link --project-ref your-project-ref
 npx supabase db push
 ```
 
-For the `create-checkout` edge function, set `APP_BASE_URL` in your Supabase project secrets so payment success/cancel redirects return users to the correct deployed domain.
+For the `create-checkout` edge function, set `APP_BASE_URL` in your Supabase project secrets (not in your local `.env` file) so payment success/cancel redirects return users to the correct deployed domain.
 
 ### Build for Production
 
