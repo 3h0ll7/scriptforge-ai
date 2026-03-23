@@ -7,6 +7,38 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const DEFAULT_APP_BASE_URL = "https://scriptforgeaii.lovable.app";
+
+function normalizeBaseUrl(url: string | null | undefined) {
+  if (!url) return null;
+
+  try {
+    return new URL(url).origin.replace(/\/$/, "");
+  } catch {
+    return null;
+  }
+}
+
+function getForwardedOrigin(req: Request) {
+  const forwardedHost = req.headers.get("x-forwarded-host");
+  if (!forwardedHost) {
+    return null;
+  }
+
+  const forwardedProto = req.headers.get("x-forwarded-proto") || "https";
+  return normalizeBaseUrl(`${forwardedProto}://${forwardedHost}`);
+}
+
+function getAppBaseUrl(req: Request) {
+  return (
+    normalizeBaseUrl(Deno.env.get("APP_BASE_URL")) ||
+    normalizeBaseUrl(req.headers.get("origin")) ||
+    normalizeBaseUrl(req.headers.get("referer")) ||
+    getForwardedOrigin(req) ||
+    DEFAULT_APP_BASE_URL
+  );
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -53,10 +85,11 @@ serve(async (req) => {
       );
     }
 
+    const appBaseUrl = getAppBaseUrl(req);
     const url = new URL(checkoutUrl);
     url.searchParams.set("user_id", user.id);
-    url.searchParams.set("success_url", "https://scriptforgeaii.lovable.app/payment-success");
-    url.searchParams.set("cancel_url", "https://scriptforgeaii.lovable.app/payment-cancel");
+    url.searchParams.set("success_url", `${appBaseUrl}/payment-success`);
+    url.searchParams.set("cancel_url", `${appBaseUrl}/payment-cancel`);
     if (typeof billing_period === "string" && billing_period.length > 0) {
       url.searchParams.set("billing_period", billing_period);
     }
