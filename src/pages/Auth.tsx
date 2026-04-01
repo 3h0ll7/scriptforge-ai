@@ -146,7 +146,7 @@ export default function Auth() {
                 className="w-full rounded-2xl border border-input bg-background pl-10 pr-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
-            <Button type="submit" variant="glow" size="lg" className="w-full" disabled={loading}>
+            <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={loading}>
               {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>

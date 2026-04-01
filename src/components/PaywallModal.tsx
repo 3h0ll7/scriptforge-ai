@@ -73,7 +73,7 @@ export default function PaywallModal({ open, onClose }: Props) {
               <Button
                 variant="glow"
                 size="lg"
-                className="w-full"
+                className="w-full rounded-full"
                 onClick={() => {
                   onClose();
                   navigate("/pricing");
