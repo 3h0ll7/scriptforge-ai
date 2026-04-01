@@ -16,18 +16,18 @@ export default function UsageBadge() {
   const limit = 5;
 
   const color = isPro
-    ? "text-primary border-primary/40 bg-primary/10"
+    ? "chip-pink"
     : count <= 2
-    ? "text-green-400 border-green-400/40 bg-green-400/10"
+    ? "chip-green"
     : count <= 4
-    ? "text-yellow-400 border-yellow-400/40 bg-yellow-400/10"
-    : "text-red-400 border-red-400/40 bg-red-400/10";
+    ? "chip-yellow"
+    : "chip-pink";
 
   return (
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-all ${color}`}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${color}`}
       >
         {isPro ? (
           <>
@@ -42,7 +42,7 @@ export default function UsageBadge() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-xl border border-border bg-card p-4 shadow-card space-y-3">
+          <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card p-4 shadow-card space-y-3">
             <p className="text-sm text-foreground font-medium">
               {isPro
                 ? "Unlimited scripts — Pro Plan"
@@ -54,7 +54,7 @@ export default function UsageBadge() {
                   setOpen(false);
                   navigate("/pricing");
                 }}
-                className="w-full text-center text-xs font-semibold text-primary-foreground gradient-primary rounded-lg py-2 hover:opacity-90 transition-opacity"
+                className="w-full text-center text-xs font-semibold text-primary-foreground gradient-primary rounded-full py-2 hover:opacity-90 transition-opacity"
               >
                 Upgrade to Pro
               </button>

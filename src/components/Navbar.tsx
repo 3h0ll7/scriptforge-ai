@@ -18,10 +18,10 @@ export default function Navbar() {
   const isPro = hasActiveProSubscription(profile);
 
   return (
-    <header className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
+    <header className="bg-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-border/50">
       <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
         <Link to="/" className="flex items-center gap-3">
-          <div className="p-2 rounded-xl gradient-primary">
+          <div className="p-2 rounded-2xl gradient-primary">
             <Zap className="w-5 h-5 text-primary-foreground" />
           </div>
           <div className="hidden sm:block">
@@ -40,7 +40,7 @@ export default function Navbar() {
 
           {!loading && !user && (
             <Link to="/auth">
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium gradient-primary text-primary-foreground hover:opacity-90 transition-opacity">
+              <button className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold gradient-primary text-primary-foreground hover:opacity-90 transition-opacity">
                 <LogIn className="w-4 h-4" />
                 Sign In
               </button>
@@ -53,9 +53,9 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg border border-border bg-secondary hover:bg-muted transition-colors"
+                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-full border border-border bg-card hover:bg-muted transition-colors"
                 >
-                  <div className="w-6 h-6 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
+                  <div className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
                     {(profile?.email || user.email || "U")[0].toUpperCase()}
                   </div>
                   <ChevronDown className="w-3 h-3 text-muted-foreground" />
@@ -64,7 +64,7 @@ export default function Navbar() {
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-xl border border-border bg-card shadow-card overflow-hidden">
+                    <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card shadow-card overflow-hidden">
                       <div className="p-3 border-b border-border">
                         <p className="text-sm font-medium text-foreground truncate">
                           {profile?.email || user.email}
@@ -76,21 +76,21 @@ export default function Navbar() {
                       <div className="p-1">
                         <button
                           onClick={() => { setMenuOpen(false); navigate("/pricing"); }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
                         >
                           <CreditCard className="w-4 h-4 text-muted-foreground" />
                           Pricing
                         </button>
                         <button
                           onClick={() => { setMenuOpen(false); navigate("/settings"); }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
                         >
                           <Settings className="w-4 h-4 text-muted-foreground" />
                           Settings
                         </button>
                         <button
                           onClick={() => { setMenuOpen(false); handleSignOut(); }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-muted rounded-lg transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-destructive hover:bg-muted rounded-xl transition-colors"
                         >
                           <LogOut className="w-4 h-4" />
                           Sign Out
