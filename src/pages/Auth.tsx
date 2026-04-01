@@ -72,9 +72,9 @@ export default function Auth() {
           Back to home
         </button>
 
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
+        <div className="rounded-3xl bg-card p-8 shadow-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl gradient-primary">
+            <div className="p-2.5 rounded-2xl gradient-primary">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
