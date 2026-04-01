@@ -180,7 +180,7 @@ export default function Pricing() {
                 Current Plan ✓
               </Button>
             ) : (
-              <Button variant="glow" size="lg" className="w-full mt-8" onClick={handleUpgrade} disabled={loadingCheckout}>
+              <Button variant="glow" size="lg" className="w-full mt-8 rounded-full" onClick={handleUpgrade} disabled={loadingCheckout}>
                 <Zap className="w-4 h-4" />
                 {loadingCheckout
                   ? "Loading..."
