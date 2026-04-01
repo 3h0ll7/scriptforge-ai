@@ -119,7 +119,7 @@ export default function Pricing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl border border-border bg-card p-8 shadow-card"
+            className="rounded-3xl bg-card p-8 shadow-card"
           >
             <h3 className="text-xl font-bold text-foreground">Free</h3>
             <p className="text-3xl font-bold text-foreground mt-2">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
@@ -135,7 +135,7 @@ export default function Pricing() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-8" disabled={!!user && !isPro}>
+            <Button variant="outline" className="w-full mt-8 rounded-full" disabled={!!user && !isPro}>
               {user && !isPro ? "Current Plan" : "Start Free"}
             </Button>
           </motion.div>
