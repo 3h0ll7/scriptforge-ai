@@ -145,9 +145,9 @@ export default function Pricing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-2xl border-2 border-primary bg-card p-8 shadow-card relative"
+            className="rounded-3xl bg-card p-8 shadow-card ring-2 ring-primary relative"
           >
-            <span className="absolute -top-3 left-6 px-3 py-0.5 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
+            <span className="absolute -top-3 left-6 px-4 py-1 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
               {billingPeriod === "yearly" ? "Best Value" : "Most Popular"}
             </span>
             <h3 className="text-xl font-bold text-foreground">Pro</h3>
