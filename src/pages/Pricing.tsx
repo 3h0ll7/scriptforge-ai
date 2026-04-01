@@ -90,24 +90,24 @@ export default function Pricing() {
         <div className="flex items-center justify-center gap-3 mb-10">
           <button
             onClick={() => setBillingPeriod("monthly")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
               billingPeriod === "monthly"
-                ? "bg-primary/15 border border-primary text-primary"
-                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+                ? "chip-pink"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
             Monthly
           </button>
           <button
             onClick={() => setBillingPeriod("yearly")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2 ${
               billingPeriod === "yearly"
-                ? "bg-primary/15 border border-primary text-primary"
-                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+                ? "chip-blue"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
             Yearly
-            <span className="px-1.5 py-0.5 rounded text-xs font-bold bg-accent/20 text-accent">
+            <span className="px-2 py-0.5 rounded-full text-xs font-bold chip-yellow">
               Save {savingsPercent}%
             </span>
           </button>
