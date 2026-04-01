@@ -97,7 +97,7 @@ export default function Settings() {
               {usage?.generation_count ?? 0} scripts generated this month
             </p>
             {!isPro && (
-              <Button variant="glow" size="sm" onClick={() => navigate("/pricing")}>
+              <Button variant="glow" size="sm" className="rounded-full" onClick={() => navigate("/pricing")}>
                 Upgrade to Pro
               </Button>
             )}
