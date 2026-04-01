@@ -33,7 +33,7 @@ export default function PaywallModal({ open, onClose }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 60 }}
             transition={{ type: "spring", damping: 25 }}
-            className="relative z-10 w-full max-w-md rounded-t-2xl sm:rounded-2xl border border-border bg-card p-8 shadow-card"
+            className="relative z-10 w-full max-w-md rounded-t-3xl sm:rounded-3xl bg-card p-8 shadow-card"
           >
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-3 rounded-2xl bg-destructive/10">
@@ -73,7 +73,7 @@ export default function PaywallModal({ open, onClose }: Props) {
               <Button
                 variant="glow"
                 size="lg"
-                className="w-full"
+                className="w-full rounded-full"
                 onClick={() => {
                   onClose();
                   navigate("/pricing");

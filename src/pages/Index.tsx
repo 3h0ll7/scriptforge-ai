@@ -57,11 +57,11 @@ export default function Index() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-2xl mx-auto mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-foreground leading-tight">
             <span className="text-gradient">Craft Scripts</span>{" "}
-            <span className="text-foreground">That Go Viral</span>
+            That Go Viral
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-base">
             Platform-optimized scripts with hooks, retention strategies, and calls to action — built for YouTube, TikTok, Reels, and more.
           </p>
         </motion.div>
@@ -76,7 +76,7 @@ export default function Index() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="rounded-2xl border border-dashed border-border bg-card/30 p-12 flex flex-col items-center justify-center text-center min-h-[400px]"
+                className="rounded-3xl border border-dashed border-border bg-card/50 p-12 flex flex-col items-center justify-center text-center min-h-[400px]"
               >
                 <div className="p-4 rounded-2xl bg-muted mb-4">
                   <Zap className="w-8 h-8 text-muted-foreground" />

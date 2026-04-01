@@ -90,24 +90,24 @@ export default function Pricing() {
         <div className="flex items-center justify-center gap-3 mb-10">
           <button
             onClick={() => setBillingPeriod("monthly")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
               billingPeriod === "monthly"
-                ? "bg-primary/15 border border-primary text-primary"
-                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+                ? "chip-pink"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
             Monthly
           </button>
           <button
             onClick={() => setBillingPeriod("yearly")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2 ${
               billingPeriod === "yearly"
-                ? "bg-primary/15 border border-primary text-primary"
-                : "bg-secondary border border-border text-muted-foreground hover:border-primary/40"
+                ? "chip-blue"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
             Yearly
-            <span className="px-1.5 py-0.5 rounded text-xs font-bold bg-accent/20 text-accent">
+            <span className="px-2 py-0.5 rounded-full text-xs font-bold chip-yellow">
               Save {savingsPercent}%
             </span>
           </button>
@@ -119,7 +119,7 @@ export default function Pricing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl border border-border bg-card p-8 shadow-card"
+            className="rounded-3xl bg-card p-8 shadow-card"
           >
             <h3 className="text-xl font-bold text-foreground">Free</h3>
             <p className="text-3xl font-bold text-foreground mt-2">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
@@ -135,7 +135,7 @@ export default function Pricing() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-8" disabled={!!user && !isPro}>
+            <Button variant="outline" className="w-full mt-8 rounded-full" disabled={!!user && !isPro}>
               {user && !isPro ? "Current Plan" : "Start Free"}
             </Button>
           </motion.div>
@@ -145,9 +145,9 @@ export default function Pricing() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-2xl border-2 border-primary bg-card p-8 shadow-card relative"
+            className="rounded-3xl bg-card p-8 shadow-card ring-2 ring-primary relative"
           >
-            <span className="absolute -top-3 left-6 px-3 py-0.5 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
+            <span className="absolute -top-3 left-6 px-4 py-1 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
               {billingPeriod === "yearly" ? "Best Value" : "Most Popular"}
             </span>
             <h3 className="text-xl font-bold text-foreground">Pro</h3>
@@ -180,7 +180,7 @@ export default function Pricing() {
                 Current Plan ✓
               </Button>
             ) : (
-              <Button variant="glow" size="lg" className="w-full mt-8" onClick={handleUpgrade} disabled={loadingCheckout}>
+              <Button variant="glow" size="lg" className="w-full mt-8 rounded-full" onClick={handleUpgrade} disabled={loadingCheckout}>
                 <Zap className="w-4 h-4" />
                 {loadingCheckout
                   ? "Loading..."
@@ -201,7 +201,7 @@ export default function Pricing() {
           <h3 className="text-xl font-bold text-foreground mb-6 text-center">Frequently Asked Questions</h3>
           <div className="space-y-2">
             {faqs.map((faq, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card overflow-hidden">
+              <div key={i} className="rounded-2xl bg-card overflow-hidden shadow-card">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between px-5 py-4 text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"

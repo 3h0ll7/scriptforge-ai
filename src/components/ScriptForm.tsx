@@ -14,34 +14,34 @@ export interface ScriptInput {
 }
 
 const platforms = [
-  { value: "youtube", label: "YouTube" },
-  { value: "tiktok", label: "TikTok" },
-  { value: "reels", label: "Reels" },
-  { value: "course", label: "Course" },
-  { value: "webinar", label: "Webinar" },
+  { value: "youtube", label: "YouTube", chip: "chip-pink" },
+  { value: "tiktok", label: "TikTok", chip: "chip-blue" },
+  { value: "reels", label: "Reels", chip: "chip-purple" },
+  { value: "course", label: "Course", chip: "chip-green" },
+  { value: "webinar", label: "Webinar", chip: "chip-yellow" },
 ];
 
 const durations = [
-  { value: "30s", label: "30s" },
-  { value: "60s", label: "60s" },
-  { value: "3min", label: "3 min" },
-  { value: "5min", label: "5 min" },
-  { value: "10min", label: "10 min" },
-  { value: "15min+", label: "15+ min" },
+  { value: "30s", label: "30s", chip: "chip-yellow" },
+  { value: "60s", label: "60s", chip: "chip-pink" },
+  { value: "3min", label: "3 min", chip: "chip-blue" },
+  { value: "5min", label: "5 min", chip: "chip-green" },
+  { value: "10min", label: "10 min", chip: "chip-purple" },
+  { value: "15min+", label: "15+ min", chip: "chip-pink" },
 ];
 
 const tones = [
-  { value: "educational", label: "Educational" },
-  { value: "entertaining", label: "Entertaining" },
-  { value: "dramatic", label: "Dramatic" },
-  { value: "casual", label: "Casual" },
-  { value: "motivational", label: "Motivational" },
+  { value: "educational", label: "Educational", chip: "chip-blue" },
+  { value: "entertaining", label: "Entertaining", chip: "chip-pink" },
+  { value: "dramatic", label: "Dramatic", chip: "chip-purple" },
+  { value: "casual", label: "Casual", chip: "chip-green" },
+  { value: "motivational", label: "Motivational", chip: "chip-yellow" },
 ];
 
 const languages = [
-  { value: "en", label: "English" },
-  { value: "ar", label: "Arabic" },
-  { value: "both", label: "Both" },
+  { value: "en", label: "English", chip: "chip-blue" },
+  { value: "ar", label: "Arabic", chip: "chip-green" },
+  { value: "both", label: "Both", chip: "chip-purple" },
 ];
 
 interface Props {
@@ -50,7 +50,7 @@ interface Props {
 }
 
 function ChipSelect({ options, value, onChange, label }: {
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; chip: string }[];
   value: string;
   onChange: (v: string) => void;
   label: string;
@@ -64,10 +64,10 @@ function ChipSelect({ options, value, onChange, label }: {
             key={opt.value}
             type="button"
             onClick={() => onChange(opt.value)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all border ${
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
               value === opt.value
-                ? "bg-primary/15 border-primary text-primary shadow-glow"
-                : "bg-secondary border-border text-muted-foreground hover:border-primary/40"
+                ? `${opt.chip} ring-2 ring-current/20 scale-105`
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
             {opt.label}
@@ -104,13 +104,13 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit}
-      className="space-y-6 rounded-2xl border border-border bg-card p-6 shadow-card"
+      className="space-y-6 rounded-3xl bg-card p-6 md:p-8 shadow-card"
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="p-2 rounded-xl gradient-primary">
+        <div className="p-2.5 rounded-2xl gradient-primary">
           <Clapperboard className="w-5 h-5 text-primary-foreground" />
         </div>
-        <h2 className="text-lg font-semibold text-foreground">Script Parameters</h2>
+        <h2 className="text-xl font-bold text-foreground">Script Parameters</h2>
       </div>
 
       <div className="space-y-2">
@@ -119,7 +119,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           value={form.topic}
           onChange={(e) => update("topic", e.target.value)}
           placeholder="e.g. How AI is changing video production"
-          className="w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
         />
       </div>
 
@@ -134,7 +134,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           value={form.audience}
           onChange={(e) => update("audience", e.target.value)}
           placeholder="e.g. Beginner content creators aged 18-30"
-          className="w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
         />
       </div>
 
@@ -145,11 +145,11 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           onChange={(e) => update("keyMessage", e.target.value)}
           rows={2}
           placeholder="The one thing viewers must remember..."
-          className="w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
+          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
         />
       </div>
 
-      <Button type="submit" variant="glow" size="lg" className="w-full" disabled={isLoading || !form.topic.trim()}>
+      <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={isLoading || !form.topic.trim()}>
         {isLoading ? (
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
             <Sparkles className="w-5 h-5" />

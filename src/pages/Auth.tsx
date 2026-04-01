@@ -72,9 +72,9 @@ export default function Auth() {
           Back to home
         </button>
 
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
+        <div className="rounded-3xl bg-card p-8 shadow-card">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl gradient-primary">
+            <div className="p-2.5 rounded-2xl gradient-primary">
               <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
@@ -119,23 +119,23 @@ export default function Auth() {
                   placeholder="Full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full rounded-2xl border border-input bg-background pl-10 pr-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
             )}
             <div className="relative">
-              <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+              <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-muted-foreground" />
               <input
                 type="email"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full rounded-2xl border border-input bg-background pl-10 pr-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+              <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-muted-foreground" />
               <input
                 type="password"
                 placeholder="Password"
@@ -143,10 +143,10 @@ export default function Auth() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full rounded-lg border border-input bg-muted/50 pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full rounded-2xl border border-input bg-background pl-10 pr-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
-            <Button type="submit" variant="glow" size="lg" className="w-full" disabled={loading}>
+            <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={loading}>
               {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>
