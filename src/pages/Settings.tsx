@@ -79,7 +79,7 @@ export default function Settings() {
           </div>
 
           {/* Plan */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-card mb-6 space-y-4">
+          <div className="rounded-3xl bg-card p-6 shadow-card mb-6 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
               <CreditCard className="w-4 h-4" /> Subscription
             </div>
