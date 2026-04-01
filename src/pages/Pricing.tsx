@@ -201,7 +201,7 @@ export default function Pricing() {
           <h3 className="text-xl font-bold text-foreground mb-6 text-center">Frequently Asked Questions</h3>
           <div className="space-y-2">
             {faqs.map((faq, i) => (
-              <div key={i} className="rounded-xl border border-border bg-card overflow-hidden">
+              <div key={i} className="rounded-2xl bg-card overflow-hidden shadow-card">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between px-5 py-4 text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
