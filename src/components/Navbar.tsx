@@ -1,12 +1,14 @@
 import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useAppSettings } from "@/hooks/useAppSettings";
 import UsageBadge from "./UsageBadge";
 import { useState } from "react";
 import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function Navbar() {
   const { user, profile, signOut, loading } = useAuth();
+  const { t } = useAppSettings();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -30,19 +32,19 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ms-auto flex items-center gap-3">
           <Link
             to="/pricing"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
           >
-            Pricing
+            {t("pricing")}
           </Link>
 
           {!loading && !user && (
             <Link to="/auth">
               <button className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold gradient-primary text-primary-foreground hover:opacity-90 transition-opacity">
                 <LogIn className="w-4 h-4" />
-                Sign In
+                {t("sign_in")}
               </button>
             </Link>
           )}
@@ -64,13 +66,13 @@ export default function Navbar() {
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card shadow-card overflow-hidden">
+                    <div className="absolute end-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card shadow-card overflow-hidden">
                       <div className="p-3 border-b border-border">
                         <p className="text-sm font-medium text-foreground truncate">
                           {profile?.email || user.email}
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {isPro ? "Pro Plan" : "Free Plan"}
+                          {isPro ? t("pro_plan") : t("free_plan")}
                         </p>
                       </div>
                       <div className="p-1">
@@ -79,21 +81,21 @@ export default function Navbar() {
                           className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
                         >
                           <CreditCard className="w-4 h-4 text-muted-foreground" />
-                          Pricing
+                          {t("pricing")}
                         </button>
                         <button
                           onClick={() => { setMenuOpen(false); navigate("/settings"); }}
                           className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
                         >
                           <Settings className="w-4 h-4 text-muted-foreground" />
-                          Settings
+                          {t("settings")}
                         </button>
                         <button
                           onClick={() => { setMenuOpen(false); handleSignOut(); }}
                           className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-destructive hover:bg-muted rounded-xl transition-colors"
                         >
                           <LogOut className="w-4 h-4" />
-                          Sign Out
+                          {t("sign_out")}
                         </button>
                       </div>
                     </div>
