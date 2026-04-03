@@ -1,4 +1,4 @@
-import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown } from "lucide-react";
+import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown, Sun, Moon, Languages } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAppSettings } from "@/hooks/useAppSettings";
@@ -8,7 +8,7 @@ import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function Navbar() {
   const { user, profile, signOut, loading } = useAuth();
-  const { t } = useAppSettings();
+  const { t, theme, setTheme, language, setLanguage } = useAppSettings();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -32,7 +32,26 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="ms-auto flex items-center gap-3">
+        <div className="ms-auto flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="p-2 rounded-xl bg-muted hover:bg-muted/70 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <Moon className="w-4 h-4 text-muted-foreground" /> : <Sun className="w-4 h-4 text-muted-foreground" />}
+          </button>
+
+          {/* Language toggle */}
+          <button
+            onClick={() => setLanguage(language === "en" ? "ar" : "en")}
+            className="flex items-center gap-1 px-2.5 py-2 rounded-xl bg-muted hover:bg-muted/70 transition-colors text-xs font-semibold text-muted-foreground"
+            aria-label="Toggle language"
+          >
+            <Languages className="w-4 h-4" />
+            <span>{language === "en" ? "ع" : "EN"}</span>
+          </button>
+
           <Link
             to="/pricing"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
