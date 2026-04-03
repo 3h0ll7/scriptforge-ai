@@ -1,4 +1,4 @@
-import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown } from "lucide-react";
+import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown, Sun, Moon, Languages } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAppSettings } from "@/hooks/useAppSettings";
@@ -8,7 +8,7 @@ import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function Navbar() {
   const { user, profile, signOut, loading } = useAuth();
-  const { t } = useAppSettings();
+  const { t, theme, setTheme, language, setLanguage } = useAppSettings();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
