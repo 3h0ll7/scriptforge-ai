@@ -7,6 +7,7 @@ import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
 import { generateScript, saveToHistory } from "@/lib/generateScript";
 import { useAuth } from "@/hooks/useAuth";
+import { useAppSettings } from "@/hooks/useAppSettings";
 import Navbar from "@/components/Navbar";
 import PaywallModal from "@/components/PaywallModal";
 
@@ -15,6 +16,7 @@ export default function Index() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const { user, profile, refreshUsage } = useAuth();
+  const { t } = useAppSettings();
   const navigate = useNavigate();
 
   const handleGenerate = async (input: ScriptInput) => {
@@ -58,11 +60,11 @@ export default function Index() {
           className="text-center max-w-2xl mx-auto mb-12"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4 text-foreground leading-tight">
-            <span className="text-gradient">Craft Scripts</span>{" "}
-            That Go Viral
+            <span className="text-gradient">{t("craft_scripts")}</span>{" "}
+            {t("that_go_viral")}
           </h2>
           <p className="text-muted-foreground text-base">
-            Platform-optimized scripts with hooks, retention strategies, and calls to action — built for YouTube, TikTok, Reels, and more.
+            {t("hero_subtitle")}
           </p>
         </motion.div>
 
@@ -82,7 +84,7 @@ export default function Index() {
                   <Zap className="w-8 h-8 text-muted-foreground" />
                 </div>
                 <p className="text-muted-foreground text-sm">
-                  Fill in your parameters and hit <span className="text-primary font-semibold">Generate</span> to create your script.
+                  {t("fill_prompt")} <span className="text-primary font-semibold">{t("generate")}</span> {t("to_create")}
                 </p>
               </motion.div>
             )}
