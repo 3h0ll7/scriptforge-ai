@@ -92,6 +92,49 @@ const translations: Record<string, Record<Language, string>> = {
   // Usage
   "scripts_left": { en: "left", ar: "متبقي" },
   "unlimited": { en: "Unlimited", ar: "غير محدود" },
+
+  // Pricing page
+  "simple_pricing": { en: "Simple Pricing", ar: "أسعار بسيطة" },
+  "pricing_subtitle": { en: "Start free, upgrade when you need more power.", ar: "ابدأ مجانًا، وقم بالترقية عندما تحتاج المزيد." },
+  "save": { en: "Save", ar: "وفّر" },
+  "start_free": { en: "Start Free", ar: "ابدأ مجانًا" },
+  "most_popular": { en: "Most Popular", ar: "الأكثر شيوعًا" },
+  "best_value": { en: "Best Value", ar: "أفضل قيمة" },
+  "upgrade_to_pro_btn": { en: "Upgrade to Pro", ar: "الترقية إلى Pro" },
+  "loading": { en: "Loading...", ar: "جارٍ التحميل..." },
+  "mastercard_visa": { en: "Mastercard & Visa", ar: "Mastercard و Visa" },
+  "faq_title": { en: "Frequently Asked Questions", ar: "الأسئلة الشائعة" },
+  "just": { en: "Just", ar: "فقط" },
+  "mo": { en: "/mo", ar: "/شهر" },
+  "yr": { en: "/yr", ar: "/سنة" },
+
+  // Plan features - Free
+  "feat_5_scripts": { en: "5 scripts per month", ar: "5 نصوص شهريًا" },
+  "feat_yt_tt_reels": { en: "YouTube, TikTok, Reels", ar: "YouTube و TikTok و Reels" },
+  "feat_basic_hooks": { en: "Basic hooks and CTAs", ar: "خطافات ودعوات عمل أساسية" },
+  "feat_3_titles": { en: "3 title suggestions", ar: "3 اقتراحات للعنوان" },
+  "feat_course_webinar": { en: "Course & Webinar platforms", ar: "منصات الدورات والندوات" },
+  "feat_multi_lang": { en: "Multi-language support", ar: "دعم متعدد اللغات" },
+  "feat_export": { en: "Export as PDF/JSON", ar: "تصدير كـ PDF/JSON" },
+  "feat_retention": { en: "Retention strategy analysis", ar: "تحليل استراتيجية الاحتفاظ" },
+
+  // Plan features - Pro
+  "feat_unlimited": { en: "Unlimited scripts", ar: "نصوص غير محدودة" },
+  "feat_all_platforms": { en: "All platforms including Course & Webinar", ar: "جميع المنصات بما فيها الدورات والندوات" },
+  "feat_advanced_hooks": { en: "Advanced hook types", ar: "أنواع خطافات متقدمة" },
+  "feat_broll": { en: "B-roll & visual direction", ar: "B-roll وتوجيه بصري" },
+  "feat_seo": { en: "SEO tags & descriptions", ar: "وسوم SEO والأوصاف" },
+  "feat_en_ar": { en: "English + Arabic support", ar: "دعم الإنجليزية + العربية" },
+
+  // FAQ
+  "faq_cancel_q": { en: "Can I cancel anytime?", ar: "هل يمكنني الإلغاء في أي وقت؟" },
+  "faq_cancel_a": { en: "Yes, cancel anytime from your account settings.", ar: "نعم، يمكنك الإلغاء في أي وقت من إعدادات حسابك." },
+  "faq_payment_q": { en: "What payment methods do you accept?", ar: "ما طرق الدفع المقبولة؟" },
+  "faq_payment_a": { en: "Mastercard, Visa, and all major credit/debit cards worldwide.", ar: "Mastercard و Visa وجميع بطاقات الائتمان/الخصم الرئيسية حول العالم." },
+  "faq_billing_q": { en: "When does my billing cycle reset?", ar: "متى تتم إعادة تعيين دورة الفوترة؟" },
+  "faq_billing_a": { en: "Your free script count resets on the 1st of each month.", ar: "يتم إعادة تعيين عدد النصوص المجانية في الأول من كل شهر." },
+  "faq_downgrade_q": { en: "Do I lose my scripts if I downgrade?", ar: "هل أفقد نصوصي إذا خفّضت الخطة؟" },
+  "faq_downgrade_a": { en: "No, all your previously generated scripts remain in your history.", ar: "لا، جميع النصوص التي أنشأتها سابقًا تبقى في سجلك." },
 };
 
 const AppSettingsContext = createContext<AppSettings | null>(null);
