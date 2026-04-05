@@ -4,10 +4,12 @@ import { CheckCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useAppSettings } from "@/hooks/useAppSettings";
 
 export default function PaymentSuccess() {
   const navigate = useNavigate();
   const { refreshProfile } = useAuth();
+  const { t } = useAppSettings();
 
   useEffect(() => {
     refreshProfile();
@@ -28,13 +30,11 @@ export default function PaymentSuccess() {
         >
           <CheckCircle className="w-16 h-16 text-primary" />
         </motion.div>
-        <h1 className="text-3xl font-bold text-foreground">You are now a Pro member! 🎉</h1>
-        <p className="text-muted-foreground">
-          Enjoy unlimited script generation, all platforms, and advanced features.
-        </p>
+        <h1 className="text-3xl font-bold text-foreground">{t("pro_member")}</h1>
+        <p className="text-muted-foreground">{t("enjoy_unlimited")}</p>
         <Button variant="glow" size="lg" onClick={() => navigate("/")}>
           <Zap className="w-4 h-4" />
-          Start Creating Scripts
+          {t("start_creating")}
         </Button>
       </motion.div>
     </div>

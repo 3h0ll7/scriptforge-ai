@@ -135,6 +135,30 @@ const translations: Record<string, Record<Language, string>> = {
   "faq_billing_a": { en: "Your free script count resets on the 1st of each month.", ar: "يتم إعادة تعيين عدد النصوص المجانية في الأول من كل شهر." },
   "faq_downgrade_q": { en: "Do I lose my scripts if I downgrade?", ar: "هل أفقد نصوصي إذا خفّضت الخطة؟" },
   "faq_downgrade_a": { en: "No, all your previously generated scripts remain in your history.", ar: "لا، جميع النصوص التي أنشأتها سابقًا تبقى في سجلك." },
+
+  // Auth page
+  "welcome_back": { en: "Welcome Back", ar: "مرحبًا بعودتك" },
+  "join_scriptforge": { en: "Join ScriptForge AI today", ar: "انضم إلى ScriptForge AI اليوم" },
+  "sign_in_continue": { en: "Sign in to continue generating scripts", ar: "سجّل الدخول لمتابعة إنشاء النصوص" },
+  "continue_google": { en: "Continue with Google", ar: "المتابعة مع Google" },
+  "or": { en: "or", ar: "أو" },
+  "full_name": { en: "Full name", ar: "الاسم الكامل" },
+  "email_address": { en: "Email address", ar: "البريد الإلكتروني" },
+  "please_wait": { en: "Please wait...", ar: "يرجى الانتظار..." },
+  "back_to_home": { en: "Back to home", ar: "العودة للرئيسية" },
+  "check_email": { en: "Check your email to verify your account!", ar: "تحقق من بريدك الإلكتروني لتأكيد حسابك!" },
+  "welcome_back_toast": { en: "Welcome back!", ar: "مرحبًا بعودتك!" },
+
+  // Payment Success
+  "pro_member": { en: "You are now a Pro member! 🎉", ar: "أنت الآن عضو Pro! 🎉" },
+  "enjoy_unlimited": { en: "Enjoy unlimited script generation, all platforms, and advanced features.", ar: "استمتع بإنشاء نصوص غير محدودة وجميع المنصات والميزات المتقدمة." },
+  "start_creating": { en: "Start Creating Scripts", ar: "ابدأ بإنشاء النصوص" },
+
+  // Payment Cancel
+  "payment_cancelled": { en: "Payment Cancelled", ar: "تم إلغاء الدفع" },
+  "no_worries": { en: "No worries! You can upgrade anytime.", ar: "لا تقلق! يمكنك الترقية في أي وقت." },
+  "try_again": { en: "Try Again", ar: "حاول مرة أخرى" },
+  "continue_free": { en: "Continue with Free", ar: "المتابعة بالخطة المجانية" },
 };
 
 const AppSettingsContext = createContext<AppSettings | null>(null);
