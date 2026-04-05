@@ -8,40 +8,41 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useState } from "react";
 import { hasActiveProSubscription } from "@/lib/subscription";
+import { useAppSettings } from "@/hooks/useAppSettings";
 
-const freePlan = [
-  { text: "5 scripts per month", included: true },
-  { text: "YouTube, TikTok, Reels", included: true },
-  { text: "Basic hooks and CTAs", included: true },
-  { text: "3 title suggestions", included: true },
-  { text: "Course & Webinar platforms", included: false },
-  { text: "Multi-language support", included: false },
-  { text: "Export as PDF/JSON", included: false },
-  { text: "Retention strategy analysis", included: false },
+const freePlanKeys = [
+  { key: "feat_5_scripts", included: true },
+  { key: "feat_yt_tt_reels", included: true },
+  { key: "feat_basic_hooks", included: true },
+  { key: "feat_3_titles", included: true },
+  { key: "feat_course_webinar", included: false },
+  { key: "feat_multi_lang", included: false },
+  { key: "feat_export", included: false },
+  { key: "feat_retention", included: false },
 ];
 
-const proPlan = [
-  { text: "Unlimited scripts", included: true },
-  { text: "All platforms including Course & Webinar", included: true },
-  { text: "Advanced hook types", included: true },
-  { text: "B-roll & visual direction", included: true },
-  { text: "SEO tags & descriptions", included: true },
-  { text: "English + Arabic support", included: true },
-  { text: "Export as PDF/JSON", included: true },
-  { text: "Retention strategy analysis", included: true },
+const proPlanKeys = [
+  { key: "feat_unlimited", included: true },
+  { key: "feat_all_platforms", included: true },
+  { key: "feat_advanced_hooks", included: true },
+  { key: "feat_broll", included: true },
+  { key: "feat_seo", included: true },
+  { key: "feat_en_ar", included: true },
+  { key: "feat_export", included: true },
+  { key: "feat_retention", included: true },
 ];
 
-const faqs = [
-  { q: "Can I cancel anytime?", a: "Yes, cancel anytime from your account settings." },
-  { q: "What payment methods do you accept?", a: "Mastercard, Visa, and all major credit/debit cards worldwide." },
-  { q: "When does my billing cycle reset?", a: "Your free script count resets on the 1st of each month." },
-  { q: "Do I lose my scripts if I downgrade?", a: "No, all your previously generated scripts remain in your history." },
-  
+const faqKeys = [
+  { q: "faq_cancel_q", a: "faq_cancel_a" },
+  { q: "faq_payment_q", a: "faq_payment_a" },
+  { q: "faq_billing_q", a: "faq_billing_a" },
+  { q: "faq_downgrade_q", a: "faq_downgrade_a" },
 ];
 
 export default function Pricing() {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const { t } = useAppSettings();
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
@@ -81,9 +82,9 @@ export default function Pricing() {
       <section className="container max-w-5xl mx-auto px-4 py-16">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            <span className="text-gradient">Simple Pricing</span>
+            <span className="text-gradient">{t("simple_pricing")}</span>
           </h2>
-          <p className="text-muted-foreground">Start free, upgrade when you need more power.</p>
+          <p className="text-muted-foreground">{t("pricing_subtitle")}</p>
         </motion.div>
 
         {/* Billing Toggle */}
@@ -96,7 +97,7 @@ export default function Pricing() {
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
-            Monthly
+            {t("monthly")}
           </button>
           <button
             onClick={() => setBillingPeriod("yearly")}
@@ -106,9 +107,9 @@ export default function Pricing() {
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
-            Yearly
+            {t("yearly")}
             <span className="px-2 py-0.5 rounded-full text-xs font-bold chip-yellow">
-              Save {savingsPercent}%
+              {t("save")} {savingsPercent}%
             </span>
           </button>
         </div>
@@ -121,22 +122,22 @@ export default function Pricing() {
             transition={{ delay: 0.1 }}
             className="rounded-3xl bg-card p-8 shadow-card"
           >
-            <h3 className="text-xl font-bold text-foreground">Free</h3>
-            <p className="text-3xl font-bold text-foreground mt-2">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+            <h3 className="text-xl font-bold text-foreground">{t("free")}</h3>
+            <p className="text-3xl font-bold text-foreground mt-2">$0<span className="text-sm font-normal text-muted-foreground">{t("per_month")}</span></p>
             <div className="mt-6 space-y-3">
-              {freePlan.map((f) => (
-                <div key={f.text} className="flex items-center gap-2 text-sm">
+              {freePlanKeys.map((f) => (
+                <div key={f.key} className="flex items-center gap-2 text-sm">
                   {f.included ? (
                     <Check className="w-4 h-4 text-primary shrink-0" />
                   ) : (
                     <X className="w-4 h-4 text-muted-foreground/40 shrink-0" />
                   )}
-                  <span className={f.included ? "text-foreground" : "text-muted-foreground/60"}>{f.text}</span>
+                  <span className={f.included ? "text-foreground" : "text-muted-foreground/60"}>{t(f.key)}</span>
                 </div>
               ))}
             </div>
             <Button variant="outline" className="w-full mt-8 rounded-full" disabled={!!user && !isPro}>
-              {user && !isPro ? "Current Plan" : "Start Free"}
+              {user && !isPro ? t("current_plan") : t("start_free")}
             </Button>
           </motion.div>
 
@@ -148,69 +149,69 @@ export default function Pricing() {
             className="rounded-3xl bg-card p-8 shadow-card ring-2 ring-primary relative"
           >
             <span className="absolute -top-3 left-6 px-4 py-1 rounded-full text-xs font-bold gradient-primary text-primary-foreground">
-              {billingPeriod === "yearly" ? "Best Value" : "Most Popular"}
+              {billingPeriod === "yearly" ? t("best_value") : t("most_popular")}
             </span>
-            <h3 className="text-xl font-bold text-foreground">Pro</h3>
+            <h3 className="text-xl font-bold text-foreground">{t("pro")}</h3>
             <div className="mt-2">
               {billingPeriod === "monthly" ? (
                 <p className="text-3xl font-bold text-primary">
-                  ${monthlyPrice}<span className="text-sm font-normal text-muted-foreground">/month</span>
+                  ${monthlyPrice}<span className="text-sm font-normal text-muted-foreground">{t("per_month")}</span>
                 </p>
               ) : (
                 <div>
                   <p className="text-3xl font-bold text-primary">
-                    ${yearlyPrice}<span className="text-sm font-normal text-muted-foreground">/year</span>
+                    ${yearlyPrice}<span className="text-sm font-normal text-muted-foreground">{t("per_year")}</span>
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Just ${yearlyMonthly}/mo · <span className="text-accent font-semibold">Save ${monthlyPrice * 12 - yearlyPrice}/year</span>
+                    {t("just")} ${yearlyMonthly}{t("mo")} · <span className="text-accent font-semibold">{t("save")} ${monthlyPrice * 12 - yearlyPrice}{t("per_year")}</span>
                   </p>
                 </div>
               )}
             </div>
             <div className="mt-6 space-y-3">
-              {proPlan.map((f) => (
-                <div key={f.text} className="flex items-center gap-2 text-sm">
+              {proPlanKeys.map((f) => (
+                <div key={f.key} className="flex items-center gap-2 text-sm">
                   <Check className="w-4 h-4 text-primary shrink-0" />
-                  <span className="text-foreground">{f.text}</span>
+                  <span className="text-foreground">{t(f.key)}</span>
                 </div>
               ))}
             </div>
             {isPro ? (
               <Button variant="outline" className="w-full mt-8" disabled>
-                Current Plan ✓
+                {t("current_plan")} ✓
               </Button>
             ) : (
               <Button variant="glow" size="lg" className="w-full mt-8 rounded-full" onClick={handleUpgrade} disabled={loadingCheckout}>
                 <Zap className="w-4 h-4" />
                 {loadingCheckout
-                  ? "Loading..."
+                  ? t("loading")
                   : billingPeriod === "monthly"
-                  ? `Upgrade to Pro — $${monthlyPrice}/mo`
-                  : `Upgrade to Pro — $${yearlyPrice}/yr`}
+                  ? `${t("upgrade_to_pro_btn")} — $${monthlyPrice}${t("mo")}`
+                  : `${t("upgrade_to_pro_btn")} — $${yearlyPrice}${t("yr")}`}
               </Button>
             )}
             <div className="flex items-center justify-center gap-2 mt-3 text-muted-foreground">
               <CreditCard className="w-4 h-4" />
-              <span className="text-xs">Mastercard & Visa</span>
+              <span className="text-xs">{t("mastercard_visa")}</span>
             </div>
           </motion.div>
         </div>
 
         {/* FAQ */}
         <div className="max-w-2xl mx-auto mt-16">
-          <h3 className="text-xl font-bold text-foreground mb-6 text-center">Frequently Asked Questions</h3>
+          <h3 className="text-xl font-bold text-foreground mb-6 text-center">{t("faq_title")}</h3>
           <div className="space-y-2">
-            {faqs.map((faq, i) => (
+            {faqKeys.map((faq, i) => (
               <div key={i} className="rounded-2xl bg-card overflow-hidden shadow-card">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between px-5 py-4 text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
                 >
-                  {faq.q}
+                  {t(faq.q)}
                   <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openFaq === i ? "rotate-180" : ""}`} />
                 </button>
                 {openFaq === i && (
-                  <div className="px-5 pb-4 text-sm text-muted-foreground">{faq.a}</div>
+                  <div className="px-5 pb-4 text-sm text-muted-foreground">{t(faq.a)}</div>
                 )}
               </div>
             ))}
