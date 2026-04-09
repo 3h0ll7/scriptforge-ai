@@ -2,21 +2,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Check, CreditCard, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAppSettings } from "@/hooks/useAppSettings";
 
 interface Props {
   open: boolean;
   onClose: () => void;
 }
 
-const features = [
-  "Unlimited script generation",
-  "All platforms (YouTube, TikTok, Reels, Course, Webinar)",
-  "Multi-language (English + Arabic)",
-  "Export as PDF/JSON",
+const featureKeys = [
+  "paywall_feat_1",
+  "paywall_feat_2",
+  "paywall_feat_3",
+  "paywall_feat_4",
 ];
 
 export default function PaywallModal({ open, onClose }: Props) {
   const navigate = useNavigate();
+  const { t } = useAppSettings();
 
   return (
     <AnimatePresence>
@@ -41,33 +43,33 @@ export default function PaywallModal({ open, onClose }: Props) {
               </div>
 
               <h2 className="text-xl font-bold text-foreground">
-                You've used all 5 free scripts this month
+                {t("paywall_title")}
               </h2>
               <p className="text-sm text-muted-foreground">
-                Upgrade to Pro for unlimited scripts, all platforms, and advanced features
+                {t("paywall_subtitle")}
               </p>
 
               <div className="space-y-1">
                 <p className="text-4xl font-bold text-primary">
-                  $3<span className="text-lg font-normal text-muted-foreground">/month</span>
+                  $3<span className="text-lg font-normal text-muted-foreground">{t("per_month")}</span>
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  or <span className="text-primary font-semibold">$24/year</span> (save 33%)
+                  {t("or_yearly")} <span className="text-primary font-semibold">$24{t("per_year")}</span> {t("save_yearly")}
                 </p>
               </div>
 
-              <div className="w-full space-y-2 text-left">
-                {features.map((f) => (
-                  <div key={f} className="flex items-center gap-2 text-sm text-foreground">
+              <div className="w-full space-y-2 text-start">
+                {featureKeys.map((key) => (
+                  <div key={key} className="flex items-center gap-2 text-sm text-foreground">
                     <Check className="w-4 h-4 text-primary shrink-0" />
-                    {f}
+                    {t(key)}
                   </div>
                 ))}
               </div>
 
               <div className="flex items-center gap-3 text-muted-foreground">
                 <CreditCard className="w-5 h-5" />
-                <span className="text-xs">Mastercard & Visa accepted</span>
+                <span className="text-xs">{t("mastercard_visa")}</span>
               </div>
 
               <Button
@@ -80,18 +82,18 @@ export default function PaywallModal({ open, onClose }: Props) {
                 }}
               >
                 <Zap className="w-4 h-4" />
-                Upgrade to Pro — $3/month
+                {t("paywall_upgrade_btn")}
               </Button>
 
               <button
                 onClick={onClose}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Maybe Later
+                {t("maybe_later")}
               </button>
 
               <p className="text-xs text-muted-foreground/70">
-                Join 500+ creators already using Pro
+                {t("join_creators")}
               </p>
             </div>
           </motion.div>

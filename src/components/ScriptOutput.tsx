@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Clock, Eye, Film, Hash, Lightbulb, Target, Type } from "lucide-react";
+import { useAppSettings } from "@/hooks/useAppSettings";
 
 export interface ScriptSection {
   timestamp: string;
@@ -35,6 +36,8 @@ function SectionBadge({ section }: { section: string }) {
 }
 
 export default function ScriptOutput({ result }: { result: ScriptResult }) {
+  const { t } = useAppSettings();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -46,11 +49,11 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       <div className="rounded-3xl bg-card p-6 shadow-card space-y-3">
         <div className="flex items-center gap-2">
           <Type className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Title Options</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("title_options")}</h3>
         </div>
-        {result.titleOptions.map((t, i) => (
+        {result.titleOptions.map((title, i) => (
           <div key={i} className="px-4 py-2.5 bg-muted rounded-2xl text-foreground font-medium text-sm">
-            {i + 1}. {t}
+            {i + 1}. {title}
           </div>
         ))}
       </div>
@@ -59,7 +62,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       <div className="rounded-3xl chip-pink p-6 shadow-card space-y-2">
         <div className="flex items-center gap-2">
           <Target className="w-4 h-4" />
-          <h3 className="text-sm font-semibold uppercase tracking-wider">Hook — {result.hook.hookType.replace("_", " ")}</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wider">{t("hook")} — {result.hook.hookType.replace("_", " ")}</h3>
         </div>
         <p className="text-foreground text-lg font-medium leading-relaxed">"{result.hook.text}"</p>
       </div>
@@ -68,8 +71,8 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       <div className="rounded-3xl bg-card p-6 shadow-card space-y-1">
         <div className="flex items-center gap-2 mb-4">
           <Film className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Full Script</h3>
-          <span className="ml-auto text-xs text-muted-foreground">~{result.estimatedWordCount} words</span>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("full_script")}</h3>
+          <span className="ms-auto text-xs text-muted-foreground">~{result.estimatedWordCount} {t("words")}</span>
         </div>
         <div className="space-y-4">
           {result.script.map((s, i) => (
@@ -78,7 +81,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="border-l-2 border-primary/30 pl-4 space-y-1.5"
+              className="border-s-2 border-primary/30 ps-4 space-y-1.5"
             >
               <div className="flex items-center gap-2">
                 <Clock className="w-3 h-3 text-muted-foreground" />
@@ -93,7 +96,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
               {s.bRollSuggestion && (
                 <div className="flex items-start gap-1.5 text-xs text-secondary">
                   <Film className="w-3 h-3 mt-0.5 shrink-0" />
-                  <span>B-Roll: {s.bRollSuggestion}</span>
+                  <span>{t("b_roll")}: {s.bRollSuggestion}</span>
                 </div>
               )}
             </motion.div>
@@ -103,7 +106,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
 
       {/* CTA */}
       <div className="rounded-3xl chip-blue p-6 shadow-card space-y-2">
-        <h3 className="text-sm font-semibold uppercase tracking-wider">Call to Action</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wider">{t("call_to_action")}</h3>
         <p className="text-foreground font-medium">{result.cta}</p>
       </div>
 
@@ -111,7 +114,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       <div className="rounded-3xl bg-card p-6 shadow-card space-y-3">
         <div className="flex items-center gap-2">
           <Hash className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">SEO Tags</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("seo_tags")}</h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {result.seoTags.map((tag, i) => {
@@ -129,7 +132,7 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       <div className="rounded-3xl bg-card p-6 shadow-card space-y-2">
         <div className="flex items-center gap-2">
           <Lightbulb className="w-4 h-4 text-accent-foreground" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Retention Strategy</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("retention_strategy")}</h3>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">{result.retentionStrategyNotes}</p>
       </div>
