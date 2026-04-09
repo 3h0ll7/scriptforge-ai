@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Clapperboard, Sparkles } from "lucide-react";
+import { useAppSettings } from "@/hooks/useAppSettings";
 
 export interface ScriptInput {
   topic: string;
@@ -79,6 +80,7 @@ function ChipSelect({ options, value, onChange, label }: {
 }
 
 export default function ScriptForm({ onGenerate, isLoading }: Props) {
+  const { t } = useAppSettings();
   const [form, setForm] = useState<ScriptInput>({
     topic: "",
     platform: "youtube",
@@ -110,41 +112,41 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         <div className="p-2.5 rounded-2xl gradient-primary">
           <Clapperboard className="w-5 h-5 text-primary-foreground" />
         </div>
-        <h2 className="text-xl font-bold text-foreground">Script Parameters</h2>
+        <h2 className="text-xl font-bold text-foreground">{t("script_parameters")}</h2>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Topic *</label>
+        <label className="text-sm font-medium text-muted-foreground">{t("topic")} *</label>
         <input
           value={form.topic}
           onChange={(e) => update("topic", e.target.value)}
-          placeholder="e.g. How AI is changing video production"
+          placeholder={t("topic_placeholder")}
           className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
         />
       </div>
 
-      <ChipSelect label="Platform" options={platforms} value={form.platform} onChange={(v) => update("platform", v)} />
-      <ChipSelect label="Duration" options={durations} value={form.targetDuration} onChange={(v) => update("targetDuration", v)} />
-      <ChipSelect label="Tone" options={tones} value={form.tone} onChange={(v) => update("tone", v)} />
-      <ChipSelect label="Language" options={languages} value={form.language} onChange={(v) => update("language", v)} />
+      <ChipSelect label={t("platform")} options={platforms} value={form.platform} onChange={(v) => update("platform", v)} />
+      <ChipSelect label={t("duration")} options={durations} value={form.targetDuration} onChange={(v) => update("targetDuration", v)} />
+      <ChipSelect label={t("tone")} options={tones} value={form.tone} onChange={(v) => update("tone", v)} />
+      <ChipSelect label={t("language")} options={languages} value={form.language} onChange={(v) => update("language", v)} />
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Target Audience</label>
+        <label className="text-sm font-medium text-muted-foreground">{t("target_audience")}</label>
         <input
           value={form.audience}
           onChange={(e) => update("audience", e.target.value)}
-          placeholder="e.g. Beginner content creators aged 18-30"
+          placeholder={t("audience_placeholder")}
           className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">Key Message *</label>
+        <label className="text-sm font-medium text-muted-foreground">{t("key_message")} *</label>
         <textarea
           value={form.keyMessage}
           onChange={(e) => update("keyMessage", e.target.value)}
           rows={2}
-          placeholder="The one thing viewers must remember..."
+          placeholder={t("key_message_placeholder")}
           className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
         />
       </div>
@@ -157,7 +159,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         ) : (
           <Sparkles className="w-5 h-5" />
         )}
-        {isLoading ? "Generating Script..." : "Generate Script"}
+        {isLoading ? t("generating_script") : t("generate_script")}
       </Button>
     </motion.form>
   );

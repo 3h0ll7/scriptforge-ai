@@ -159,6 +159,36 @@ const translations: Record<string, Record<Language, string>> = {
   "no_worries": { en: "No worries! You can upgrade anytime.", ar: "لا تقلق! يمكنك الترقية في أي وقت." },
   "try_again": { en: "Try Again", ar: "حاول مرة أخرى" },
   "continue_free": { en: "Continue with Free", ar: "المتابعة بالخطة المجانية" },
+
+  // ScriptForm extra
+  "script_parameters": { en: "Script Parameters", ar: "معلمات النص" },
+  "target_audience": { en: "Target Audience", ar: "الجمهور المستهدف" },
+  "audience_placeholder": { en: "e.g. Beginner content creators aged 18-30", ar: "مثال: صنّاع محتوى مبتدئون بعمر 18-30" },
+  "key_message": { en: "Key Message", ar: "الرسالة الرئيسية" },
+  "key_message_placeholder": { en: "The one thing viewers must remember...", ar: "الشيء الذي يجب أن يتذكره المشاهدون..." },
+  "generating_script": { en: "Generating Script...", ar: "جارٍ إنشاء النص..." },
+
+  // ScriptOutput
+  "title_options": { en: "Title Options", ar: "خيارات العنوان" },
+  "full_script": { en: "Full Script", ar: "النص الكامل" },
+  "words": { en: "words", ar: "كلمة" },
+  "seo_tags": { en: "SEO Tags", ar: "وسوم SEO" },
+  "retention_strategy": { en: "Retention Strategy", ar: "استراتيجية الاحتفاظ" },
+  "call_to_action": { en: "Call to Action", ar: "دعوة للعمل" },
+  "b_roll": { en: "B-Roll", ar: "B-Roll" },
+
+  // PaywallModal
+  "paywall_title": { en: "You've used all 5 free scripts this month", ar: "لقد استخدمت جميع النصوص المجانية الـ 5 هذا الشهر" },
+  "paywall_subtitle": { en: "Upgrade to Pro for unlimited scripts, all platforms, and advanced features", ar: "قم بالترقية إلى Pro للحصول على نصوص غير محدودة وجميع المنصات والميزات المتقدمة" },
+  "paywall_feat_1": { en: "Unlimited script generation", ar: "إنشاء نصوص غير محدود" },
+  "paywall_feat_2": { en: "All platforms (YouTube, TikTok, Reels, Course, Webinar)", ar: "جميع المنصات (YouTube, TikTok, Reels, الدورات, الندوات)" },
+  "paywall_feat_3": { en: "Multi-language (English + Arabic)", ar: "متعدد اللغات (إنجليزي + عربي)" },
+  "paywall_feat_4": { en: "Export as PDF/JSON", ar: "تصدير كـ PDF/JSON" },
+  "paywall_upgrade_btn": { en: "Upgrade to Pro — $3/month", ar: "الترقية إلى Pro — $3/شهر" },
+  "maybe_later": { en: "Maybe Later", ar: "ربما لاحقًا" },
+  "join_creators": { en: "Join 500+ creators already using Pro", ar: "انضم لأكثر من 500 صانع محتوى يستخدمون Pro" },
+  "or_yearly": { en: "or", ar: "أو" },
+  "save_yearly": { en: "(save 33%)", ar: "(وفّر 33%)" },
 };
 
 const AppSettingsContext = createContext<AppSettings | null>(null);
