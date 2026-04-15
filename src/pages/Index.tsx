@@ -91,6 +91,21 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="container max-w-6xl mx-auto px-4 py-6 text-center">
+        <p className="text-muted-foreground text-sm">
+          Developed by{" "}
+          <a
+            href="https://hassanaii.lovable.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary font-semibold hover:underline"
+          >
+            𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }
