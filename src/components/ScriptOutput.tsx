@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { Clock, Eye, Film, Hash, Lightbulb, Target, Type } from "lucide-react";
+import { Check, Clock, Copy, Eye, Film, Hash, Lightbulb, Target, Type } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
 
 export interface ScriptSection {
@@ -37,6 +39,20 @@ function SectionBadge({ section }: { section: string }) {
 
 export default function ScriptOutput({ result }: { result: ScriptResult }) {
   const { t } = useAppSettings();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const text = result.script.map(s => `[${s.timestamp}] ${s.dialogue}`).join("\n\n");
+    const full = `${result.titleOptions[0]}\n\n"${result.hook.text}"\n\n${text}\n\n${result.cta}`;
+    try {
+      await navigator.clipboard.writeText(full);
+      setCopied(true);
+      toast.success("تم نسخ السكربت!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("فشل النسخ");
+    }
+  };
 
   return (
     <motion.div
@@ -46,7 +62,14 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
       className="space-y-6"
     >
       {/* Titles */}
-      <div className="rounded-3xl bg-card p-6 shadow-card space-y-3">
+      <div className="rounded-3xl bg-card p-6 shadow-card space-y-3 relative">
+        <button
+          onClick={handleCopy}
+          className="absolute top-4 right-4 p-2 rounded-xl bg-muted hover:bg-muted/80 transition-colors"
+          title="Copy script"
+        >
+          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
+        </button>
         <div className="flex items-center gap-2">
           <Type className="w-4 h-4 text-secondary" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("title_options")}</h3>
