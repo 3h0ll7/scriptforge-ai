@@ -1,7 +1,7 @@
 project_id = "lrhrceelqnmqvyngedfs"
 
 [functions.generate-script]
-verify_jwt = true
+verify_jwt = false
 
 [functions.create-checkout]
 verify_jwt = true

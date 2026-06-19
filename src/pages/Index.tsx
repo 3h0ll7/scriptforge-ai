@@ -2,45 +2,25 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
-import { generateScript, saveToHistory } from "@/lib/generateScript";
-import { useAuth } from "@/hooks/useAuth";
+import { generateScript } from "@/lib/generateScript";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import Navbar from "@/components/Navbar";
-import PaywallModal from "@/components/PaywallModal";
 
 export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
-  const { user, profile, refreshUsage } = useAuth();
   const { t } = useAppSettings();
-  const navigate = useNavigate();
 
   const handleGenerate = async (input: ScriptInput) => {
-    if (!user || !profile) {
-      navigate("/auth");
-      return;
-    }
-
     setIsLoading(true);
     setResult(null);
     try {
       const data = await generateScript(input);
       setResult(data);
-      await saveToHistory(user.id, input, data.hook?.text || input.topic);
-      await refreshUsage();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to generate script";
-      const status = typeof err === "object" && err !== null && "status" in err ? Number(err.status) : undefined;
-
-      if (status === 429) {
-        setShowPaywall(true);
-        return;
-      }
-
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -50,7 +30,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <PaywallModal open={showPaywall} onClose={() => setShowPaywall(false)} />
+
 
       {/* Hero */}
       <section className="container max-w-6xl mx-auto px-4 pt-12 pb-8">

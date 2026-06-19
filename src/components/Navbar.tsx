@@ -1,23 +1,9 @@
-import { Zap, LogIn, Settings, CreditCard, LogOut, ChevronDown, Sun, Moon, Languages } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { Zap, Sun, Moon, Languages } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
-import UsageBadge from "./UsageBadge";
-import { useState } from "react";
-import { hasActiveProSubscription } from "@/lib/subscription";
 
 export default function Navbar() {
-  const { user, profile, signOut, loading } = useAuth();
-  const { t, theme, setTheme, language, setLanguage } = useAppSettings();
-  const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
-
-  const isPro = hasActiveProSubscription(profile);
+  const { theme, setTheme, language, setLanguage } = useAppSettings();
 
   return (
     <header className="bg-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-border/50">
@@ -33,7 +19,8 @@ export default function Navbar() {
         </Link>
 
         <div className="ms-auto flex items-center gap-2">
-          {/* Theme toggle */}
+          <span className="px-3 py-1.5 rounded-full text-xs font-bold chip-green">FREE</span>
+
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             className="p-2 rounded-xl bg-muted hover:bg-muted/70 transition-colors"
@@ -42,7 +29,6 @@ export default function Navbar() {
             {theme === "light" ? <Moon className="w-4 h-4 text-muted-foreground" /> : <Sun className="w-4 h-4 text-muted-foreground" />}
           </button>
 
-          {/* Language toggle */}
           <button
             onClick={() => setLanguage(language === "en" ? "ar" : "en")}
             className="flex items-center gap-1 px-2.5 py-2 rounded-xl bg-muted hover:bg-muted/70 transition-colors text-xs font-semibold text-muted-foreground"
@@ -51,78 +37,6 @@ export default function Navbar() {
             <Languages className="w-4 h-4" />
             <span>{language === "en" ? "ع" : "EN"}</span>
           </button>
-
-          <Link
-            to="/pricing"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-          >
-            {t("pricing")}
-          </Link>
-
-          {!loading && !user && (
-            <Link to="/auth">
-              <button className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold gradient-primary text-primary-foreground hover:opacity-90 transition-opacity">
-                <LogIn className="w-4 h-4" />
-                {t("sign_in")}
-              </button>
-            </Link>
-          )}
-
-          {user && (
-            <>
-              <UsageBadge />
-              <div className="relative">
-                <button
-                  onClick={() => setMenuOpen(!menuOpen)}
-                  className="flex items-center gap-1.5 px-2 py-1.5 rounded-full border border-border bg-card hover:bg-muted transition-colors"
-                >
-                  <div className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center text-xs font-bold text-primary-foreground">
-                    {(profile?.email || user.email || "U")[0].toUpperCase()}
-                  </div>
-                  <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                </button>
-
-                {menuOpen && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute end-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-                      <div className="p-3 border-b border-border">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {profile?.email || user.email}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          {isPro ? t("pro_plan") : t("free_plan")}
-                        </p>
-                      </div>
-                      <div className="p-1">
-                        <button
-                          onClick={() => { setMenuOpen(false); navigate("/pricing"); }}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
-                        >
-                          <CreditCard className="w-4 h-4 text-muted-foreground" />
-                          {t("pricing")}
-                        </button>
-                        <button
-                          onClick={() => { setMenuOpen(false); navigate("/settings"); }}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-foreground hover:bg-muted rounded-xl transition-colors"
-                        >
-                          <Settings className="w-4 h-4 text-muted-foreground" />
-                          {t("settings")}
-                        </button>
-                        <button
-                          onClick={() => { setMenuOpen(false); handleSignOut(); }}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-destructive hover:bg-muted rounded-xl transition-colors"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          {t("sign_out")}
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
         </div>
       </div>
     </header>
