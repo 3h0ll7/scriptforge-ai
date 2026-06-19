@@ -19,7 +19,6 @@ export default function Navbar() {
         </Link>
 
         <div className="ms-auto flex items-center gap-2">
-          <span className="px-3 py-1.5 rounded-full text-xs font-bold chip-green">FREE</span>
 
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
