@@ -1,9 +1,14 @@
-import { Zap, Sun, Moon, Languages } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Zap, Sun, Moon, Languages, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
-  const { theme, setTheme, language, setLanguage } = useAppSettings();
+  const { theme, setTheme, language, setLanguage, t } = useAppSettings();
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+
 
   return (
     <header className="bg-card/80 backdrop-blur-md sticky top-0 z-50 border-b border-border/50">
