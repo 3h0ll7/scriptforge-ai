@@ -148,6 +148,14 @@ const translations: Record<string, Record<Language, string>> = {
   "back_to_home": { en: "Back to home", ar: "العودة للرئيسية" },
   "check_email": { en: "Check your email to verify your account!", ar: "تحقق من بريدك الإلكتروني لتأكيد حسابك!" },
   "welcome_back_toast": { en: "Welcome back!", ar: "مرحبًا بعودتك!" },
+  "forgot_password": { en: "Forgot password?", ar: "نسيت كلمة المرور؟" },
+  "reset_password": { en: "Reset password", ar: "إعادة تعيين كلمة المرور" },
+  "send_reset_link": { en: "Send reset link", ar: "إرسال رابط الاستعادة" },
+  "reset_link_sent": { en: "Password reset link sent to your email.", ar: "تم إرسال رابط استعادة كلمة المرور إلى بريدك." },
+  "new_password": { en: "New password", ar: "كلمة المرور الجديدة" },
+  "update_password": { en: "Update password", ar: "تحديث كلمة المرور" },
+  "password_updated": { en: "Password updated successfully!", ar: "تم تحديث كلمة المرور بنجاح!" },
+  "sign_in_to_generate": { en: "Sign in to generate scripts", ar: "سجّل الدخول لإنشاء النصوص" },
 
   // Payment Success
   "pro_member": { en: "You are now a Pro member! 🎉", ar: "أنت الآن عضو Pro! 🎉" },
