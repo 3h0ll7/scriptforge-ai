@@ -166,6 +166,17 @@ export default function Auth() {
             </Button>
           </form>
 
+          {isLogin && (
+            <button
+              onClick={handleForgotPassword}
+              className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              {t("forgot_password")}
+            </button>
+          )}
+
+
+
           <p className="mt-6 text-center text-sm text-muted-foreground">
             {isLogin ? t("no_account") : t("have_account")}{" "}
             <button
