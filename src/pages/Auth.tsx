@@ -52,12 +52,25 @@ export default function Auth() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast.error(t("email_address"));
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success(t("reset_link_sent"));
+  };
+
   const handleGoogleAuth = async () => {
     const { error } = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
     if (error) toast.error("Google sign-in failed");
   };
+
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
