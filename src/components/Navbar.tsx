@@ -41,7 +41,30 @@ export default function Navbar() {
             <Languages className="w-4 h-4" />
             <span>{language === "en" ? "ع" : "EN"}</span>
           </button>
+
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline text-xs font-medium text-muted-foreground max-w-[140px] truncate">
+                {profile?.full_name || user.email}
+              </span>
+              <button
+                onClick={async () => {
+                  await signOut();
+                  navigate("/");
+                }}
+                className="p-2 rounded-xl bg-muted hover:bg-muted/70 transition-colors"
+                aria-label={t("sign_out")}
+              >
+                <LogOut className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
+          ) : (
+            <Button size="sm" variant="glow" className="rounded-full" onClick={() => navigate("/auth")}>
+              {t("sign_in")}
+            </Button>
+          )}
         </div>
+
       </div>
     </header>
   );
