@@ -14,13 +14,20 @@ export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useAppSettings();
-  const { user } = useAuth();
+  const { user, usage, refreshUsage } = useAuth();
   const navigate = useNavigate();
+
+  const exhausted = !!usage && usage.remaining <= 0;
 
   const handleGenerate = async (input: ScriptInput) => {
     if (!user) {
       toast.error(t("sign_in_to_generate"));
       navigate("/auth");
+      return;
+    }
+    if (isLoading) return;
+    if (exhausted) {
+      toast.error("Your free generations are finished. Upgrade to continue.");
       return;
     }
     setIsLoading(true);
@@ -37,6 +44,7 @@ export default function Index() {
       const message = err instanceof Error ? err.message : "Failed to generate script";
       toast.error(message);
     } finally {
+      await refreshUsage();
       setIsLoading(false);
     }
   };
