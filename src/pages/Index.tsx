@@ -71,7 +71,23 @@ export default function Index() {
           </p>
         </motion.div>
 
+        {user && usage && (
+          <div className="mb-6 text-center text-sm">
+            {exhausted ? (
+              <span className="inline-block rounded-full chip-pink px-4 py-2 font-semibold">
+                Your free generations are finished. Upgrade to continue.
+              </span>
+            ) : (
+              <span className="text-muted-foreground">
+                Free generations: <strong className="text-foreground">{usage.generations_used} / {usage.free_limit}</strong> used
+                {" · "}Remaining: <strong className="text-foreground">{usage.remaining} left</strong>
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Main Layout */}
+
         <div className="grid lg:grid-cols-2 gap-8">
           <ScriptForm onGenerate={handleGenerate} isLoading={isLoading} />
           <div>
