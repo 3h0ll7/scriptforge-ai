@@ -1,10 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.58.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -18,14 +25,54 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
+    // --- Authentication (server-side, never trust the client) ---
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace("Bearer ", "").trim();
+    if (!token) {
+      return json({ error: "Authentication required" }, 401);
+    }
+
+    const admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      { auth: { persistSession: false } }
+    );
+
+    const { data: userData, error: userError } = await admin.auth.getUser(token);
+    const user = userData?.user;
+    if (userError || !user) {
+      return json({ error: "Authentication required" }, 401);
+    }
+
+    // --- Free allowance check (server authoritative) ---
+    const { data: usageRow } = await admin
+      .from("user_usage")
+      .select("generations_used, free_limit, current_period_end")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (usageRow) {
+      const periodActive = new Date(usageRow.current_period_end).getTime() > Date.now();
+      if (periodActive && usageRow.generations_used >= usageRow.free_limit) {
+        return json(
+          {
+            error: "Your free generations are finished. Upgrade to continue.",
+            code: "usage_limit_reached",
+            generations_used: usageRow.generations_used,
+            free_limit: usageRow.free_limit,
+            remaining: 0,
+          },
+          402
+        );
+      }
+    }
+
     const { topic, platform, targetDuration, audience, tone, keyMessage, language } = await req.json();
 
     if (!topic) {
-      return new Response(JSON.stringify({ error: "Topic is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ error: "Topic is required" }, 400);
     }
+
 
     const systemPrompt = `You are ScriptForge AI — an expert video scriptwriter specializing in YouTube, TikTok, Reels, courses, and webinars.
 
