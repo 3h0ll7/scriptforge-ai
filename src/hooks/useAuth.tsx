@@ -13,8 +13,10 @@ interface Profile {
 }
 
 interface UsageData {
-  generation_count: number;
-  month_year: string;
+  generations_used: number;
+  free_limit: number;
+  remaining: number;
+  current_period_end: string | null;
 }
 
 interface AuthContextType {
