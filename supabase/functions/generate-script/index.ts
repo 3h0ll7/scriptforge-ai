@@ -213,9 +213,29 @@ Return the result using the generate_script tool.`;
       }));
     }
 
-    return new Response(JSON.stringify(scriptResult), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // --- Consume exactly one generation, atomically, after success ---
+    const { data: consumed, error: consumeError } = await admin.rpc("consume_generation", {
+      _user_id: user.id,
     });
+    const usage = Array.isArray(consumed) ? consumed[0] : consumed;
+
+    if (consumeError) {
+      console.error("consume_generation error:", consumeError);
+    } else if (usage && usage.allowed === false) {
+      return json(
+        {
+          error: "Your free generations are finished. Upgrade to continue.",
+          code: "usage_limit_reached",
+          generations_used: usage.generations_used,
+          free_limit: usage.free_limit,
+          remaining: 0,
+        },
+        402
+      );
+    }
+
+    return json({ ...scriptResult, usage: usage ?? null });
+
   } catch (e) {
     console.error("generate-script error:", e);
     return new Response(
