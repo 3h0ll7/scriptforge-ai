@@ -14,13 +14,20 @@ export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useAppSettings();
-  const { user } = useAuth();
+  const { user, usage, refreshUsage } = useAuth();
   const navigate = useNavigate();
+
+  const exhausted = !!usage && usage.remaining <= 0;
 
   const handleGenerate = async (input: ScriptInput) => {
     if (!user) {
       toast.error(t("sign_in_to_generate"));
       navigate("/auth");
+      return;
+    }
+    if (isLoading) return;
+    if (exhausted) {
+      toast.error("Your free generations are finished. Upgrade to continue.");
       return;
     }
     setIsLoading(true);
@@ -37,6 +44,7 @@ export default function Index() {
       const message = err instanceof Error ? err.message : "Failed to generate script";
       toast.error(message);
     } finally {
+      await refreshUsage();
       setIsLoading(false);
     }
   };
@@ -63,7 +71,23 @@ export default function Index() {
           </p>
         </motion.div>
 
+        {user && usage && (
+          <div className="mb-6 text-center text-sm">
+            {exhausted ? (
+              <span className="inline-block rounded-full chip-pink px-4 py-2 font-semibold">
+                Your free generations are finished. Upgrade to continue.
+              </span>
+            ) : (
+              <span className="text-muted-foreground">
+                Free generations: <strong className="text-foreground">{usage.generations_used} / {usage.free_limit}</strong> used
+                {" · "}Remaining: <strong className="text-foreground">{usage.remaining} left</strong>
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Main Layout */}
+
         <div className="grid lg:grid-cols-2 gap-8">
           <ScriptForm onGenerate={handleGenerate} isLoading={isLoading} />
           <div>

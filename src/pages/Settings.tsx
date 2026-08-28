@@ -157,7 +157,7 @@ export default function Settings() {
               </p>
             )}
             <p className="text-sm text-muted-foreground">
-              {usage?.generation_count ?? 0} {t("scripts_generated")}
+              {usage?.generations_used ?? 0} {t("scripts_generated")}
             </p>
             {!isPro && (
               <Button variant="glow" size="sm" className="rounded-full" onClick={() => navigate("/pricing")}>

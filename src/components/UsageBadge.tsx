@@ -1,27 +1,19 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Infinity, ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { hasActiveProSubscription } from "@/lib/subscription";
+import { ChevronDown } from "lucide-react";
 
 export default function UsageBadge() {
-  const { profile, usage } = useAuth();
+  const { user, usage } = useAuth();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
 
-  if (!profile) return null;
+  if (!user) return null;
 
-  const isPro = hasActiveProSubscription(profile);
-  const count = usage?.generation_count ?? 0;
-  const limit = 5;
+  const used = usage?.generations_used ?? 0;
+  const limit = usage?.free_limit ?? 5;
+  const remaining = usage?.remaining ?? Math.max(limit - used, 0);
+  const exhausted = remaining <= 0;
 
-  const color = isPro
-    ? "chip-pink"
-    : count <= 2
-    ? "chip-green"
-    : count <= 4
-    ? "chip-yellow"
-    : "chip-pink";
+  const color = exhausted ? "chip-pink" : remaining <= 2 ? "chip-yellow" : "chip-green";
 
   return (
     <div className="relative">
@@ -29,35 +21,22 @@ export default function UsageBadge() {
         onClick={() => setOpen(!open)}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${color}`}
       >
-        {isPro ? (
-          <>
-            <Infinity className="w-3.5 h-3.5" /> Pro
-          </>
-        ) : (
-          <>{count}/{limit}</>
-        )}
+        {used}/{limit}
         <ChevronDown className="w-3 h-3" />
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-2xl border border-border bg-card p-4 shadow-card space-y-3">
-            <p className="text-sm text-foreground font-medium">
-              {isPro
-                ? "Unlimited scripts — Pro Plan"
-                : `${count} of ${limit} free scripts used this month`}
+          <div className="absolute end-0 top-full mt-2 z-50 w-64 rounded-2xl border border-border bg-card p-4 shadow-card space-y-2">
+            <p className="text-sm font-semibold text-foreground">
+              Free generations: {used} / {limit} used
             </p>
-            {!isPro && (
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  navigate("/pricing");
-                }}
-                className="w-full text-center text-xs font-semibold text-primary-foreground gradient-primary rounded-full py-2 hover:opacity-90 transition-opacity"
-              >
-                Upgrade to Pro
-              </button>
+            <p className="text-xs text-muted-foreground">Remaining: {remaining} left</p>
+            {exhausted && (
+              <p className="text-xs font-medium text-primary">
+                Your free generations are finished. Upgrade to continue.
+              </p>
             )}
           </div>
         </>

@@ -13,8 +13,10 @@ interface Profile {
 }
 
 interface UsageData {
-  generation_count: number;
-  month_year: string;
+  generations_used: number;
+  free_limit: number;
+  remaining: number;
+  current_period_end: string | null;
 }
 
 interface AuthContextType {
@@ -62,20 +64,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (data) setProfile(normalizeProfile(data as Profile));
   };
 
-  const fetchUsage = async (userId: string) => {
-    const monthYear = getCurrentMonthYear();
-    const { data } = await supabase
-      .from("usage_tracking")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("month_year", monthYear)
-      .single();
-    if (data) {
-      setUsage({ generation_count: data.generation_count, month_year: data.month_year });
+  const fetchUsage = async (_userId: string) => {
+    const { data, error } = await supabase.rpc("get_usage_status");
+    const row = Array.isArray(data) ? data[0] : data;
+    if (!error && row) {
+      setUsage({
+        generations_used: row.generations_used ?? 0,
+        free_limit: row.free_limit ?? 5,
+        remaining: row.remaining ?? 0,
+        current_period_end: row.current_period_end ?? null,
+      });
     } else {
-      setUsage({ generation_count: 0, month_year: monthYear });
+      setUsage({ generations_used: 0, free_limit: 5, remaining: 5, current_period_end: null });
     }
   };
+
 
   const refreshProfile = async () => {
     if (user) await fetchProfile(user.id);

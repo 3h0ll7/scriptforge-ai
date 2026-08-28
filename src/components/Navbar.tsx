@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import UsageBadge from "@/components/UsageBadge";
 
 export default function Navbar() {
   const { theme, setTheme, language, setLanguage, t } = useAppSettings();
@@ -24,6 +25,8 @@ export default function Navbar() {
         </Link>
 
         <div className="ms-auto flex items-center gap-2">
+          {user && <UsageBadge />}
+
 
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
