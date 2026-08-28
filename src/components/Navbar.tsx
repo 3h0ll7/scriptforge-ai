@@ -25,6 +25,8 @@ export default function Navbar() {
         </Link>
 
         <div className="ms-auto flex items-center gap-2">
+          {user && <UsageBadge />}
+
 
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
