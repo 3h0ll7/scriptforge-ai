@@ -126,71 +126,12 @@ export type Database = {
           },
         ]
       }
-      user_usage: {
-        Row: {
-          created_at: string
-          current_period_end: string
-          current_period_start: string
-          free_limit: number
-          generations_used: number
-          id: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          current_period_end?: string
-          current_period_start?: string
-          free_limit?: number
-          generations_used?: number
-          id?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          current_period_end?: string
-          current_period_start?: string
-          free_limit?: number
-          generations_used?: number
-          id?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_usage_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      consume_generation: {
-        Args: { _user_id: string }
-        Returns: {
-          allowed: boolean
-          free_limit: number
-          generations_used: number
-          remaining: number
-        }[]
-      }
-      get_usage_status: {
-        Args: never
-        Returns: {
-          current_period_end: string
-          current_period_start: string
-          free_limit: number
-          generations_used: number
-          remaining: number
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
