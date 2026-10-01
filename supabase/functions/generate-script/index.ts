@@ -18,7 +18,7 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const { topic, platform, targetDuration, audience, tone, keyMessage, language } = await req.json();
+    const { topic, platform, targetDuration, audience, tone, keyMessage, language, videoUrl, sourceText, imageDataUrl, videoPrompt } = await req.json();
 
     if (!topic) {
       return new Response(JSON.stringify({ error: "Topic is required" }), {
@@ -46,8 +46,18 @@ Rules:
 - Tone: ${tone}
 - Key Message: ${keyMessage || "not specified"}
 - Language: ${language}
+- Reference video link: ${videoUrl || "none"}
+- Video visual direction prompt: ${videoPrompt || "none"}
+- Reference text: ${sourceText ? String(sourceText).slice(0, 8000) : "none"}
+${imageDataUrl ? "- A reference image is attached; use it as visual/source material." : ""}
 
+Use any reference material as source content for the script.
 Return the result using the generate_script tool.`;
+
+    const userContent: unknown =
+      typeof imageDataUrl === "string" && imageDataUrl.startsWith("data:image/")
+        ? [{ type: "text", text: userPrompt }, { type: "image_url", image_url: { url: imageDataUrl } }]
+        : userPrompt;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -59,7 +69,7 @@ Return the result using the generate_script tool.`;
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
+          { role: "user", content: userContent },
         ],
         tools: [
           {

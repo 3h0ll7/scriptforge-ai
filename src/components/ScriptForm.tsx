@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Clapperboard, Sparkles } from "lucide-react";
+import { Clapperboard, Sparkles, Link2, FileText, ImagePlus, X, Wand2, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
+import { enhancePrompt } from "@/lib/generateScript";
 
 export interface ScriptInput {
   topic: string;
@@ -12,6 +14,10 @@ export interface ScriptInput {
   tone: string;
   keyMessage: string;
   language: string;
+  videoUrl?: string;
+  sourceText?: string;
+  imageDataUrl?: string;
+  videoPrompt?: string;
 }
 
 const platforms = [
