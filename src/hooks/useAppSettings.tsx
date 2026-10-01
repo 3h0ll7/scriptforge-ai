@@ -189,7 +189,6 @@ const translations: Record<string, Record<Language, string>> = {
   "rebuilding": { en: "Rebuilding...", ar: "جارٍ إعادة البناء..." },
   "rebuilt_prompt": { en: "Rebuilt prompt", ar: "البرومبت المُعاد بناؤه" },
   "copy": { en: "Copy", ar: "نسخ" },
-  "copied": { en: "Copied!", ar: "تم النسخ!" },
   "use_prompt": { en: "Use it", ar: "استخدمه" },
   "generating_script": { en: "Generating Script...", ar: "جارٍ إنشاء النص..." },
 
