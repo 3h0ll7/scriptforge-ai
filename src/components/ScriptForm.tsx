@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Clapperboard, Sparkles } from "lucide-react";
+import { Clapperboard, Sparkles, Link2, FileText, ImagePlus, X, Wand2, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
+import { enhancePrompt } from "@/lib/generateScript";
 
 export interface ScriptInput {
   topic: string;
@@ -12,6 +14,10 @@ export interface ScriptInput {
   tone: string;
   keyMessage: string;
   language: string;
+  videoUrl?: string;
+  sourceText?: string;
+  imageDataUrl?: string;
+  videoPrompt?: string;
 }
 
 const platforms = [
@@ -89,16 +95,52 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     tone: "educational",
     keyMessage: "",
     language: "en",
+    videoUrl: "",
+    sourceText: "",
+    imageDataUrl: "",
+    videoPrompt: "",
   });
+  const [rebuilt, setRebuilt] = useState("");
+  const [rebuilding, setRebuilding] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const update = (key: keyof ScriptInput, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
+
+  const handleImage = (file?: File) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return toast.error(t("image_too_large"));
+    const reader = new FileReader();
+    reader.onload = () => update("imageDataUrl", String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
+  const handleRebuild = async () => {
+    if (!form.videoPrompt?.trim()) return;
+    setRebuilding(true);
+    try {
+      setRebuilt(await enhancePrompt(form));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally {
+      setRebuilding(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(rebuilt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.topic.trim()) return;
     onGenerate(form);
   };
+
+  const inputCls = "w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all";
 
   return (
     <motion.form
@@ -149,6 +191,54 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           placeholder={t("key_message_placeholder")}
           className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
         />
+      </div>
+
+      <div className="space-y-3 rounded-2xl border border-dashed border-border p-4">
+        <label className="text-sm font-medium text-muted-foreground">{t("attachments")}</label>
+        <div className="relative">
+          <Link2 className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input type="url" value={form.videoUrl} onChange={(e) => update("videoUrl", e.target.value)} placeholder={`${t("video_link")} — ${t("video_link_placeholder")}`} className={`${inputCls} ps-11`} />
+        </div>
+        <div className="relative">
+          <FileText className="absolute start-4 top-4 w-4 h-4 text-muted-foreground" />
+          <textarea rows={3} value={form.sourceText} onChange={(e) => update("sourceText", e.target.value)} placeholder={t("source_text_placeholder")} className={`${inputCls} ps-11 resize-none`} />
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleImage(e.target.files?.[0])} />
+        {form.imageDataUrl ? (
+          <div className="flex items-center gap-3">
+            <img src={form.imageDataUrl} alt="" className="w-16 h-16 rounded-xl object-cover" />
+            <Button type="button" variant="ghost" size="sm" className="rounded-full" onClick={() => { update("imageDataUrl", ""); if (fileRef.current) fileRef.current.value = ""; }}>
+              <X className="w-4 h-4" /> {t("remove")}
+            </Button>
+          </div>
+        ) : (
+          <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => fileRef.current?.click()}>
+            <ImagePlus className="w-4 h-4" /> {t("upload_image")}
+          </Button>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-muted-foreground">{t("video_prompt")}</label>
+        <textarea rows={3} value={form.videoPrompt} onChange={(e) => update("videoPrompt", e.target.value)} placeholder={t("video_prompt_placeholder")} className={`${inputCls} resize-none`} />
+        <Button type="button" variant="outline" className="rounded-full" disabled={rebuilding || !form.videoPrompt?.trim()} onClick={handleRebuild}>
+          <Wand2 className={`w-4 h-4 ${rebuilding ? "animate-spin" : ""}`} />
+          {rebuilding ? t("rebuilding") : t("rebuild_prompt")}
+        </Button>
+        {rebuilt && (
+          <div className="rounded-2xl bg-muted p-4 space-y-3">
+            <p className="text-xs font-semibold text-muted-foreground">{t("rebuilt_prompt")}</p>
+            <p className="text-sm text-foreground whitespace-pre-wrap">{rebuilt}</p>
+            <div className="flex gap-2">
+              <Button type="button" size="sm" variant="outline" className="rounded-full" onClick={handleCopy}>
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} {copied ? t("copied") : t("copy")}
+              </Button>
+              <Button type="button" size="sm" variant="ghost" className="rounded-full" onClick={() => update("videoPrompt", rebuilt)}>
+                {t("use_prompt")}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={isLoading || !form.topic.trim()}>

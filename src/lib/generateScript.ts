@@ -45,6 +45,15 @@ export async function generateScript(input: ScriptInput): Promise<ScriptResult> 
   return data as ScriptResult;
 }
 
+export async function enhancePrompt(input: ScriptInput & { prompt?: string }): Promise<string> {
+  const { data, error } = await supabase.functions.invoke("enhance-prompt", {
+    body: { ...input, prompt: input.videoPrompt },
+  });
+  if (error) throw await buildFunctionError(error);
+  if (data?.error) throw new Error(data.error);
+  return data.prompt as string;
+}
+
 export async function saveToHistory(
   userId: string,
   input: ScriptInput,
