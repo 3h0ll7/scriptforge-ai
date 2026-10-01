@@ -193,6 +193,54 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         />
       </div>
 
+      <div className="space-y-3 rounded-2xl border border-dashed border-border p-4">
+        <label className="text-sm font-medium text-muted-foreground">{t("attachments")}</label>
+        <div className="relative">
+          <Link2 className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input type="url" value={form.videoUrl} onChange={(e) => update("videoUrl", e.target.value)} placeholder={`${t("video_link")} — ${t("video_link_placeholder")}`} className={`${inputCls} ps-11`} />
+        </div>
+        <div className="relative">
+          <FileText className="absolute start-4 top-4 w-4 h-4 text-muted-foreground" />
+          <textarea rows={3} value={form.sourceText} onChange={(e) => update("sourceText", e.target.value)} placeholder={t("source_text_placeholder")} className={`${inputCls} ps-11 resize-none`} />
+        </div>
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleImage(e.target.files?.[0])} />
+        {form.imageDataUrl ? (
+          <div className="flex items-center gap-3">
+            <img src={form.imageDataUrl} alt="" className="w-16 h-16 rounded-xl object-cover" />
+            <Button type="button" variant="ghost" size="sm" className="rounded-full" onClick={() => { update("imageDataUrl", ""); if (fileRef.current) fileRef.current.value = ""; }}>
+              <X className="w-4 h-4" /> {t("remove")}
+            </Button>
+          </div>
+        ) : (
+          <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => fileRef.current?.click()}>
+            <ImagePlus className="w-4 h-4" /> {t("upload_image")}
+          </Button>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-muted-foreground">{t("video_prompt")}</label>
+        <textarea rows={3} value={form.videoPrompt} onChange={(e) => update("videoPrompt", e.target.value)} placeholder={t("video_prompt_placeholder")} className={`${inputCls} resize-none`} />
+        <Button type="button" variant="outline" className="rounded-full" disabled={rebuilding || !form.videoPrompt?.trim()} onClick={handleRebuild}>
+          <Wand2 className={`w-4 h-4 ${rebuilding ? "animate-spin" : ""}`} />
+          {rebuilding ? t("rebuilding") : t("rebuild_prompt")}
+        </Button>
+        {rebuilt && (
+          <div className="rounded-2xl bg-muted p-4 space-y-3">
+            <p className="text-xs font-semibold text-muted-foreground">{t("rebuilt_prompt")}</p>
+            <p className="text-sm text-foreground whitespace-pre-wrap">{rebuilt}</p>
+            <div className="flex gap-2">
+              <Button type="button" size="sm" variant="outline" className="rounded-full" onClick={handleCopy}>
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} {copied ? t("copied") : t("copy")}
+              </Button>
+              <Button type="button" size="sm" variant="ghost" className="rounded-full" onClick={() => update("videoPrompt", rebuilt)}>
+                {t("use_prompt")}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
       <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={isLoading || !form.topic.trim()}>
         {isLoading ? (
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
