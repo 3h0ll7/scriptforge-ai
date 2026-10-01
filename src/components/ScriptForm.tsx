@@ -95,16 +95,52 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     tone: "educational",
     keyMessage: "",
     language: "en",
+    videoUrl: "",
+    sourceText: "",
+    imageDataUrl: "",
+    videoPrompt: "",
   });
+  const [rebuilt, setRebuilt] = useState("");
+  const [rebuilding, setRebuilding] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const update = (key: keyof ScriptInput, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
+
+  const handleImage = (file?: File) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) return toast.error(t("image_too_large"));
+    const reader = new FileReader();
+    reader.onload = () => update("imageDataUrl", String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
+  const handleRebuild = async () => {
+    if (!form.videoPrompt?.trim()) return;
+    setRebuilding(true);
+    try {
+      setRebuilt(await enhancePrompt(form));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed");
+    } finally {
+      setRebuilding(false);
+    }
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(rebuilt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.topic.trim()) return;
     onGenerate(form);
   };
+
+  const inputCls = "w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all";
 
   return (
     <motion.form
