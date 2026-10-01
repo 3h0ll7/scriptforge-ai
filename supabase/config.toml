@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.payment-webhook]
 verify_jwt = false
+
+[functions.enhance-prompt]
+verify_jwt = true
