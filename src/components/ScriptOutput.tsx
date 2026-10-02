@@ -3,6 +3,8 @@ import { Check, Clock, Copy, Eye, Film, Hash, Lightbulb, Target, Type } from "lu
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
+import VideoPromptBuilder from "@/components/VideoPromptBuilder";
+import type { ScriptInput } from "@/components/ScriptForm";
 
 export interface ScriptSection {
   timestamp: string;
@@ -37,7 +39,7 @@ function SectionBadge({ section }: { section: string }) {
   );
 }
 
-export default function ScriptOutput({ result }: { result: ScriptResult }) {
+export default function ScriptOutput({ result, input }: { result: ScriptResult; input: ScriptInput }) {
   const { t } = useAppSettings();
   const [copied, setCopied] = useState(false);
 
@@ -159,6 +161,8 @@ export default function ScriptOutput({ result }: { result: ScriptResult }) {
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">{result.retentionStrategyNotes}</p>
       </div>
+
+      <VideoPromptBuilder input={input} result={result} />
     </motion.div>
   );
 }

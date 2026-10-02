@@ -12,6 +12,7 @@ import Navbar from "@/components/Navbar";
 
 export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
+  const [generatedInput, setGeneratedInput] = useState<ScriptInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useAppSettings();
   const { user } = useAuth();
@@ -28,6 +29,7 @@ export default function Index() {
     try {
       const data = await generateScript(input);
       setResult(data);
+      setGeneratedInput(input);
       try {
         await saveToHistory(user.id, input, data.hook?.text ?? input.topic);
       } catch {
@@ -67,8 +69,8 @@ export default function Index() {
         <div className="grid lg:grid-cols-2 gap-8">
           <ScriptForm onGenerate={handleGenerate} isLoading={isLoading} />
           <div>
-            {result ? (
-              <ScriptOutput result={result} />
+            {result && generatedInput ? (
+              <ScriptOutput result={result} input={generatedInput} />
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}

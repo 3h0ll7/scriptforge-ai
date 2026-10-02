@@ -1,10 +1,9 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Clapperboard, Sparkles, Link2, FileText, ImagePlus, X, Wand2, Copy, Check } from "lucide-react";
+import { Clapperboard, Sparkles, Link2, FileText, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
-import { enhancePrompt } from "@/lib/generateScript";
 
 export interface ScriptInput {
   topic: string;
@@ -100,9 +99,6 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     imageDataUrl: "",
     videoPrompt: "",
   });
-  const [rebuilt, setRebuilt] = useState("");
-  const [rebuilding, setRebuilding] = useState(false);
-  const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const update = (key: keyof ScriptInput, value: string) =>
@@ -114,24 +110,6 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     const reader = new FileReader();
     reader.onload = () => update("imageDataUrl", String(reader.result));
     reader.readAsDataURL(file);
-  };
-
-  const handleRebuild = async () => {
-    if (!form.videoPrompt?.trim()) return;
-    setRebuilding(true);
-    try {
-      setRebuilt(await enhancePrompt(form));
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed");
-    } finally {
-      setRebuilding(false);
-    }
-  };
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(rebuilt);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -215,29 +193,6 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => fileRef.current?.click()}>
             <ImagePlus className="w-4 h-4" /> {t("upload_image")}
           </Button>
-        )}
-      </div>
-
-      <div className="space-y-3">
-        <label className="text-sm font-medium text-muted-foreground">{t("video_prompt")}</label>
-        <textarea rows={3} value={form.videoPrompt} onChange={(e) => update("videoPrompt", e.target.value)} placeholder={t("video_prompt_placeholder")} className={`${inputCls} resize-none`} />
-        <Button type="button" variant="outline" className="rounded-full" disabled={rebuilding || !form.videoPrompt?.trim()} onClick={handleRebuild}>
-          <Wand2 className={`w-4 h-4 ${rebuilding ? "animate-spin" : ""}`} />
-          {rebuilding ? t("rebuilding") : t("rebuild_prompt")}
-        </Button>
-        {rebuilt && (
-          <div className="rounded-2xl bg-muted p-4 space-y-3">
-            <p className="text-xs font-semibold text-muted-foreground">{t("rebuilt_prompt")}</p>
-            <p className="text-sm text-foreground whitespace-pre-wrap">{rebuilt}</p>
-            <div className="flex gap-2">
-              <Button type="button" size="sm" variant="outline" className="rounded-full" onClick={handleCopy}>
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />} {copied ? t("copied") : t("copy")}
-              </Button>
-              <Button type="button" size="sm" variant="ghost" className="rounded-full" onClick={() => update("videoPrompt", rebuilt)}>
-                {t("use_prompt")}
-              </Button>
-            </div>
-          </div>
         )}
       </div>
 
