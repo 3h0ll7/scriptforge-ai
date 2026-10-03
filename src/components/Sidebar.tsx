@@ -49,7 +49,7 @@ export default function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps
   };
   const handleSignOut = async () => { await signOut(); onMobileOpenChange(false); navigate("/"); };
 
-  const railClass = mobileOpen ? "translate-x-0" : "-translate-x-[calc(100%+28px)] lg:translate-x-0";
+  const railClass = mobileOpen ? "translate-x-0" : (language === "ar" ? "translate-x-[calc(100%+28px)] lg:translate-x-0" : "-translate-x-[calc(100%+28px)] lg:translate-x-0");
   return <>
     {mobileOpen && <button aria-label="Close navigation" onClick={() => onMobileOpenChange(false)} className="fixed inset-0 z-[65] bg-black/15 backdrop-blur-[2px] lg:hidden" />}
     <aside className={`fixed inset-y-4 start-4 z-[70] flex w-[248px] flex-col rounded-[28px] border border-white/75 bg-[#fbfaf7]/96 p-4 shadow-[0_24px_70px_rgba(74,63,54,.12)] backdrop-blur-xl transition-transform duration-300 lg:inset-y-5 lg:start-5 ${railClass}`}>
