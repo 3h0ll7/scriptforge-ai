@@ -11,6 +11,7 @@ import type { ScriptResult } from "@/components/ScriptOutput";
 interface Props {
   input: ScriptInput;
   result: ScriptResult;
+  onPromptChange?: (prompt: string) => void;
 }
 
 const formatScript = (result: ScriptResult) =>
