@@ -221,6 +221,12 @@ const translations: Record<string, Record<Language, string>> = {
   "retention_strategy": { en: "Retention Strategy", ar: "استراتيجية الاحتفاظ" },
   "call_to_action": { en: "Call to Action", ar: "دعوة للعمل" },
   "b_roll": { en: "B-Roll", ar: "B-Roll" },
+  "download_results": { en: "Download the result", ar: "تنزيل النتيجة" },
+  "download_results_help": { en: "Save the hook, script, and final video prompt as a text or Markdown file.", ar: "احفظ الهوك والسكربت والبرومبت النهائي كملف نصي أو Markdown." },
+  "download_txt": { en: "Download .txt", ar: "تنزيل .txt" },
+  "download_md": { en: "Download .md", ar: "تنزيل .md" },
+  "download_failed": { en: "Failed to download.", ar: "تعذر التنزيل." },
+  "prompt_not_built": { en: "Build the video prompt first.", ar: "أنشئ البرومبت أولاً." },
 
   // PaywallModal
   "paywall_title": { en: "You've used all 5 free scripts this month", ar: "لقد استخدمت جميع النصوص المجانية الـ 5 هذا الشهر" },
