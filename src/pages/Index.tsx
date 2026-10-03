@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, FileText, Sparkles, Zap } from "lucide-react";
+import { ArrowUpRight, FileText, Sparkles, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
@@ -8,14 +8,16 @@ import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
 import { generateScript, saveToHistory } from "@/lib/generateScript";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { useAuth } from "@/hooks/useAuth";
-import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import TopBar from "@/components/TopBar";
 
 export default function Index() {
   const [result, setResult] = useState<ScriptResult | null>(null);
   const [generatedInput, setGeneratedInput] = useState<ScriptInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { t } = useAppSettings();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const handleGenerate = async (input: ScriptInput) => {
@@ -32,84 +34,98 @@ export default function Index() {
       setGeneratedInput(input);
       try {
         await saveToHistory(user.id, input, data.hook?.text ?? input.topic);
-      } catch {
-        // history is best-effort
-      }
+      } catch {}
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to generate script";
-      toast.error(message);
+      toast.error(err instanceof Error ? err.message : "Failed to generate script");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const displayName = profile?.full_name?.split(" ")[0] || "Creator";
 
   return (
-    <div className="min-h-screen bg-background p-0 lg:p-5">
-      <Navbar />
-
-      <main className="lg:ms-60 min-h-[calc(100vh-2.5rem)] bg-card/55 lg:rounded-2xl border-border lg:border overflow-hidden">
-      <section className="max-w-workspace mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-8">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 lg:mb-10"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
-            <div>
-              <p className="text-[11px] font-semibold uppercase text-muted-foreground mb-2">{t("creative_workspace")}</p>
-              <h2 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">ScriptForge AI <span aria-hidden="true">✦</span></h2>
-              <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-xl">{t("workspace_subtitle")}</p>
-            </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-secondary"><span className="w-2 h-2 rounded-full bg-secondary" />{t("ai_ready")}</div>
-          </div>
-        </motion.div>
-
-        <div className="grid xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-5 items-start">
-          <div id="script-form"><ScriptForm onGenerate={handleGenerate} isLoading={isLoading} /></div>
-          <div id="script-output">
-            {result && generatedInput ? (
-              <ScriptOutput result={result} input={generatedInput} />
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="rounded-xl border border-border bg-card p-7 flex flex-col min-h-[400px] shadow-card"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="p-3 rounded-lg bg-primary text-primary-foreground"><FileText className="w-5 h-5" /></div>
-                  <ArrowUpRight className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <div className="mt-auto mb-auto py-12 text-center">
-                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-muted flex items-center justify-center"><Sparkles className="w-6 h-6 text-secondary" /></div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{t("results_ready_title")}</h3>
-                <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-                  {t("fill_prompt")} <span className="text-primary font-semibold">{t("generate")}</span> {t("to_create")}
+    <div className="min-h-screen bg-[#e9e6df] p-0 lg:p-5">
+      <Sidebar mobileOpen={mobileNavOpen} onMobileOpenChange={setMobileNavOpen} />
+      <main className="min-h-[calc(100vh-2.5rem)] overflow-hidden rounded-[30px] border border-white/80 bg-[#eeece7] shadow-[0_24px_70px_rgba(69,59,49,.08)] lg:ms-[270px]">
+        <div className="mx-auto min-h-full max-w-[1480px] px-4 md:px-7">
+          <TopBar />
+          <section className="pb-10">
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-7 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[.28em] text-[#93948e]">{t("creative_workspace")}</p>
+                <h1 className="text-4xl font-extrabold tracking-[-.045em] text-[#131915] md:text-5xl">
+                  Good to see you, {displayName}.
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#6f746f] md:text-[15px]">
+                  Turn a clear idea into a platform-ready script, then take it straight into visual production.
                 </p>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {["Hook", "Script", "SEO"].map((item) => <div key={item} className="rounded-lg bg-muted px-3 py-3 text-center text-xs font-semibold text-muted-foreground">{item}</div>)}
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </div>
-      </section>
+              </div>
+              <div className="flex items-center gap-2 self-start rounded-full border border-[#dedbd3] bg-white/70 px-3 py-2 text-xs font-semibold text-[#56655b] lg:self-auto">
+                <span className="h-2 w-2 rounded-full bg-[#3d6952]" />
+                {t("ai_ready")}
+              </div>
+            </motion.div>
 
-      {/* Footer */}
-      <footer className="max-w-workspace mx-auto px-4 py-6 text-center">
-        <p className="text-muted-foreground text-sm">
-          Developed by{" "}
-          <a
-            href="https://hassanaii.lovable.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary font-semibold hover:underline"
-          >
-            𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷
-          </a>
-        </p>
-      </footer>
+            <div className="mb-5 grid gap-4 xl:grid-cols-[1.55fr_.85fr]">
+              <div className="rounded-[28px] border border-[#e4e0d8] bg-[#fbfaf7] p-5 shadow-[0_18px_50px_rgba(73,64,56,.055)] md:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef0ea] text-[#59675d]"><Sparkles className="h-5 w-5" /></div>
+                    <div><div className="text-xs font-bold uppercase tracking-[.17em] text-[#8e908b]">Creative engine</div><div className="mt-1 text-lg font-bold text-[#1a211d]">Build once. Refine faster.</div></div>
+                  </div>
+                  <ArrowUpRight className="h-5 w-5 text-[#a0a29d]" />
+                </div>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  {[
+                    ["01","Brief","Define topic, platform and audience"],
+                    ["02","Forge","Generate the script with AI"],
+                    ["03","Produce","Convert the result into video prompts"],
+                  ].map(([n,tit,desc]) => (
+                    <div key={n} className="rounded-2xl border border-[#ebe7df] bg-white/75 p-4">
+                      <div className="text-[10px] font-bold text-[#a2a29d]">{n}</div>
+                      <div className="mt-2 text-sm font-bold text-[#252c27]">{tit}</div>
+                      <div className="mt-1 text-xs leading-5 text-[#878b86]">{desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[28px] bg-[#111a14] p-5 text-white shadow-[0_18px_42px_rgba(22,30,25,.15)] md:p-6">
+                <div className="flex items-start justify-between">
+                  <div><div className="text-[10px] font-bold uppercase tracking-[.2em] text-white/45">Workspace state</div><div className="mt-2 text-2xl font-bold tracking-[-.03em]">{user ? "Ready to create" : "Explore the studio"}</div></div>
+                  <Wand2 className="h-5 w-5 text-white/60" />
+                </div>
+                <p className="mt-3 text-sm leading-6 text-white/60">Keep the interface calm and the creation flow focused on one thing: better scripts.</p>
+                {!user && <button onClick={() => navigate("/auth")} className="mt-5 rounded-2xl bg-white px-4 py-2.5 text-xs font-bold text-[#141b16] hover:bg-white/90">{t("sign_in")}</button>}
+              </div>
+            </div>
+
+            <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,.93fr)_minmax(0,1.07fr)]">
+              <div id="script-form"><ScriptForm onGenerate={handleGenerate} isLoading={isLoading} /></div>
+              <div id="script-output">
+                {result && generatedInput ? (
+                  <ScriptOutput result={result} input={generatedInput} />
+                ) : (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="min-h-[520px] rounded-[28px] border border-[#e4e0d8] bg-[#fbfaf7] p-7 shadow-[0_18px_50px_rgba(73,64,56,.055)]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0f1812] text-white"><FileText className="h-5 w-5" /></div>
+                      <span className="rounded-full border border-[#e7e3db] bg-white/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.15em] text-[#92948f]">Output</span>
+                    </div>
+                    <div className="flex min-h-[390px] flex-col items-center justify-center py-12 text-center">
+                      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#eef0ea] text-[#7a877d]"><Sparkles className="h-7 w-7" /></div>
+                      <h3 className="text-xl font-bold tracking-[-.02em] text-[#1c231f]">{t("results_ready_title")}</h3>
+                      <p className="mt-2 max-w-sm text-sm leading-6 text-[#858984]">{t("fill_prompt")} <span className="font-bold text-[#202a24]">{t("generate")}</span> {t("to_create")}</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["Hook","Script","Video prompt"].map(item => <div key={item} className="rounded-2xl bg-[#f1efe9] px-3 py-3 text-center text-[11px] font-bold text-[#777c77]">{item}</div>)}
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </div>
+          </section>
+          <footer className="border-t border-[#e2dfd7] py-6 text-center text-xs text-[#90928d]">Developed by <a href="https://hassanaii.lovable.app" target="_blank" rel="noopener noreferrer" className="font-bold text-[#526258] hover:underline">𝓗𝓪𝓼𝓼𝓪𝓷 𝓼𝓪𝓵𝓶𝓪𝓷</a></footer>
+        </div>
       </main>
     </div>
   );
