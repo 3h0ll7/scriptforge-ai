@@ -72,8 +72,8 @@ function ChipSelect({ options, value, onChange, label }: {
             onClick={() => onChange(opt.value)}
             className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
               value === opt.value
-                ? `${opt.chip} ring-2 ring-current/20 scale-105`
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             {opt.label}
@@ -118,7 +118,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     onGenerate(form);
   };
 
-  const inputCls = "w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all";
+    const inputCls = "w-full rounded-lg border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all";
 
   return (
     <motion.form
@@ -126,10 +126,10 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit}
-      className="space-y-6 rounded-3xl bg-card p-6 md:p-8 shadow-card"
+      className="space-y-6 rounded-xl border border-border bg-card p-5 md:p-7 shadow-card"
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="p-2.5 rounded-2xl gradient-primary">
+        <div className="p-2.5 rounded-lg gradient-primary">
           <Clapperboard className="w-5 h-5 text-primary-foreground" />
         </div>
         <h2 className="text-xl font-bold text-foreground">{t("script_parameters")}</h2>
@@ -141,7 +141,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           value={form.topic}
           onChange={(e) => update("topic", e.target.value)}
           placeholder={t("topic_placeholder")}
-          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          className={inputCls}
         />
       </div>
 
@@ -156,7 +156,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           value={form.audience}
           onChange={(e) => update("audience", e.target.value)}
           placeholder={t("audience_placeholder")}
-          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          className={inputCls}
         />
       </div>
 
@@ -167,11 +167,11 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
           onChange={(e) => update("keyMessage", e.target.value)}
           rows={2}
           placeholder={t("key_message_placeholder")}
-          className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
+          className={`${inputCls} resize-none`}
         />
       </div>
 
-      <div className="space-y-3 rounded-2xl border border-dashed border-border p-4">
+      <div className="space-y-3 rounded-lg border border-border bg-muted/40 p-4">
         <label className="text-sm font-medium text-muted-foreground">{t("attachments")}</label>
         <div className="relative">
           <Link2 className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -184,7 +184,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleImage(e.target.files?.[0])} />
         {form.imageDataUrl ? (
           <div className="flex items-center gap-3">
-            <img src={form.imageDataUrl} alt="" className="w-16 h-16 rounded-xl object-cover" />
+            <img src={form.imageDataUrl} alt="" className="w-16 h-16 rounded-lg object-cover" />
             <Button type="button" variant="ghost" size="sm" className="rounded-full" onClick={() => { update("imageDataUrl", ""); if (fileRef.current) fileRef.current.value = ""; }}>
               <X className="w-4 h-4" /> {t("remove")}
             </Button>
@@ -196,7 +196,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         )}
       </div>
 
-      <Button type="submit" variant="glow" size="lg" className="w-full rounded-full" disabled={isLoading || !form.topic.trim()}>
+      <Button type="submit" variant="glow" size="lg" className="w-full rounded-lg" disabled={isLoading || !form.topic.trim()}>
         {isLoading ? (
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
             <Sparkles className="w-5 h-5" />

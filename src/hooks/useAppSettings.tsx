@@ -19,6 +19,10 @@ const translations: Record<string, Record<Language, string>> = {
   "settings": { en: "Settings", ar: "الإعدادات" },
   "pro_plan": { en: "Pro Plan", ar: "الخطة الاحترافية" },
   "free_plan": { en: "Free Plan", ar: "الخطة المجانية" },
+  "home": { en: "Home", ar: "الرئيسية" },
+  "new_script": { en: "New script", ar: "سكربت جديد" },
+  "results": { en: "Results", ar: "النتائج" },
+  "workspace": { en: "Workspace", ar: "مساحة العمل" },
 
   // Index
   "craft_scripts": { en: "Craft Scripts", ar: "اصنع نصوصاً" },
@@ -27,6 +31,10 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Platform-optimized scripts with hooks, retention strategies, and calls to action — built for YouTube, TikTok, Reels, and more.",
     ar: "نصوص محسّنة للمنصات مع خطافات واستراتيجيات احتفاظ ودعوات للعمل — مُصممة لـ YouTube و TikTok و Reels والمزيد."
   },
+  "creative_workspace": { en: "Creative workspace", ar: "مساحة صناعة المحتوى" },
+  "workspace_subtitle": { en: "Turn one clear idea into a structured, platform-ready video script.", ar: "حوّل فكرتك إلى سكربت فيديو منظم وجاهز للمنصة." },
+  "ai_ready": { en: "AI ready", ar: "الذكاء جاهز" },
+  "results_ready_title": { en: "Your script will appear here", ar: "سيظهر سكربتك هنا" },
   "generate": { en: "Generate", ar: "إنشاء" },
   "fill_prompt": {
     en: "Fill in your parameters and hit",

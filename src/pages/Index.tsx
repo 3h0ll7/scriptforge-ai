@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Zap } from "lucide-react";
+import { ArrowUpRight, FileText, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
@@ -45,44 +45,51 @@ export default function Index() {
 
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background p-0 lg:p-5">
       <Navbar />
 
-
-      {/* Hero */}
-      <section className="container max-w-6xl mx-auto px-4 pt-12 pb-8">
+      <main className="lg:ms-60 min-h-[calc(100vh-2.5rem)] bg-card/55 lg:rounded-2xl border-border lg:border overflow-hidden">
+      <section className="max-w-workspace mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-8">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-2xl mx-auto mb-12"
+          className="mb-8 lg:mb-10"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-foreground leading-tight">
-            <span className="text-gradient">{t("craft_scripts")}</span>{" "}
-            {t("that_go_viral")}
-          </h2>
-          <p className="text-muted-foreground text-base">
-            {t("hero_subtitle")}
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+            <div>
+              <p className="text-[11px] font-semibold uppercase text-muted-foreground mb-2">{t("creative_workspace")}</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">ScriptForge AI <span aria-hidden="true">✦</span></h2>
+              <p className="text-muted-foreground text-sm md:text-base mt-2 max-w-xl">{t("workspace_subtitle")}</p>
+            </div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-secondary"><span className="w-2 h-2 rounded-full bg-secondary" />{t("ai_ready")}</div>
+          </div>
         </motion.div>
 
-        {/* Main Layout */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          <ScriptForm onGenerate={handleGenerate} isLoading={isLoading} />
-          <div>
+        <div className="grid xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-5 items-start">
+          <div id="script-form"><ScriptForm onGenerate={handleGenerate} isLoading={isLoading} /></div>
+          <div id="script-output">
             {result && generatedInput ? (
               <ScriptOutput result={result} input={generatedInput} />
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="rounded-3xl border border-dashed border-border bg-card/50 p-12 flex flex-col items-center justify-center text-center min-h-[400px]"
+                className="rounded-xl border border-border bg-card p-7 flex flex-col min-h-[400px] shadow-card"
               >
-                <div className="p-4 rounded-2xl bg-muted mb-4">
-                  <Zap className="w-8 h-8 text-muted-foreground" />
+                <div className="flex items-center justify-between">
+                  <div className="p-3 rounded-lg bg-primary text-primary-foreground"><FileText className="w-5 h-5" /></div>
+                  <ArrowUpRight className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <p className="text-muted-foreground text-sm">
+                <div className="mt-auto mb-auto py-12 text-center">
+                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-muted flex items-center justify-center"><Sparkles className="w-6 h-6 text-secondary" /></div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{t("results_ready_title")}</h3>
+                <p className="text-muted-foreground text-sm max-w-xs mx-auto">
                   {t("fill_prompt")} <span className="text-primary font-semibold">{t("generate")}</span> {t("to_create")}
                 </p>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {["Hook", "Script", "SEO"].map((item) => <div key={item} className="rounded-lg bg-muted px-3 py-3 text-center text-xs font-semibold text-muted-foreground">{item}</div>)}
+                </div>
               </motion.div>
             )}
           </div>
@@ -90,7 +97,7 @@ export default function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="container max-w-6xl mx-auto px-4 py-6 text-center">
+      <footer className="max-w-workspace mx-auto px-4 py-6 text-center">
         <p className="text-muted-foreground text-sm">
           Developed by{" "}
           <a
@@ -103,6 +110,7 @@ export default function Index() {
           </a>
         </p>
       </footer>
+      </main>
     </div>
   );
 }
