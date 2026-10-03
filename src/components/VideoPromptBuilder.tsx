@@ -9,7 +9,7 @@ import type { ScriptInput } from "@/components/ScriptForm";
 import type { ScriptResult } from "@/components/ScriptOutput";
 
 interface Props { input: ScriptInput; result: ScriptResult; onPromptChange?: (prompt: string) => void; }
-const formatScript = (result: ScriptResult) => result.script.map(section => \`[\${section.timestamp}] \${section.dialogue}\`).join("\\n\\n");
+const formatScript = (result: ScriptResult) => result.script.map(section => "[" + section.timestamp + "] " + section.dialogue).join("\n\n");
 
 export default function VideoPromptBuilder({ input, result, onPromptChange }: Props) {
   const { t } = useAppSettings();
@@ -23,11 +23,21 @@ export default function VideoPromptBuilder({ input, result, onPromptChange }: Pr
     if(!hook.trim()||!script.trim()){toast.error(t("hook_script_required"));return;}
     setIsBuilding(true);
     try{
-      const sourceText = \`\${input.sourceText?.trim()?\`\${input.sourceText.trim()}\\n\\n\`:""}\${t("hook")}:\\n\${hook.trim()}\\n\\n\${t("full_script")}:\\n\${script.trim()}\`;
-      const detailedPrompt=await enhancePrompt({...input,sourceText,videoPrompt:\`\${t("build_video_from_script_instruction")}\\n\\n\${hook.trim()}\\n\\n\${script.trim()}\`});
-      setPrompt(detailedPrompt);onPromptChange?.(detailedPrompt);
-    }catch(error){toast.error(error instanceof Error?error.message:t("prompt_build_failed"))}
-    finally{setIsBuilding(false)}
+      const sourceText =
+        (input.sourceText?.trim() ? input.sourceText.trim() + "\n\n" : "") +
+        t("hook") + ":\n" + hook.trim() + "\n\n" +
+        t("full_script") + ":\n" + script.trim();
+      const detailedPrompt = await enhancePrompt({
+        ...input,
+        sourceText,
+        videoPrompt:
+          t("build_video_from_script_instruction") + "\n\n" +
+          hook.trim() + "\n\n" + script.trim(),
+      });
+      setPrompt(detailedPrompt); onPromptChange?.(detailedPrompt);
+    } catch(error) {
+      toast.error(error instanceof Error ? error.message : t("prompt_build_failed"));
+    } finally { setIsBuilding(false); }
   };
   const handleCopy=async()=>{try{await navigator.clipboard.writeText(prompt);setCopied(true);toast.success(t("copied"));window.setTimeout(()=>setCopied(false),1500)}catch{toast.error(t("copy_failed"))}};
   const inputClass="w-full rounded-2xl border border-[#e7e3db] bg-white/80 px-4 py-3.5 text-sm text-[#252b27] placeholder:text-[#a3a39d] outline-none transition focus:border-[#bab6ad] focus:bg-white focus:ring-4 focus:ring-[#7c8d82]/10 resize-y";
@@ -40,10 +50,7 @@ export default function VideoPromptBuilder({ input, result, onPromptChange }: Pr
       <div className="mt-6 space-y-2"><label className="text-[10px] font-bold uppercase tracking-[.16em] text-[#8d8f8a]">{t("hook_for_video")}</label><textarea rows={3} value={hook} onChange={event=>setHook(event.target.value)} placeholder={t("hook_for_video_placeholder")} className={inputClass}/></div>
       <div className="mt-5 space-y-2"><label className="text-[10px] font-bold uppercase tracking-[.16em] text-[#8d8f8a]">{t("script_for_video")}</label><textarea rows={8} value={script} onChange={event=>setScript(event.target.value)} placeholder={t("script_for_video_placeholder")} className={inputClass}/></div>
       <Button type="button" variant="glow" className="mt-5 h-12 w-full rounded-2xl" disabled={isBuilding||!hook.trim()||!script.trim()} onClick={handleBuild}><Wand2 className={isBuilding?"h-4 w-4 animate-spin":"h-4 w-4"}/>{isBuilding?t("building_detailed_prompt"):t("build_detailed_prompt")}</Button>
-      {prompt && <div className="mt-5 rounded-2xl border border-[#e8e4dc] bg-[#f5f3ee] p-4">
-        <div className="flex items-center justify-between gap-3"><p className="text-[10px] font-bold uppercase tracking-[.16em] text-[#777b76]">{t("detailed_video_prompt")}</p><Button type="button" size="icon" variant="ghost" className="rounded-xl" onClick={handleCopy}>{copied?<Check className="h-4 w-4"/>:<Copy className="h-4 w-4"/>}</Button></div>
-        <textarea rows={10} value={prompt} onChange={event=>setPrompt(event.target.value)} className={inputClass+" mt-3 bg-white/90"}/>
-      </div>}
+      {prompt && <div className="mt-5 rounded-2xl border border-[#e8e4dc] bg-[#f5f3ee] p-4"><div className="flex items-center justify-between gap-3"><p className="text-[10px] font-bold uppercase tracking-[.16em] text-[#777b76]">{t("detailed_video_prompt")}</p><Button type="button" size="icon" variant="ghost" className="rounded-xl" onClick={handleCopy}>{copied?<Check className="h-4 w-4"/>:<Copy className="h-4 w-4"/>}</Button></div><textarea rows={10} value={prompt} onChange={event=>setPrompt(event.target.value)} className={inputClass+" mt-3 bg-white/90"}/></div>}
     </motion.section>
   );
 }
