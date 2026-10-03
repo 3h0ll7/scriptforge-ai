@@ -63,16 +63,16 @@ export default function VideoPromptBuilder({ input, result }: Props) {
     }
   };
 
-  const inputClass = "w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-y";
+  const inputClass = "w-full rounded-lg border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-y";
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl bg-card p-5 md:p-6 shadow-card space-y-5"
+      className="rounded-xl border border-border bg-card p-5 md:p-6 shadow-card space-y-5"
     >
       <div className="flex items-start gap-3">
-        <div className="p-2.5 rounded-2xl gradient-primary shrink-0">
+        <div className="p-2.5 rounded-lg gradient-primary shrink-0">
           <Film className="w-5 h-5 text-primary-foreground" />
         </div>
         <div>
@@ -91,13 +91,13 @@ export default function VideoPromptBuilder({ input, result }: Props) {
         <textarea rows={8} value={script} onChange={(event) => setScript(event.target.value)} placeholder={t("script_for_video_placeholder")} className={inputClass} />
       </div>
 
-      <Button type="button" variant="outline" className="w-full rounded-full" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
+      <Button type="button" variant="glow" className="w-full rounded-lg" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
         <Wand2 className={`w-4 h-4 ${isBuilding ? "animate-spin" : ""}`} />
         {isBuilding ? t("building_detailed_prompt") : t("build_detailed_prompt")}
       </Button>
 
       {prompt && (
-        <div className="rounded-2xl bg-muted p-4 space-y-3">
+        <div className="rounded-lg bg-muted p-4 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-semibold text-muted-foreground">{t("detailed_video_prompt")}</p>
             <Button type="button" size="icon" variant="ghost" className="rounded-full shrink-0" onClick={handleCopy} title={t("copy")}>

@@ -61,13 +61,13 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="space-y-6"
+      className="space-y-5"
     >
       {/* Titles */}
-      <div className="rounded-3xl bg-card p-6 shadow-card space-y-3 relative">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-3 relative">
         <button
           onClick={handleCopy}
-          className="absolute top-4 right-4 p-2 rounded-xl bg-muted hover:bg-muted/80 transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-lg bg-muted hover:bg-accent transition-colors"
           title="Copy script"
         >
           {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
@@ -77,14 +77,14 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("title_options")}</h3>
         </div>
         {result.titleOptions.map((title, i) => (
-          <div key={i} className="px-4 py-2.5 bg-muted rounded-2xl text-foreground font-medium text-sm">
+          <div key={i} className="px-4 py-2.5 bg-muted rounded-lg text-foreground font-medium text-sm">
             {i + 1}. {title}
           </div>
         ))}
       </div>
 
       {/* Hook */}
-      <div className="rounded-3xl chip-pink p-6 shadow-card space-y-2">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-2">
         <div className="flex items-center gap-2">
           <Target className="w-4 h-4" />
           <h3 className="text-sm font-semibold uppercase tracking-wider">{t("hook")} — {result.hook.hookType.replace("_", " ")}</h3>
@@ -93,7 +93,7 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       </div>
 
       {/* Script Sections */}
-      <div className="rounded-3xl bg-card p-6 shadow-card space-y-1">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-1">
         <div className="flex items-center gap-2 mb-4">
           <Film className="w-4 h-4 text-secondary" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("full_script")}</h3>
@@ -130,13 +130,13 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       </div>
 
       {/* CTA */}
-      <div className="rounded-3xl chip-blue p-6 shadow-card space-y-2">
+      <div className="rounded-xl bg-primary text-primary-foreground p-6 shadow-card space-y-2">
         <h3 className="text-sm font-semibold uppercase tracking-wider">{t("call_to_action")}</h3>
-        <p className="text-foreground font-medium">{result.cta}</p>
+        <p className="text-primary-foreground font-medium">{result.cta}</p>
       </div>
 
       {/* SEO Tags */}
-      <div className="rounded-3xl bg-card p-6 shadow-card space-y-3">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-3">
         <div className="flex items-center gap-2">
           <Hash className="w-4 h-4 text-secondary" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("seo_tags")}</h3>
@@ -154,7 +154,7 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       </div>
 
       {/* Retention Notes */}
-      <div className="rounded-3xl bg-card p-6 shadow-card space-y-2">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-2">
         <div className="flex items-center gap-2">
           <Lightbulb className="w-4 h-4 text-accent-foreground" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("retention_strategy")}</h3>
