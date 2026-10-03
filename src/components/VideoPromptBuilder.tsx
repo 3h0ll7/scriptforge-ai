@@ -17,7 +17,7 @@ interface Props {
 const formatScript = (result: ScriptResult) =>
   result.script.map((section) => `[${section.timestamp}] ${section.dialogue}`).join("\n\n");
 
-export default function VideoPromptBuilder({ input, result }: Props) {
+export default function VideoPromptBuilder({ input, result, onPromptChange }: Props) {
   const { t } = useAppSettings();
   const [hook, setHook] = useState(result.hook.text);
   const [script, setScript] = useState(() => formatScript(result));
@@ -29,6 +29,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
     setHook(result.hook.text);
     setScript(formatScript(result));
     setPrompt("");
+    onPromptChange?.("");
   }, [result]);
 
   const handleBuild = async () => {
@@ -46,6 +47,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
         videoPrompt: `${t("build_video_from_script_instruction")}\n\n${hook.trim()}\n\n${script.trim()}`,
       });
       setPrompt(detailedPrompt);
+      onPromptChange?.(detailedPrompt);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : t("prompt_build_failed"));
     } finally {
