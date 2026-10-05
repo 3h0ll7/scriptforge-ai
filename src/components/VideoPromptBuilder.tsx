@@ -75,36 +75,35 @@ export default function VideoPromptBuilder({ input, result }: Props) {
         <div className="p-2.5 rounded-lg gradient-primary shrink-0">
           <Film className="w-5 h-5 text-primary-foreground" />
         </div>
-        <div>
+        <div className="min-w-0">
           <h3 className="text-lg font-bold text-foreground">{t("video_prompt_builder")}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{t("video_prompt_builder_help")}</p>
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">{t("hook_for_video")}</label>
-        <textarea rows={3} value={hook} onChange={(event) => setHook(event.target.value)} placeholder={t("hook_for_video_placeholder")} className={inputClass} />
+        <label htmlFor="video-hook" className="text-sm font-medium text-muted-foreground">{t("hook_for_video")}</label>
+        <textarea id="video-hook" rows={3} value={hook} onChange={(event) => setHook(event.target.value)} placeholder={t("hook_for_video_placeholder")} className={inputClass} />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">{t("script_for_video")}</label>
-        <textarea rows={8} value={script} onChange={(event) => setScript(event.target.value)} placeholder={t("script_for_video_placeholder")} className={inputClass} />
+        <label htmlFor="video-script" className="text-sm font-medium text-muted-foreground">{t("script_for_video")}</label>
+        <textarea id="video-script" rows={8} value={script} onChange={(event) => setScript(event.target.value)} placeholder={t("script_for_video_placeholder")} className={inputClass} />
       </div>
 
-      <Button type="button" variant="glow" className="w-full rounded-lg" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
-        <Wand2 className={`w-4 h-4 ${isBuilding ? "animate-spin" : ""}`} />
-        {isBuilding ? t("building_detailed_prompt") : t("build_detailed_prompt")}
+      <Button type="button" variant="glow" className="w-full h-auto min-h-11 py-3 rounded-lg whitespace-normal" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
+        <Wand2 className={`w-4 h-4 shrink-0 ${isBuilding ? "animate-spin" : ""}`} />
+        <span>{isBuilding ? t("building_detailed_prompt") : t("build_detailed_prompt")}</span>
       </Button>
 
       {prompt && (
         <div className="rounded-lg bg-muted p-4 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-semibold text-muted-foreground">{t("detailed_video_prompt")}</p>
-            <Button type="button" size="icon" variant="ghost" className="rounded-full shrink-0" onClick={handleCopy} title={t("copy")}>
+            <Button type="button" size="icon" variant="ghost" className="rounded-lg shrink-0" onClick={handleCopy} title={t("copy")} aria-label={t("copy")}>
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
-          <textarea rows={10} value={prompt} onChange={(event) => setPrompt(event.target.value)} className={`${inputClass} bg-card`} />
+          <textarea aria-label={t("detailed_video_prompt")} rows={10} value={prompt} onChange={(event) => setPrompt(event.target.value)} className={`${inputClass} bg-card`} />
         </div>
       )}
     </motion.section>
