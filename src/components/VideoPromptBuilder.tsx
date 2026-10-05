@@ -63,7 +63,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
     }
   };
 
-  const inputClass = "w-full rounded-lg border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-y";
+  const inputClass = "w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-y";
 
   return (
     <motion.section
@@ -96,7 +96,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
       </Button>
 
       {prompt && (
-        <div className="rounded-lg bg-muted p-4 space-y-3">
+        <div className="border-t border-border pt-5 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-semibold text-muted-foreground">{t("detailed_video_prompt")}</p>
             <Button type="button" size="icon" variant="ghost" className="rounded-lg shrink-0" onClick={handleCopy} title={t("copy")} aria-label={t("copy")}>
