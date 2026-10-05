@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, FileText, Sparkles, Zap } from "lucide-react";
+import { FileText, LoaderCircle, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
@@ -66,8 +66,8 @@ export default function Index() {
         </motion.div>
 
         <div className="grid xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] gap-5 items-start">
-          <div id="script-form"><ScriptForm onGenerate={handleGenerate} isLoading={isLoading} /></div>
-          <div id="script-output">
+          <div id="script-form" className="min-w-0 scroll-mt-5"><ScriptForm onGenerate={handleGenerate} isLoading={isLoading} /></div>
+          <div id="script-output" className="min-w-0 scroll-mt-5" aria-busy={isLoading}>
             {result && generatedInput ? (
               <ScriptOutput result={result} input={generatedInput} />
             ) : (
@@ -78,17 +78,16 @@ export default function Index() {
               >
                 <div className="flex items-center justify-between">
                   <div className="p-3 rounded-lg bg-primary text-primary-foreground"><FileText className="w-5 h-5" /></div>
-                  <ArrowUpRight className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <div className="mt-auto mb-auto py-12 text-center">
-                <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-muted flex items-center justify-center"><Sparkles className="w-6 h-6 text-secondary" /></div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{t("results_ready_title")}</h3>
-                <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+                 <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-muted flex items-center justify-center">{isLoading ? <LoaderCircle className="w-6 h-6 text-secondary animate-spin" /> : <Sparkles className="w-6 h-6 text-secondary" />}</div>
+                 <h3 role="status" className="text-lg font-bold text-foreground mb-2">{t(isLoading ? "generating_script" : "results_ready_title")}</h3>
+                 {!isLoading && <p className="text-muted-foreground text-sm max-w-xs mx-auto">
                   {t("fill_prompt")} <span className="text-primary font-semibold">{t("generate")}</span> {t("to_create")}
-                </p>
+                 </p>}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  {["Hook", "Script", "SEO"].map((item) => <div key={item} className="rounded-lg bg-muted px-3 py-3 text-center text-xs font-semibold text-muted-foreground">{item}</div>)}
+                   {["hook", "full_script", "seo_tags"].map((item) => <div key={item} className="rounded-lg bg-muted px-2 py-3 text-center text-xs font-semibold text-muted-foreground">{t(item)}</div>)}
                 </div>
               </motion.div>
             )}

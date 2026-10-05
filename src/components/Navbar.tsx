@@ -1,4 +1,4 @@
-import { Zap, Sun, Moon, Languages, LogOut, Home, FilePenLine, Film, Settings, Sparkles } from "lucide-react";
+import { Zap, Sun, Moon, Languages, LogOut, Home, FilePenLine, Film } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { useAuth } from "@/hooks/useAuth";
@@ -24,56 +24,63 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex flex-col gap-1 pt-5" aria-label="Main navigation">
-          <Link to="/" className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2.5 text-sm font-semibold text-foreground"><Home className="w-4 h-4" />{t("home")}</Link>
-          <a href="#script-form" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"><FilePenLine className="w-4 h-4" />{t("new_script")}</a>
-          <a href="#script-output" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"><Film className="w-4 h-4" />{t("results")}</a>
-          <div className="mt-5 mb-2 px-3 text-[10px] font-semibold uppercase text-muted-foreground">{t("workspace")}</div>
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground"><Sparkles className="w-4 h-4" />AI Studio</div>
+          <Button asChild variant="ghost" className="justify-start bg-muted"><Link to="/"><Home />{t("home")}</Link></Button>
+          <Button asChild variant="ghost" className="justify-start text-muted-foreground"><Link to="/#script-form"><FilePenLine />{t("new_script")}</Link></Button>
+          <Button asChild variant="ghost" className="justify-start text-muted-foreground"><Link to="/#script-output"><Film />{t("results")}</Link></Button>
         </nav>
 
         <div className="ms-auto lg:ms-0 lg:mt-auto flex lg:flex-col items-center lg:items-stretch gap-2">
 
-          <button
+           <Button
+             type="button"
+             variant="ghost"
+             size="icon"
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             className="p-2 rounded-lg bg-muted hover:bg-accent transition-colors lg:self-start"
             aria-label="Toggle theme"
+             title={t("theme")}
           >
             {theme === "light" ? <Moon className="w-4 h-4 text-muted-foreground" /> : <Sun className="w-4 h-4 text-muted-foreground" />}
-          </button>
+           </Button>
 
-          <button
+           <Button
+             type="button"
+             variant="ghost"
+             size="sm"
             onClick={() => setLanguage(language === "en" ? "ar" : "en")}
             className="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-muted hover:bg-accent transition-colors text-xs font-semibold text-muted-foreground lg:self-start"
             aria-label="Toggle language"
+             title={t("app_language")}
           >
             <Languages className="w-4 h-4" />
             <span>{language === "en" ? "ع" : "EN"}</span>
-          </button>
+           </Button>
 
           {user ? (
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline text-xs font-medium text-muted-foreground max-w-[110px] truncate">
                 {profile?.full_name || user.email}
               </span>
-              <button
+               <Button
+                 type="button"
+                 variant="ghost"
+                 size="icon"
                 onClick={async () => {
                   await signOut();
                   navigate("/");
                 }}
                 className="p-2 rounded-lg bg-muted hover:bg-accent transition-colors"
                 aria-label={t("sign_out")}
+                 title={t("sign_out")}
               >
                 <LogOut className="w-4 h-4 text-muted-foreground" />
-              </button>
+               </Button>
             </div>
           ) : (
             <Button size="sm" variant="glow" className="rounded-lg lg:w-full" onClick={() => navigate("/auth")}> 
               {t("sign_in")}
             </Button>
           )}
-          <div className="hidden lg:flex items-center gap-3 border-t border-border pt-4 mt-2 text-muted-foreground">
-            <Settings className="w-4 h-4" /><span className="text-xs">{t("settings")}</span>
-          </div>
         </div>
 
       </div>
