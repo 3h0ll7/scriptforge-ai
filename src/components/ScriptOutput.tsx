@@ -3,6 +3,7 @@ import { Check, Clock, Copy, Eye, Film, Hash, Lightbulb, Target, Type } from "lu
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAppSettings } from "@/hooks/useAppSettings";
+import { Button } from "@/components/ui/button";
 import VideoPromptBuilder from "@/components/VideoPromptBuilder";
 import type { ScriptInput } from "@/components/ScriptForm";
 
@@ -33,7 +34,7 @@ function SectionBadge({ section }: { section: string }) {
   };
   const cls = colors[section] || "bg-muted text-muted-foreground";
   return (
-    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${cls}`}>
+    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase ${cls}`}>
       {section.replace("_", " ")}
     </span>
   );
@@ -49,10 +50,10 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
     try {
       await navigator.clipboard.writeText(full);
       setCopied(true);
-      toast.success("تم نسخ السكربت!");
+      toast.success(t("copied"));
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("فشل النسخ");
+      toast.error(t("copy_failed"));
     }
   };
 
@@ -65,16 +66,12 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
     >
       {/* Titles */}
       <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-3 relative">
-        <button
-          onClick={handleCopy}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-muted hover:bg-accent transition-colors"
-          title="Copy script"
-        >
-          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-muted-foreground" />}
-        </button>
         <div className="flex items-center gap-2">
           <Type className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("title_options")}</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase">{t("title_options")}</h3>
+          <Button type="button" variant="ghost" size="icon" className="ms-auto shrink-0 bg-muted" onClick={handleCopy} title={t("copy_script")} aria-label={t("copy_script")}>
+            {copied ? <Check className="text-secondary" /> : <Copy className="text-muted-foreground" />}
+          </Button>
         </div>
         {result.titleOptions.map((title, i) => (
           <div key={i} className="px-4 py-2.5 bg-muted rounded-lg text-foreground font-medium text-sm">
@@ -94,7 +91,7 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
 
       {/* Script Sections */}
       <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-1">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2 mb-4">
           <Film className="w-4 h-4 text-secondary" />
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("full_script")}</h3>
           <span className="ms-auto text-xs text-muted-foreground">~{result.estimatedWordCount} {t("words")}</span>
@@ -108,7 +105,7 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
               transition={{ delay: i * 0.05 }}
               className="border-s-2 border-primary/30 ps-4 space-y-1.5"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Clock className="w-3 h-3 text-muted-foreground" />
                 <span className="text-xs font-mono text-muted-foreground">{s.timestamp}</span>
                 <SectionBadge section={s.section} />

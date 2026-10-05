@@ -63,21 +63,24 @@ function ChipSelect({ options, value, onChange, label }: {
 }) {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-muted-foreground">{label}</label>
-      <div className="flex flex-wrap gap-2">
+      <p className="text-sm font-medium text-muted-foreground">{label}</p>
+      <div className="flex flex-wrap gap-2" role="group" aria-label={label}>
         {options.map((opt) => (
-          <button
+          <Button
             key={opt.value}
             type="button"
+            variant="ghost"
+            size="sm"
+            aria-pressed={value === opt.value}
             onClick={() => onChange(opt.value)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+            className={`px-3 rounded-lg text-xs font-semibold transition-all ${
               value === opt.value
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             }`}
           >
             {opt.label}
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -118,7 +121,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     onGenerate(form);
   };
 
-    const inputCls = "w-full rounded-lg border border-input bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring transition-all";
+  const inputCls = "w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all";
 
   return (
     <motion.form
@@ -136,8 +139,10 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">{t("topic")} *</label>
+        <label htmlFor="script-topic" className="text-sm font-medium text-muted-foreground">{t("topic")} *</label>
         <input
+          id="script-topic"
+          required
           value={form.topic}
           onChange={(e) => update("topic", e.target.value)}
           placeholder={t("topic_placeholder")}
@@ -151,8 +156,9 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       <ChipSelect label={t("language")} options={languages} value={form.language} onChange={(v) => update("language", v)} />
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">{t("target_audience")}</label>
+        <label htmlFor="script-audience" className="text-sm font-medium text-muted-foreground">{t("target_audience")}</label>
         <input
+          id="script-audience"
           value={form.audience}
           onChange={(e) => update("audience", e.target.value)}
           placeholder={t("audience_placeholder")}
@@ -161,8 +167,9 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">{t("key_message")} *</label>
+        <label htmlFor="script-message" className="text-sm font-medium text-muted-foreground">{t("key_message")}</label>
         <textarea
+          id="script-message"
           value={form.keyMessage}
           onChange={(e) => update("keyMessage", e.target.value)}
           rows={2}
@@ -171,15 +178,15 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         />
       </div>
 
-      <div className="space-y-3 rounded-lg border border-border bg-muted/40 p-4">
-        <label className="text-sm font-medium text-muted-foreground">{t("attachments")}</label>
+      <div className="space-y-3 border-t border-border pt-5">
+        <p className="text-sm font-medium text-muted-foreground">{t("attachments")}</p>
         <div className="relative">
           <Link2 className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input type="url" value={form.videoUrl} onChange={(e) => update("videoUrl", e.target.value)} placeholder={`${t("video_link")} — ${t("video_link_placeholder")}`} className={`${inputCls} ps-11`} />
+          <input type="url" aria-label={t("video_link")} value={form.videoUrl} onChange={(e) => update("videoUrl", e.target.value)} placeholder={t("video_link_placeholder")} className={`${inputCls} ps-11`} />
         </div>
         <div className="relative">
           <FileText className="absolute start-4 top-4 w-4 h-4 text-muted-foreground" />
-          <textarea rows={3} value={form.sourceText} onChange={(e) => update("sourceText", e.target.value)} placeholder={t("source_text_placeholder")} className={`${inputCls} ps-11 resize-none`} />
+          <textarea rows={3} aria-label={t("source_text")} value={form.sourceText} onChange={(e) => update("sourceText", e.target.value)} placeholder={t("source_text_placeholder")} className={`${inputCls} ps-11 resize-none`} />
         </div>
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleImage(e.target.files?.[0])} />
         {form.imageDataUrl ? (
