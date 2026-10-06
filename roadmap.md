@@ -5,6 +5,6 @@
 - [x] Verify desktop/mobile, Arabic RTL, both themes, and preview errors.
 
 ## Public generation
-- [ ] Remove login UI and authentication gate without deleting existing user data.
-- [ ] Make script and prompt generation public without a five-attempt quota.
-- [ ] Verify anonymous generation and preview health.
+- [x] Remove login UI and authentication gate without deleting existing user data.
+- [x] Make script and prompt generation public without a five-attempt quota.
+- [x] Verify anonymous generation and preview health.
