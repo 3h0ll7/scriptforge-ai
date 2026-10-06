@@ -2,12 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileText, LoaderCircle, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import ScriptForm, { type ScriptInput } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
-import { generateScript, saveToHistory } from "@/lib/generateScript";
+import { generateScript } from "@/lib/generateScript";
 import { useAppSettings } from "@/hooks/useAppSettings";
-import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
 
 export default function Index() {
@@ -15,26 +13,14 @@ export default function Index() {
   const [generatedInput, setGeneratedInput] = useState<ScriptInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useAppSettings();
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   const handleGenerate = async (input: ScriptInput) => {
-    if (!user) {
-      toast.error(t("sign_in_to_generate"));
-      navigate("/auth");
-      return;
-    }
     setIsLoading(true);
     setResult(null);
     try {
       const data = await generateScript(input);
       setResult(data);
       setGeneratedInput(input);
-      try {
-        await saveToHistory(user.id, input, data.hook?.text ?? input.topic);
-      } catch {
-        // history is best-effort
-      }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to generate script";
       toast.error(message);
