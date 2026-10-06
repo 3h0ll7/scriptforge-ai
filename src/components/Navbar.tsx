@@ -1,13 +1,10 @@
-import { Zap, Sun, Moon, Languages, LogOut, Home, FilePenLine, Film } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Zap, Sun, Moon, Languages, Home, FilePenLine, Film } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
-import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const { theme, setTheme, language, setLanguage, t } = useAppSettings();
-  const { user, profile, signOut } = useAuth();
-  const navigate = useNavigate();
 
 
   return (
@@ -56,31 +53,6 @@ export default function Navbar() {
             <span>{language === "en" ? "ع" : "EN"}</span>
            </Button>
 
-          {user ? (
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:inline text-xs font-medium text-muted-foreground max-w-[110px] truncate">
-                {profile?.full_name || user.email}
-              </span>
-               <Button
-                 type="button"
-                 variant="ghost"
-                 size="icon"
-                onClick={async () => {
-                  await signOut();
-                  navigate("/");
-                }}
-                className="p-2 rounded-lg bg-muted hover:bg-accent transition-colors"
-                aria-label={t("sign_out")}
-                 title={t("sign_out")}
-              >
-                <LogOut className="w-4 h-4 text-muted-foreground" />
-               </Button>
-            </div>
-          ) : (
-            <Button size="sm" variant="glow" className="rounded-lg lg:w-full" onClick={() => navigate("/auth")}> 
-              {t("sign_in")}
-            </Button>
-          )}
         </div>
 
       </div>
