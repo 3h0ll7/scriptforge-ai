@@ -43,6 +43,16 @@ const translations: Record<string, Record<Language, string>> = {
   "workspace_title": { en: "Shape your script", ar: "شكّل سكربتك" },
   "scenes": { en: "scenes", ar: "مشاهد" },
 
+  // Support
+  "support": { en: "Support", ar: "ادعمنا" },
+  "support_project": { en: "Support this project", ar: "ادعم المشروع" },
+  "support_title": { en: "Support ScriptForge", ar: "ادعم ScriptForge" },
+  "support_desc": { en: "ScriptForge is free for everyone. If it helped you, a small USDT tip keeps it running.", ar: "ScriptForge مجاني للجميع. إذا أفادك، تبرّع بسيط بـ USDT يساعد على استمراره." },
+  "wallet_address": { en: "Wallet address", ar: "عنوان المحفظة" },
+  "copy_address": { en: "Copy address", ar: "نسخ العنوان" },
+  "address_copied": { en: "Address copied", ar: "تم نسخ العنوان" },
+  "network_warning": { en: "Send only USDT on BNB Smart Chain (BEP20). Sending other coins or using another network (TRC20, ERC20…) will lose the funds.", ar: "أرسل USDT على شبكة BNB Smart Chain (BEP20) فقط. إرسال عملة أخرى أو استخدام شبكة مختلفة (TRC20، ERC20…) يؤدي لضياع المبلغ." },
+
   // Index
   "craft_scripts": { en: "Craft Scripts", ar: "اصنع نصوصاً" },
   "that_go_viral": { en: "That Go Viral", ar: "تنتشر بسرعة" },
