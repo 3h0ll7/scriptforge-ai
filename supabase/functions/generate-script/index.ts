@@ -1,10 +1,53 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { chatCompletion, readToolArguments } from "../_shared/ai.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+const SCRIPT_TOOL = {
+  type: "function",
+  function: {
+    name: "generate_script",
+    description: "Generate a structured video script with all sections",
+    parameters: {
+      type: "object",
+      properties: {
+        titleOptions: { type: "array", items: { type: "string" }, description: "3 title/thumbnail text ideas" },
+        hook: {
+          type: "object",
+          properties: {
+            text: { type: "string", description: "First 3-5 seconds hook text" },
+            hookType: { type: "string", enum: ["question", "shocking_stat", "story", "controversy", "pain_point"] },
+          },
+          required: ["text", "hookType"],
+        },
+        script: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              timestamp: { type: "string", description: "MM:SS format" },
+              section: { type: "string", enum: ["hook", "intro", "point_1", "point_2", "point_3", "climax", "cta", "outro"] },
+              dialogue: { type: "string", description: "What to say" },
+              visualDirection: { type: "string", description: "What the viewer sees" },
+              bRollSuggestion: { type: "string", description: "B-roll idea or null" },
+            },
+            required: ["timestamp", "section", "dialogue", "visualDirection"],
+          },
+        },
+        cta: { type: "string", description: "Call to action text" },
+        seoTags: { type: "array", items: { type: "string" }, description: "SEO/hashtag tags for optimization" },
+        estimatedWordCount: { type: "number" },
+        retentionStrategyNotes: { type: "string", description: "Explanation of retention techniques used" },
+      },
+      required: ["titleOptions", "hook", "script", "cta", "seoTags", "estimatedWordCount", "retentionStrategyNotes"],
+    },
+  },
 };
 
 serve(async (req) => {
@@ -13,13 +56,17 @@ serve(async (req) => {
   }
 
   try {
+    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+
+    if (!GROQ_API_KEY && !LOVABLE_API_KEY) {
+      throw new Error("AI is not configured");
+    }
+
     const { topic, platform, targetDuration, audience, tone, keyMessage, language, videoUrl, sourceText, imageDataUrl, videoPrompt } = await req.json();
 
     if (!topic) {
-      return new Response(JSON.stringify({ error: "Topic is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return json({ error: "Topic is required" }, 400);
     }
 
     const systemPrompt = `You are ScriptForge AI — an expert video scriptwriter specializing in YouTube, TikTok, Reels, courses, and webinars.
@@ -50,95 +97,71 @@ Use any reference material as source content for the script.
 Return the result using the generate_script tool.`;
 
     const hasImage = typeof imageDataUrl === "string" && imageDataUrl.startsWith("data:image/");
-    const userContent = hasImage
+    const userContent: unknown = hasImage
       ? [{ type: "text", text: userPrompt }, { type: "image_url", image_url: { url: imageDataUrl } }]
-      : [{ type: "text", text: userPrompt }];
+      : userPrompt;
 
-    const result = await chatCompletion({
-      hasImage,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userContent },
-      ],
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "generate_script",
-            description: "Generate a structured video script with all sections",
-            parameters: {
-              type: "object",
-              properties: {
-                titleOptions: {
-                  type: "array",
-                  items: { type: "string" },
-                  description: "3 title/thumbnail text ideas",
-                },
-                hook: {
-                  type: "object",
-                  properties: {
-                    text: { type: "string", description: "First 3-5 seconds hook text" },
-                    hookType: {
-                      type: "string",
-                      enum: ["question", "shocking_stat", "story", "controversy", "pain_point"],
-                    },
-                  },
-                  required: ["text", "hookType"],
-                },
-                script: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      timestamp: { type: "string", description: "MM:SS format" },
-                      section: {
-                        type: "string",
-                        enum: ["hook", "intro", "point_1", "point_2", "point_3", "climax", "cta", "outro"],
-                      },
-                      dialogue: { type: "string", description: "What to say" },
-                      visualDirection: { type: "string", description: "What the viewer sees" },
-                      bRollSuggestion: { type: "string", description: "B-roll idea or null" },
-                    },
-                    required: ["timestamp", "section", "dialogue", "visualDirection"],
-                  },
-                },
-                cta: { type: "string", description: "Call to action text" },
-                seoTags: {
-                  type: "array",
-                  items: { type: "string" },
-                  description: "SEO/hashtag tags for optimization",
-                },
-                estimatedWordCount: { type: "number" },
-                retentionStrategyNotes: {
-                  type: "string",
-                  description: "Explanation of retention techniques used",
-                },
-              },
-              required: [
-                "titleOptions",
-                "hook",
-                "script",
-                "cta",
-                "seoTags",
-                "estimatedWordCount",
-                "retentionStrategyNotes",
-              ],
-            },
-          },
-        },
-      ],
-      tool_choice: { type: "function", function: { name: "generate_script" } },
-    });
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userContent },
+    ];
 
-    if (!result.ok) {
-      return new Response(JSON.stringify({ error: result.error }), {
-        status: result.status,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+    let data: Record<string, unknown> | null = null;
+    let lastError = "";
+
+    if (GROQ_API_KEY) {
+      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${GROQ_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "meta-llama/llama-4-scout-17b-16e-instruct",
+          messages,
+          tools: [SCRIPT_TOOL],
+          tool_choice: { type: "function", function: { name: "generate_script" } },
+        }),
       });
-    }
-    console.log(`generate-script served by ${result.provider}/${result.model}`);
 
-    const scriptResult = readToolArguments(result.data);
+      if (groqRes.ok) {
+        data = await groqRes.json();
+      } else {
+        lastError = await groqRes.text();
+        console.error("Groq error:", groqRes.status, lastError);
+        if (!LOVABLE_API_KEY) {
+          if (groqRes.status === 429) return json({ error: "AI provider is temporarily rate limited. Please try again in a moment." }, 503);
+          return json({ error: `AI error (${groqRes.status})` }, groqRes.status >= 500 ? 502 : groqRes.status);
+        }
+      }
+    }
+
+    if (!data && LOVABLE_API_KEY) {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages,
+          tools: [SCRIPT_TOOL],
+          tool_choice: { type: "function", function: { name: "generate_script" } },
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) return json({ error: "AI provider is temporarily rate limited. Please try again in a moment." }, 503);
+        if (response.status === 402) return json({ error: "AI credits exhausted." }, 402);
+        const text = await response.text();
+        console.error("AI gateway error:", response.status, text);
+        throw new Error(`AI gateway error: ${response.status}`);
+      }
+      data = await response.json();
+    }
+
+    const toolCall = (data as { choices?: { message?: { tool_calls?: { function?: { arguments?: string } }[] } }[] })?.choices?.[0]?.message?.tool_calls?.[0];
+
+    if (!toolCall?.function?.arguments) {
+      throw new Error("No structured output returned from AI");
+    }
+
+    const scriptResult = JSON.parse(toolCall.function.arguments);
 
     if (scriptResult.script) {
       scriptResult.script = scriptResult.script.map((section: Record<string, unknown>) => ({
@@ -147,14 +170,9 @@ Return the result using the generate_script tool.`;
       }));
     }
 
-    return new Response(JSON.stringify(scriptResult), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return json(scriptResult);
   } catch (e) {
     console.error("generate-script error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({ error: e instanceof Error ? e.message : "Unknown error" }, 500);
   }
 });
