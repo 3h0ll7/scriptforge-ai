@@ -1,250 +1,301 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/🎬_ScriptForge-AI-FF4500?style=for-the-badge" alt="ScriptForge AI" />
-  <img src="https://img.shields.io/badge/TypeScript-96%25-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Supabase-Auth_&_DB-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Bilingual-EN_|_AR-F59E0B?style=for-the-badge" alt="Bilingual" />
-</p>
-
-<h1 align="center">🎬 ScriptForge AI</h1>
-
-<p align="center">
-  <strong>Turn any idea into a scroll-stopping video script in seconds.</strong><br/>
-  AI agent prompt optimized for YouTube, TikTok, Reels & educational content.<br/>
-  Supports English & Arabic.
+  <a href="https://scriptforgeaii.lovable.app/">
+    <img src="docs/assets/banner.svg" alt="ScriptForge AI — Discover ideas. Forge scripts." width="100%" />
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://scriptforgeaii.lovable.app/">🌐 Live Demo</a> &nbsp;·&nbsp;
-  <a href="#-features">✨ Features</a> &nbsp;·&nbsp;
-  <a href="#-tech-stack">⚙️ Tech Stack</a> &nbsp;·&nbsp;
-  <a href="#-getting-started">🚀 Getting Started</a>
+  <a href="https://scriptforgeaii.lovable.app/"><img src="https://img.shields.io/badge/Live_demo-scriptforgeaii.lovable.app-EA4C89?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live demo" /></a>
+  <img src="https://img.shields.io/badge/Free-No_sign--up-0D0C22?style=for-the-badge" alt="Free, no sign-up" />
+  <img src="https://img.shields.io/badge/EN_%7C_%D8%B9%D8%B1%D8%A8%D9%8A-RTL_ready-0D0C22?style=for-the-badge" alt="English and Arabic" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Supabase_Edge_Functions-3FCF8E?style=flat-square&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/github/last-commit/3h0ll7/scriptforge-ai?style=flat-square&color=EA4C89" alt="Last commit" />
+</p>
+
+<h3 align="center">Turn one idea into a platform-ready video script — hook, timestamps, B-roll, CTA and SEO tags — in seconds.</h3>
+
+<p align="center">
+  <a href="https://scriptforgeaii.lovable.app/"><b>Try it live</b></a> ·
+  <a href="#-features">Features</a> ·
+  <a href="#-how-it-works">How it works</a> ·
+  <a href="#-run-it-locally">Run locally</a> ·
+  <a href="#-بالعربي">بالعربي</a>
+</p>
+
+<br/>
+
+<p align="center">
+  <img src="docs/assets/demo.gif" alt="ScriptForge demo: typing an idea, filtering the idea gallery, auto-filling the form, switching to dark mode and Arabic" width="88%" />
 </p>
 
 ---
 
-## 🔍 Overview
+## 💡 Why ScriptForge
 
-**ScriptForge AI** is an AI-powered video script generator that transforms raw ideas into production-ready scripts tailored for modern social media platforms. Whether you're creating YouTube long-form, TikTok hooks, Instagram Reels, or educational explainers — ScriptForge crafts engaging, platform-optimized scripts with the right tone, pacing, and structure.
+> **Blank page → filmable script.** ScriptForge structures your idea the way short-form and long-form creators actually shoot: a scroll-stopping hook first, timed sections with visual direction, then a clear call to action.
+
+- **Made for each platform** — pacing and length adapt to YouTube, TikTok, Reels, online courses and webinars.
+- **Script to video** — turn the finished script into a detailed, scene-by-scene prompt for AI video tools.
+- **Open to everyone** — no account, no paywall, full English & Arabic (RTL) support.
 
 ---
 
 ## ✨ Features
 
-### 🤖 AI Script Generation
-- **Instant Script Creation** — Describe your idea, get a polished video script in seconds
-- **Platform-Specific Optimization** — Scripts tailored for YouTube, TikTok, Instagram Reels & educational formats
-- **Hook-First Writing** — Every script opens with a scroll-stopping hook designed to capture attention
-- **Viral Framework** — Built-in patterns for engagement, retention, and call-to-action
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h4>🎬 Script generator</h4>
+      Title options, a typed hook, timestamped sections with dialogue, visual direction and B-roll, a CTA, SEO tags and retention notes.
+    </td>
+    <td width="33%" valign="top">
+      <h4>🎥 Video prompt builder</h4>
+      Edit the hook and script, then build a production-ready prompt for text-to-video models — copy it in one click.
+    </td>
+    <td width="33%" valign="top">
+      <h4>🧭 Idea gallery</h4>
+      Dribbble-style starter ideas with platform mockups. Filter by platform; one click fills the whole form.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h4>📎 Bring your sources</h4>
+      Add a video link, paste an article or transcript, or upload an image to ground the script.
+    </td>
+    <td valign="top">
+      <h4>🌍 English · العربية</h4>
+      Generate in English, Arabic or both. The interface switches to a native right-to-left layout.
+    </td>
+    <td valign="top">
+      <h4>🌗 Light & dark</h4>
+      A clean white/ink/pink design system with semantic tokens, responsive down to small phones.
+    </td>
+  </tr>
+</table>
 
-### 🌍 Bilingual Support
-- **English & Arabic** — Full support for both languages
-- **RTL Layout** — Native right-to-left interface for Arabic content creators
-- **Culturally Adapted** — Scripts that resonate with regional audiences
-
-### 💰 Monetization & Auth
-- **User Authentication** — Secure sign-up and login via Supabase Auth
-- **Subscription Plans** — Built-in monetization with tiered access
-- **Usage Tracking** — Monitor script generation credits and usage
-
-### 🎯 Content Types
-- 📹 YouTube long-form scripts with chapters & timestamps
-- 📱 TikTok / Reels short-form with hooks & transitions
-- 🎓 Educational & explainer content with clear structure
-- 📢 Marketing & promotional scripts with CTAs
-
----
-
-## ⚙️ Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| [TypeScript](https://www.typescriptlang.org/) | Type-safe application logic (96%) |
-| [React 18](https://react.dev/) | Component-based UI framework |
-| [Vite](https://vitejs.dev/) | Lightning-fast build tooling |
-| [Supabase](https://supabase.com/) | Auth, database (PostgreSQL), and backend |
-| [shadcn/ui](https://ui.shadcn.com/) | Accessible, customizable UI components |
-| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
-| [PL/pgSQL](https://www.postgresql.org/) | Database functions & stored procedures |
-| [Lovable](https://lovable.dev/) | AI-powered development platform |
+**Controls you get:** platform (YouTube · TikTok · Reels · Course · Webinar) · duration (30s → 15+ min) · tone (educational, entertaining, dramatic, casual, motivational) · target audience · key message.
 
 ---
 
-## 📐 Architecture
+## 🧠 How it works
 
-```
-┌─────────────────────────────────────────────┐
-│                  Frontend                    │
-│         React + TypeScript + Vite            │
-│              shadcn/ui + Tailwind            │
-├──────────────┬──────────────────────────────┤
-│   Auth Flow  │      Script Engine           │
-│  (Supabase)  │   AI Prompt → Script Output  │
-├──────────────┴──────────────────────────────┤
-│              Supabase Backend                │
-│   PostgreSQL  ·  Auth  ·  Edge Functions     │
-│   Row-Level Security  ·  Realtime            │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    A([💡 Idea or<br/>gallery pick]) --> B[Script parameters<br/>platform · duration · tone<br/>audience · sources]
+    B -->|Generate| C{{generate-script<br/>Edge Function}}
+    C --> D[📄 Script output<br/>hook · timed sections · CTA · SEO]
+    D --> E[🎥 Video prompt builder]
+    E -->|Build prompt| F{{enhance-prompt<br/>Edge Function}}
+    F --> G([📋 Detailed video prompt])
+
+    classDef pink fill:#EA4C89,stroke:#C2185B,color:#fff
+    classDef ink fill:#0D0C22,stroke:#0D0C22,color:#fff
+    class C,F pink
+    class A,G ink
 ```
 
+```mermaid
+flowchart TB
+    subgraph Browser["🖥️ Browser — React 18 + Vite SPA"]
+        UI[Hero · Idea gallery · Script form]
+        OUT[Script output · Video prompt builder]
+        SET[Theme + language settings<br/>localStorage]
+    end
+    subgraph Supabase["⚡ Supabase"]
+        GS[generate-script]
+        EP[enhance-prompt]
+    end
+    AI[(🤖 AI models via<br/>Lovable AI Gateway)]
+
+    UI -- supabase.functions.invoke --> GS
+    OUT -- supabase.functions.invoke --> EP
+    GS --> AI
+    EP --> AI
+    GS -- structured JSON --> OUT
+```
+
 ---
 
-## 🚀 Getting Started
+## 📸 Screenshots
 
-### Prerequisites
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/desktop-light.png" alt="Home page in light mode" /><p align="center"><sub>Hero & search — light</sub></p></td>
+    <td width="50%"><img src="docs/screenshots/desktop-dark.png" alt="Idea gallery in dark mode" /><p align="center"><sub>Idea gallery — dark</sub></p></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/support-dialog.png" alt="Support dialog with USDT address" /><p align="center"><sub>Support dialog</sub></p></td>
+    <td align="center"><img src="docs/screenshots/mobile-arabic.png" alt="Mobile layout in Arabic" width="55%" /><p align="center"><sub>Mobile — Arabic (RTL)</sub></p></td>
+  </tr>
+</table>
 
-- [Node.js](https://nodejs.org/) v18+
-- npm or [bun](https://bun.sh/)
-- [Supabase](https://supabase.com/) project (for auth & database)
+---
 
-### Environment Variables
+## 🛠️ Tech stack
 
-Create a local `.env` file in the root directory by copying `.env.example`:
+| Layer | Tools |
+|---|---|
+| **UI** | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui (Radix), Framer Motion, Lucide icons |
+| **Backend** | Supabase Edge Functions (Deno): `generate-script`, `enhance-prompt` |
+| **AI** | Lovable AI Gateway (chat completion models) |
+| **Quality** | ESLint, Vitest, Testing Library, Playwright |
+| **Hosting** | Lovable |
+
+---
+
+## 🚀 Run it locally
+
+**Requirements:** Node.js 18+ and npm (or Bun), plus a Supabase project for the edge functions.
 
 ```bash
-cp .env.example .env
+git clone https://github.com/3h0ll7/scriptforge-ai.git
+cd scriptforge-ai
+cp .env.example .env      # fill in your Supabase URL + publishable key
+npm install
+npm run dev               # http://localhost:8080
 ```
-
-Then replace every placeholder with values from your own Supabase project. Keep real credentials and deployment-specific values in your local environment or Supabase secrets, and never commit them to source control.
 
 ```env
-VITE_SUPABASE_PUBLISHABLE_KEY=replace-with-your-supabase-publishable-key
 VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=replace-with-your-supabase-publishable-key
 ```
 
-### Installation
+<details>
+<summary><b>Deploying the edge functions</b></summary>
 
 ```bash
-# Clone the repository
-git clone https://github.com/3h0ll7/scriptforge-ai.git
-
-# Navigate to project directory
-cd scriptforge-ai
-
-# Install dependencies
-npm install
-# or
-bun install
-
-# Start development server
-npm run dev
-# or
-bun dev
-```
-
-The app will be available at `http://localhost:5173`
-
-### Supabase Setup
-
-```bash
-# Link your Supabase project
 npx supabase link --project-ref your-project-ref
-
-# Apply database migrations
 npx supabase db push
+npx supabase functions deploy generate-script
+npx supabase functions deploy enhance-prompt
 ```
 
-For the `create-checkout` edge function, set `APP_BASE_URL` in your Supabase project secrets (not in your local `.env` file) so payment success/cancel redirects return users to the correct deployed domain.
-
-### Build for Production
+Set `LOVABLE_API_KEY` (the AI gateway key both functions read) as a Supabase secret — never in `.env` or in git:
 
 ```bash
-npm run build
-# or
-bun run build
+npx supabase secrets set LOVABLE_API_KEY=your-key
 ```
+
+</details>
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the dev server on port 8080 |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest |
 
 ---
 
-## 📁 Project Structure
+## 📁 Project structure
 
 ```
 scriptforge-ai/
-├── public/                # Static assets
+├── docs/                       # README banner, demo GIF, screenshots
+├── public/                     # Static assets
 ├── src/
-│   ├── components/        # Reusable UI components
-│   ├── pages/             # Route pages
-│   ├── hooks/             # Custom React hooks
-│   ├── lib/               # Utilities & Supabase client
-│   ├── services/          # AI script generation logic
-│   └── styles/            # Global styles
+│   ├── components/
+│   │   ├── IdeaGallery.tsx     # Filterable starter ideas
+│   │   ├── IdeaShot.tsx        # Platform mockup thumbnails
+│   │   ├── ScriptForm.tsx      # Script parameters (accepts presets)
+│   │   ├── ScriptOutput.tsx    # Generated script view
+│   │   ├── VideoPromptBuilder.tsx
+│   │   ├── SupportDialog.tsx   # USDT donation dialog
+│   │   └── ui/                 # shadcn/ui primitives
+│   ├── hooks/useAppSettings.tsx # Theme, language, EN/AR strings
+│   ├── lib/                    # generateScript, idea templates, donation config
+│   ├── pages/Index.tsx         # Hero · gallery · workspace
+│   └── index.css               # Design tokens (light/dark)
 ├── supabase/
-│   ├── migrations/        # Database schema migrations
-│   └── functions/         # Edge functions
-├── .env.example           # Safe environment template
-├── .env                   # Local environment variables (gitignored)
-├── vite.config.ts         # Vite configuration
-├── tailwind.config.ts     # Tailwind configuration
-└── tsconfig.json          # TypeScript configuration
+│   ├── functions/              # Edge functions
+│   └── migrations/
+└── AGENTS.md                   # Architecture rules for contributors & agents
 ```
-
----
-
-## 🎯 Use Cases
-
-| Audience | Use Case |
-|----------|----------|
-| 🎥 **YouTubers** | Generate structured long-form scripts with hooks, chapters, and CTAs |
-| 📱 **TikTok Creators** | Craft viral short-form scripts with trending patterns |
-| 🎓 **Educators** | Build clear, engaging explainer scripts for courses and tutorials |
-| 📈 **Marketers** | Create promotional video scripts optimized for conversions |
-| 🌐 **Arabic Creators** | Produce native Arabic scripts with culturally relevant tone |
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Core AI script generation engine
-- [x] YouTube, TikTok & Reels templates
-- [x] English & Arabic bilingual support
-- [x] Supabase authentication & user accounts
-- [x] Monetization & subscription tiers
-- [ ] Script history & favorites
-- [ ] Team collaboration & shared workspaces
-- [ ] API access for third-party integrations
-- [ ] Voice-over generation integration
-- [ ] Analytics dashboard for script performance
+- [x] Script generation for YouTube, TikTok, Reels, courses & webinars
+- [x] Video prompt builder
+- [x] English & Arabic with RTL
+- [x] Dribbble-inspired redesign, idea gallery, dark mode
+- [x] Free public access, optional donations
+- [ ] Save & export scripts (PDF / Markdown)
+- [ ] More idea templates and niches
+- [ ] Shareable script links
+- [ ] Voice-over generation
+
+---
+
+## ❤️ Support the project
+
+ScriptForge is free. If it saves you time, you can send a tip in **USDT on BNB Smart Chain (BEP20)**:
+
+```
+0x03d28429e4c9a0ae0d6fcc750ac4b1cf0bd41850
+```
+
+> ⚠️ Send **only USDT on BEP20**. Other coins or networks (TRC20, ERC20…) will be lost.
+
+---
+
+## 🇮🇶 بالعربي
+
+<details>
+<summary><b>اضغط لعرض الوصف بالعربي</b></summary>
+
+<div dir="rtl">
+
+### ScriptForge AI
+
+حوّل فكرة واحدة إلى **سكربت فيديو جاهز للتصوير** خلال ثوانٍ: خطّاف (Hook) يوقف التمرير، أقسام بتوقيت زمني مع توجيه بصري ولقطات B-roll، دعوة للعمل، ووسوم SEO.
+
+**المميزات**
+- سكربتات مخصّصة لـ YouTube و TikTok و Reels والدورات والندوات.
+- مُنشئ برومبت فيديو مفصّل مشهداً بمشهد لأدوات توليد الفيديو بالذكاء الاصطناعي.
+- معرض أفكار جاهزة يملأ النموذج بضغطة واحدة.
+- إرفاق رابط فيديو أو نص أو صورة كمصدر.
+- واجهة عربية كاملة من اليمين لليسار، ووضع فاتح وداكن.
+- مجاني بالكامل وبدون تسجيل دخول.
+
+**التشغيل محلياً**
+
+</div>
+
+```bash
+git clone https://github.com/3h0ll7/scriptforge-ai.git
+cd scriptforge-ai && cp .env.example .env && npm install && npm run dev
+```
+
+<div dir="rtl">
+
+**ادعم المشروع:** USDT على شبكة **BEP20** فقط — العنوان موجود في قسم *Support the project* أعلاه.
+
+</div>
+</details>
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how to get involved:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/new-template`)
-3. Commit your changes (`git commit -m 'feat: add new script template'`)
-4. Push to the branch (`git push origin feature/new-template`)
-5. Open a Pull Request
-
----
-
-## 📊 Stats
-
-<p align="center">
-  <img src="https://img.shields.io/github/last-commit/3h0ll7/scriptforge-ai?style=flat-square&color=FF4500" alt="Last Commit" />
-  <img src="https://img.shields.io/github/commit-activity/m/3h0ll7/scriptforge-ai?style=flat-square&color=06B6D4" alt="Commit Activity" />
-  <img src="https://img.shields.io/github/repo-size/3h0ll7/scriptforge-ai?style=flat-square&color=10B981" alt="Repo Size" />
-</p>
-
----
+Issues and pull requests are welcome. Please read [`AGENTS.md`](AGENTS.md) for the architecture rules, keep changes small, and run `npm run lint && npm test && npm run build` before opening a PR.
 
 ## 📜 License
 
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-## 🙏 Acknowledgments
-
-- Built with [Lovable](https://lovable.dev/) — AI-powered development platform
-- Backend powered by [Supabase](https://supabase.com/)
-- UI components from [shadcn/ui](https://ui.shadcn.com/)
+No license file has been added yet, so all rights are reserved by the author by default.
 
 ---
 
 <p align="center">
-  <strong>🎬 Stop staring at a blank page. Start forging scripts.</strong><br/><br/>
-  <a href="https://scriptforgeaii.lovable.app/">
-    <img src="https://img.shields.io/badge/🚀_Try_ScriptForge-Live_Demo-FF4500?style=for-the-badge" alt="Try ScriptForge AI" />
-  </a>
+  Built by <a href="https://hassanaii.lovable.app"><b>Hassan Salman</b></a> with <a href="https://lovable.dev">Lovable</a>, <a href="https://supabase.com">Supabase</a> and <a href="https://ui.shadcn.com">shadcn/ui</a>.<br/><br/>
+  <a href="https://scriptforgeaii.lovable.app/"><img src="https://img.shields.io/badge/🎬_Stop_staring_at_a_blank_page-Start_forging-EA4C89?style=for-the-badge" alt="Start forging scripts" /></a>
 </p>

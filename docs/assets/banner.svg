@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="title desc">
+  <title id="title">ScriptForge AI</title>
+  <desc id="desc">Turn any idea into a scroll-stopping video script. Hooks, scripts, SEO tags and video prompts for YouTube, TikTok, Reels and courses.</desc>
+  <defs>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F06BA0"/>
+      <stop offset="1" stop-color="#C2185B"/>
+    </linearGradient>
+    <linearGradient id="yt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F9A26C"/>
+      <stop offset="1" stop-color="#EE5A8C"/>
+    </linearGradient>
+    <linearGradient id="tt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7B6CF6"/>
+      <stop offset="1" stop-color="#3FB5F0"/>
+    </linearGradient>
+    <linearGradient id="course" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A974F0"/>
+      <stop offset="1" stop-color="#E06CC8"/>
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.45"/></filter>
+    <clipPath id="phoneScreen"><rect x="0" y="0" width="112" height="212" rx="16"/></clipPath>
+    <clipPath id="ytScreen"><rect x="0" y="0" width="236" height="133" rx="10"/></clipPath>
+    <clipPath id="typeClip"><rect x="80" y="214" width="0" height="44">
+      <animate attributeName="width" values="0;350;350;0;0" keyTimes="0;0.35;0.8;0.92;1" dur="6s" repeatCount="indefinite"/>
+    </rect></clipPath>
+  </defs>
+
+  <style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .float1 { animation: float 6s ease-in-out infinite; }
+    .float2 { animation: float 7s ease-in-out -2s infinite; }
+    .float3 { animation: float 8s ease-in-out -4s infinite; }
+    .blob1 { animation: drift 14s ease-in-out infinite; }
+    .blob2 { animation: drift 18s ease-in-out -6s infinite reverse; }
+    .cursor { animation: blink 1s steps(1) infinite; }
+    .chip { animation: pop 6s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+    @keyframes drift { 0%,100% { transform: translate(0,0) } 50% { transform: translate(40px,-25px) } }
+    @keyframes blink { 50% { opacity: 0 } }
+    @keyframes pop { 0%,30% { opacity: 0; transform: translateY(6px) } 40%,85% { opacity: 1; transform: translateY(0) } 95%,100% { opacity: 0 } }
+    @media (prefers-reduced-motion: reduce) {
+      .float1, .float2, .float3, .blob1, .blob2, .cursor, .chip { animation: none; }
+      .chip { opacity: 1; }
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="1280" height="400" rx="24" fill="#0D0C22"/>
+  <g filter="url(#blur)" opacity="0.55">
+    <circle class="blob1" cx="1060" cy="60" r="190" fill="#EA4C89"/>
+    <circle class="blob2" cx="760" cy="420" r="170" fill="#6D5DF6"/>
+  </g>
+  <g opacity="0.07" stroke="#fff">
+    <path d="M0 100H1280M0 200H1280M0 300H1280M320 0V400M640 0V400M960 0V400"/>
+  </g>
+
+  <!-- Left: brand + tagline -->
+  <g class="sans">
+    <g transform="translate(80 92)">
+      <circle cx="22" cy="22" r="22" fill="url(#pink)"/>
+      <text x="22" y="30" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">S</text>
+      <text x="58" y="33" font-size="30" font-weight="800" fill="#fff" letter-spacing="-0.5">scriptforge<tspan fill="#EA4C89">.</tspan></text>
+    </g>
+
+    <text x="80" y="200" font-size="52" font-weight="800" fill="#fff" letter-spacing="-1.5">Discover ideas.</text>
+
+    <g clip-path="url(#typeClip)">
+      <text x="80" y="250" font-size="52" font-weight="800" fill="#EA4C89" letter-spacing="-1.5">Forge scripts.</text>
+    </g>
+    <rect class="cursor" x="80" y="214" width="4" height="44" rx="2" fill="#EA4C89">
+      <animate attributeName="x" values="80;424;424;80;80" keyTimes="0;0.35;0.8;0.92;1" dur="6s" repeatCount="indefinite"/>
+    </rect>
+
+    <text x="80" y="300" font-size="18" fill="#B8B6C8">Hooks · Timestamped scripts · B-roll · SEO tags · Video prompts</text>
+
+    <g transform="translate(80 326)" font-size="13" font-weight="700">
+      <rect width="92" height="30" rx="15" fill="#fff" fill-opacity="0.08" stroke="#fff" stroke-opacity="0.15"/>
+      <text x="46" y="20" text-anchor="middle" fill="#fff">YouTube</text>
+      <rect x="102" width="82" height="30" rx="15" fill="#fff" fill-opacity="0.08" stroke="#fff" stroke-opacity="0.15"/>
+      <text x="143" y="20" text-anchor="middle" fill="#fff">TikTok</text>
+      <rect x="194" width="76" height="30" rx="15" fill="#fff" fill-opacity="0.08" stroke="#fff" stroke-opacity="0.15"/>
+      <text x="232" y="20" text-anchor="middle" fill="#fff">Reels</text>
+      <rect x="280" width="80" height="30" rx="15" fill="#fff" fill-opacity="0.08" stroke="#fff" stroke-opacity="0.15"/>
+      <text x="320" y="20" text-anchor="middle" fill="#fff">Course</text>
+      <rect x="370" width="76" height="30" rx="15" fill="#EA4C89"/>
+      <text x="408" y="20" text-anchor="middle" fill="#fff">EN · ع</text>
+    </g>
+  </g>
+
+  <!-- Right: floating platform mockups -->
+  <g class="sans">
+    <!-- YouTube thumbnail -->
+    <g transform="translate(700 70)">
+      <g class="float1">
+        <g filter="url(#shadow)">
+          <g clip-path="url(#ytScreen)">
+            <rect width="236" height="133" fill="url(#yt)"/>
+            <circle cx="190" cy="40" r="70" fill="#fff" opacity="0.18"/>
+            <text x="18" y="62" font-size="24" font-weight="900" fill="#fff">5 HABITS</text>
+            <text x="18" y="88" font-size="13" font-weight="700" fill="#fff" opacity="0.85">that changed my life</text>
+            <circle cx="186" cy="66" r="30" fill="#fff"/>
+            <path d="M178 54v24l20-12z" fill="#EE5A8C"/>
+            <rect x="0" y="129" width="236" height="4" fill="#fff" opacity="0.35"/>
+            <rect x="0" y="129" width="96" height="4" fill="#FF0033"/>
+            <rect x="192" y="108" width="36" height="16" rx="3" fill="#000" opacity="0.8"/>
+            <text x="210" y="120" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">5:00</text>
+          </g>
+        </g>
+        <circle cx="12" cy="152" r="10" fill="url(#yt)"/>
+        <rect x="30" y="146" width="150" height="7" rx="3.5" fill="#fff" opacity="0.5"/>
+        <rect x="30" y="159" width="90" height="6" rx="3" fill="#fff" opacity="0.25"/>
+      </g>
+    </g>
+
+    <!-- Phone (TikTok / Reels) -->
+    <g transform="translate(980 70) rotate(-5)">
+      <g class="float2">
+        <g filter="url(#shadow)">
+          <rect x="-4" y="-4" width="120" height="220" rx="20" fill="#1C1B33"/>
+          <g clip-path="url(#phoneScreen)">
+            <rect width="112" height="212" fill="url(#tt)"/>
+            <rect y="120" width="112" height="92" fill="#000" opacity="0.25"/>
+            <text x="12" y="118" font-size="17" font-weight="900" fill="#fff">10 HRS</text>
+            <text x="12" y="138" font-size="17" font-weight="900" fill="#fff">SAVED</text>
+            <path d="M94 128c-4-6-12-2-9 4l9 8 9-8c3-6-5-10-9-4z" fill="#fff"/>
+            <circle cx="94" cy="156" r="5" fill="none" stroke="#fff" stroke-width="2"/>
+            <rect x="12" y="170" width="60" height="6" rx="3" fill="#fff" opacity="0.9"/>
+            <rect x="12" y="182" width="78" height="6" rx="3" fill="#fff" opacity="0.6"/>
+          </g>
+          <rect x="40" y="6" width="32" height="6" rx="3" fill="#1C1B33"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Hook chip -->
+    <g transform="translate(900 268)">
+      <g class="chip">
+        <rect width="170" height="48" rx="14" fill="#fff" filter="url(#shadow)"/>
+        <circle cx="26" cy="24" r="14" fill="#EA4C89"/>
+        <path d="M26 15l2.5 6.5L35 24l-6.5 2.5L26 33l-2.5-6.5L17 24l6.5-2.5z" fill="#fff"/>
+        <text x="50" y="21" font-size="12" font-weight="800" fill="#0D0C22">Hook · 0:03</text>
+        <text x="50" y="36" font-size="11" fill="#6E6D7A">Scroll-stopping opener</text>
+      </g>
+    </g>
+
+    <!-- Course slide -->
+    <g transform="translate(720 262)">
+      <g class="float3">
+        <rect width="160" height="96" rx="12" fill="#fff" filter="url(#shadow)"/>
+        <rect x="12" y="12" width="64" height="16" rx="8" fill="#F3E8FD"/>
+        <text x="44" y="24" text-anchor="middle" font-size="9" font-weight="800" fill="#A33DC6">MODULE 04</text>
+        <rect x="12" y="38" width="36" height="36" rx="8" fill="url(#course)"/>
+        <rect x="58" y="42" width="88" height="8" rx="4" fill="#0D0C22" opacity="0.8"/>
+        <rect x="58" y="56" width="64" height="6" rx="3" fill="#0D0C22" opacity="0.2"/>
+        <g fill="#C04FCB"><rect x="12" y="82" width="24" height="4" rx="2"/><rect x="40" y="82" width="24" height="4" rx="2"/><rect x="68" y="82" width="24" height="4" rx="2"/></g>
+        <g fill="#0D0C22" opacity="0.1"><rect x="96" y="82" width="24" height="4" rx="2"/><rect x="124" y="82" width="24" height="4" rx="2"/></g>
+      </g>
+    </g>
+  </g>
+</svg>
