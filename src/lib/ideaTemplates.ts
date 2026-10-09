@@ -18,6 +18,8 @@ export interface IdeaTemplate {
   /** Two HSL stops used for the card thumbnail gradient. */
   colors: [string, string];
   title: Localized;
+  /** Short, bold text shown inside the thumbnail mockup. */
+  headline: Localized;
   audience: Localized;
   values: Pick<ScriptInput, "platform" | "targetDuration" | "tone">;
 }
@@ -25,6 +27,7 @@ export interface IdeaTemplate {
 export const ideaTemplates: IdeaTemplate[] = [
   {
     id: "morning-habits",
+    headline: { en: "5 HABITS", ar: "5 عادات" },
     icon: Coffee,
     colors: ["28 92% 68%", "350 85% 66%"],
     title: { en: "5 morning habits that changed my life", ar: "5 عادات صباحية غيّرت حياتي" },
@@ -33,6 +36,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "ai-tools",
+    headline: { en: "10 HRS SAVED", ar: "وفّر 10 ساعات" },
     icon: Laptop,
     colors: ["250 80% 68%", "200 85% 60%"],
     title: { en: "3 AI tools that save me 10 hours a week", ar: "3 أدوات ذكاء اصطناعي توفر لي 10 ساعات أسبوعياً" },
@@ -41,6 +45,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "nurse-shift",
+    headline: { en: "NIGHT SHIFT", ar: "الشفت الليلي" },
     icon: Stethoscope,
     colors: ["170 60% 52%", "200 70% 55%"],
     title: { en: "A night shift nurse's survival kit", ar: "عدة البقاء لممرض الشفت الليلي" },
@@ -49,6 +54,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "budget",
+    headline: { en: "50/30/20", ar: "50/30/20" },
     icon: PiggyBank,
     colors: ["145 55% 52%", "80 65% 58%"],
     title: { en: "The 50/30/20 budget explained simply", ar: "شرح ميزانية 50/30/20 ببساطة" },
@@ -57,6 +63,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "startup",
+    headline: { en: "7-DAY TEST", ar: "اختبار 7 أيام" },
     icon: Rocket,
     colors: ["336 80% 62%", "280 70% 62%"],
     title: { en: "How I validated my SaaS idea in 7 days", ar: "كيف اختبرت فكرة مشروعي SaaS في 7 أيام" },
@@ -65,6 +72,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "home-workout",
+    headline: { en: "10 MIN", ar: "10 دقائق" },
     icon: Dumbbell,
     colors: ["12 85% 62%", "40 90% 60%"],
     title: { en: "A 10-minute workout with zero equipment", ar: "تمرين 10 دقائق بدون أي معدات" },
@@ -73,6 +81,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "study",
+    headline: { en: "STUDY LESS", ar: "ادرس أقل" },
     icon: Brain,
     colors: ["265 60% 66%", "320 65% 66%"],
     title: { en: "Active recall: study less, remember more", ar: "الاسترجاع النشط: ادرس أقل وتذكّر أكثر" },
@@ -81,6 +90,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "travel",
+    headline: { en: "HIDDEN GEMS", ar: "أماكن مخفية" },
     icon: Plane,
     colors: ["195 80% 58%", "160 60% 55%"],
     title: { en: "Hidden gems most tourists miss", ar: "أماكن مخفية يفوتها أغلب السيّاح" },
@@ -89,6 +99,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "launch",
+    headline: { en: "LAUNCH DAY", ar: "يوم الإطلاق" },
     icon: Megaphone,
     colors: ["45 92% 60%", "18 88% 62%"],
     title: { en: "Launch day: what we learned shipping v1", ar: "يوم الإطلاق: ما تعلمناه من الإصدار الأول" },
@@ -97,6 +108,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "photo",
+    headline: { en: "PRO SHOTS", ar: "لقطات احترافية" },
     icon: Camera,
     colors: ["220 25% 30%", "250 35% 50%"],
     title: { en: "Phone photography tricks pros use", ar: "حيل تصوير بالهاتف يستخدمها المحترفون" },
@@ -105,6 +117,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "reading",
+    headline: { en: "1 BOOK", ar: "كتاب واحد" },
     icon: BookOpen,
     colors: ["30 55% 60%", "10 50% 55%"],
     title: { en: "One book that rewired how I think", ar: "كتاب واحد غيّر طريقة تفكيري" },
@@ -113,6 +126,7 @@ export const ideaTemplates: IdeaTemplate[] = [
   },
   {
     id: "exam-course",
+    headline: { en: "MODULE 04", ar: "الوحدة 04" },
     icon: GraduationCap,
     colors: ["210 75% 55%", "240 65% 62%"],
     title: { en: "Exam prep module: mastering priority questions", ar: "وحدة تحضير: إتقان أسئلة الأولويات" },
