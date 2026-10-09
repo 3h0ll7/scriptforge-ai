@@ -104,6 +104,7 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
     { models: (p: Provider) => p.textModels, messages: withoutImages(req.messages) },
   ];
   let lastStatus = 503;
+  const failures: string[] = [];
 
   for (const pass of passes) {
     for (const provider of all) {
@@ -113,11 +114,13 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
           if (res.ok) return { ok: true, provider: provider.name, model, data: await res.json() };
 
           lastStatus = res.status;
+          failures.push(`${provider.name} ${res.status}`);
           console.error(`${provider.name}/${model} error ${res.status}: ${(await res.text()).slice(0, 500)}`);
           if (NEXT_MODEL.has(res.status)) continue;
           break;
         } catch (e) {
           lastStatus = 502;
+          failures.push(`${provider.name} network`);
           console.error(`${provider.name}/${model} request failed:`, e);
           break;
         }
@@ -125,10 +128,13 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
     }
   }
 
+  // Provider/status codes only (no response bodies) so the owner can tell a bad key (401)
+  // from a retired model (404) or exhausted credits (402) straight from the toast.
+  const detail = failures.length ? ` (${[...new Set(failures)].join(", ")})` : "";
   if (lastStatus === 429) {
-    return { ok: false, status: 429, error: "The AI is busy right now. Please try again in a minute." };
+    return { ok: false, status: 429, error: `The AI is busy right now. Please try again in a minute.${detail}` };
   }
-  return { ok: false, status: 503, error: "The AI service is temporarily unavailable. Please try again later." };
+  return { ok: false, status: 503, error: `The AI service is temporarily unavailable. Please try again later.${detail}` };
 }
 
 /** Reads structured output from a forced tool call, falling back to JSON in the message text. */
