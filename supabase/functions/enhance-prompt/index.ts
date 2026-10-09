@@ -1,3 +1,5 @@
+import { chatCompletion } from "../_shared/ai.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -10,9 +12,6 @@ const json = (body: unknown, status = 200) =>
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const key = Deno.env.get("LOVABLE_API_KEY");
-    if (!key) return json({ error: "AI is not configured" }, 500);
-
     const b = await req.json();
     const prompt = String(b.prompt ?? "").trim();
     if (!prompt) return json({ error: "Prompt is required" }, 400);
@@ -33,60 +32,21 @@ Key message: ${b.keyMessage || "-"}
 Reference video link: ${b.videoUrl || "-"}
 Reference text: ${(b.sourceText || "-").slice(0, 8000)}`;
 
-    const content: unknown[] = [{ type: "input_text", text: details }];
-    if (typeof b.imageDataUrl === "string" && b.imageDataUrl.startsWith("data:image/")) {
-      content.push({ type: "input_image", image_url: b.imageDataUrl });
-    }
+    const hasImage = typeof b.imageDataUrl === "string" && b.imageDataUrl.startsWith("data:image/");
+    const content: unknown[] = [{ type: "text", text: details }];
+    if (hasImage) content.push({ type: "image_url", image_url: { url: b.imageDataUrl } });
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
-      method: "POST",
-      headers: {
-        "Lovable-API-Key": key,
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-        "X-Lovable-AIG-SDK": "fetch",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-6-astra",
-        instructions,
-        input: [{ role: "user", content }],
-        reasoning: { effort: "low" },
-        store: false,
-        stream: true,
-      }),
+    const result = await chatCompletion({
+      hasImage,
+      messages: [
+        { role: "system", content: instructions },
+        { role: "user", content },
+      ],
     });
+    if (!result.ok) return json({ error: result.error }, result.status);
+    console.log(`enhance-prompt served by ${result.provider}/${result.model}`);
 
-    if (!res.ok || !res.body) {
-      const text = await res.text();
-      console.error("gateway", res.status, text);
-      if (res.status === 429) return json({ error: "Too many requests, please try again shortly." }, 429);
-      if (res.status === 402) return json({ error: "AI credits exhausted." }, 402);
-      return json({ error: `AI error (${res.status})` }, res.status >= 500 ? 502 : res.status);
-    }
-
-    const reader = res.body.getReader();
-    const dec = new TextDecoder();
-    let buf = "", out = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += dec.decode(value, { stream: true });
-      const lines = buf.split("\n");
-      buf = lines.pop() ?? "";
-      for (const line of lines) {
-        if (!line.startsWith("data:")) continue;
-        const d = line.slice(5).trim();
-        if (!d || d === "[DONE]") continue;
-        try {
-          const ev = JSON.parse(d);
-          if (ev.type === "response.output_text.delta") out += ev.delta ?? "";
-          if (ev.type === "response.failed" || ev.type === "error") {
-            return json({ error: ev.response?.error?.message || ev.message || "AI failed" }, 502);
-          }
-        } catch { /* ignore */ }
-      }
-    }
-    out = out.trim();
+    const out = String(result.data?.choices?.[0]?.message?.content ?? "").trim();
     if (!out) return json({ error: "The AI returned no prompt. Please adjust your input." }, 502);
     return json({ prompt: out });
   } catch (e) {
