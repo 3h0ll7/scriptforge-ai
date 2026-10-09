@@ -110,16 +110,35 @@ Return the result using the generate_script tool.`;
     let lastError = "";
 
     if (GROQ_API_KEY) {
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      const groqBody = JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages,
+        tools: [SCRIPT_TOOL],
+        tool_choice: { type: "function", function: { name: "generate_script" } },
+      });
+      let groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${GROQ_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          messages,
-          tools: [SCRIPT_TOOL],
-          tool_choice: { type: "function", function: { name: "generate_script" } },
-        }),
+        body: groqBody,
       });
+
+      // If the request included an image and failed (text-only model), retry without the image.
+      if (!groqRes.ok && hasImage) {
+        const retryMessages = [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt + "\n- Note: a reference image was attached but could not be processed; rely on the text material." },
+        ];
+        groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${GROQ_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: retryMessages,
+            tools: [SCRIPT_TOOL],
+            tool_choice: { type: "function", function: { name: "generate_script" } },
+          }),
+        });
+      }
 
       if (groqRes.ok) {
         data = await groqRes.json();

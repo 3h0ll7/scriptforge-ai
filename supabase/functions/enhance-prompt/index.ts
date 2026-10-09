@@ -37,21 +37,25 @@ Reference text: ${(b.sourceText || "-").slice(0, 8000)}`;
     const hasImage = typeof b.imageDataUrl === "string" && b.imageDataUrl.startsWith("data:image/");
 
     if (groqKey) {
-      const userContent: unknown = hasImage
-        ? [{ type: "text", text: details }, { type: "image_url", image_url: { url: b.imageDataUrl } }]
-        : details;
+      const groqMessages = (content: unknown) => [
+        { role: "system", content: instructions },
+        { role: "user", content },
+      ];
+      const groqCall = (content: unknown) =>
+        fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${groqKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: groqMessages(content) }),
+        });
 
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${groqKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          messages: [
-            { role: "system", content: instructions },
-            { role: "user", content: userContent },
-          ],
-        }),
-      });
+      let groqRes = await groqCall(
+        hasImage ? [{ type: "text", text: details }, { type: "image_url", image_url: { url: b.imageDataUrl } }] : details,
+      );
+
+      // Text-only model: retry without the image if it was rejected.
+      if (!groqRes.ok && hasImage) {
+        groqRes = await groqCall(details + "\nNote: a reference image was attached but could not be processed; rely on the text material.");
+      }
 
       if (groqRes.ok) {
         const data = await groqRes.json();
