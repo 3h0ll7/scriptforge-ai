@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { FileText, LoaderCircle, Search, Sparkles } from "lucide-react";
+import { FileText, Heart, LoaderCircle, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import ScriptForm, { type ScriptInput, type ScriptPreset } from "@/components/ScriptForm";
 import ScriptOutput, { type ScriptResult } from "@/components/ScriptOutput";
@@ -9,6 +9,8 @@ import { generateScript } from "@/lib/generateScript";
 import type { IdeaTemplate } from "@/lib/ideaTemplates";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import Navbar from "@/components/Navbar";
+import SupportDialog from "@/components/SupportDialog";
+import { donationEnabled } from "@/lib/donation";
 
 const trendingKeys = ["trend_ai", "trend_productivity", "trend_health", "trend_money"];
 
@@ -159,6 +161,14 @@ export default function Index() {
       <footer className="border-t border-border">
         <div className="max-w-workspace mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-lg font-bold tracking-tight text-foreground">scriptforge<span className="text-brand">.</span></p>
+          {donationEnabled && (
+            <SupportDialog>
+              <button type="button" className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold text-secondary hover:bg-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Heart className="w-4 h-4 fill-current" />
+                {t("support_project")}
+              </button>
+            </SupportDialog>
+          )}
           <p className="text-muted-foreground text-sm">
             Developed by{" "}
             <a

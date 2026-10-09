@@ -1,7 +1,9 @@
-import { Sun, Moon, Languages, Compass, FilePenLine, Film, Plus } from "lucide-react";
+import { Sun, Moon, Languages, Compass, FilePenLine, Film, Plus, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { Button } from "@/components/ui/button";
+import SupportDialog from "@/components/SupportDialog";
+import { donationEnabled } from "@/lib/donation";
 
 const links = [
   { href: "#explore", key: "explore", icon: Compass },
@@ -55,6 +57,15 @@ export default function Navbar() {
             <Languages />
             <span>{language === "en" ? "ع" : "EN"}</span>
           </Button>
+
+          {donationEnabled && (
+            <SupportDialog>
+              <Button type="button" variant="ghost" size="sm" className="rounded-full h-10 text-secondary hover:bg-accent hover:text-accent-foreground" aria-label={t("support")}>
+                <Heart className="fill-current" />
+                <span className="hidden lg:inline">{t("support")}</span>
+              </Button>
+            </SupportDialog>
+          )}
 
           <Button asChild variant="default" size="sm" className="rounded-full px-4 h-10">
             <a href="#script-form">
