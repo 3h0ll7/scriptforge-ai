@@ -63,17 +63,17 @@ export default function VideoPromptBuilder({ input, result }: Props) {
     }
   };
 
-  const inputClass = "w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-y";
+  const inputClass = "w-full rounded-xl border border-transparent bg-muted px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground hover:bg-card hover:border-input focus:bg-card focus:border-transparent focus:outline-none focus:ring-4 focus:ring-ring/20 focus:shadow-[0_0_0_1px_hsl(var(--ring))] transition-all resize-y";
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-border bg-card p-5 md:p-6 shadow-card space-y-5"
+      className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card space-y-5"
     >
       <div className="flex items-start gap-3">
-        <div className="p-2.5 rounded-lg gradient-primary shrink-0">
-          <Film className="w-5 h-5 text-primary-foreground" />
+        <div className="w-10 h-10 rounded-full bg-accent grid place-items-center shrink-0">
+          <Film className="w-5 h-5 text-accent-foreground" />
         </div>
         <div className="min-w-0">
           <h3 className="text-lg font-bold text-foreground">{t("video_prompt_builder")}</h3>
@@ -90,7 +90,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
         <textarea id="video-script" rows={8} value={script} onChange={(event) => setScript(event.target.value)} placeholder={t("script_for_video_placeholder")} className={inputClass} />
       </div>
 
-      <Button type="button" variant="glow" className="w-full h-auto min-h-11 py-3 rounded-lg whitespace-normal" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
+      <Button type="button" variant="glow" className="w-full h-auto min-h-11 py-3 rounded-full whitespace-normal" disabled={isBuilding || !hook.trim() || !script.trim()} onClick={handleBuild}>
         <Wand2 className={`w-4 h-4 shrink-0 ${isBuilding ? "animate-spin" : ""}`} />
         <span>{isBuilding ? t("building_detailed_prompt") : t("build_detailed_prompt")}</span>
       </Button>
@@ -99,7 +99,7 @@ export default function VideoPromptBuilder({ input, result }: Props) {
         <div className="border-t border-border pt-5 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-semibold text-muted-foreground">{t("detailed_video_prompt")}</p>
-            <Button type="button" size="icon" variant="ghost" className="rounded-lg shrink-0" onClick={handleCopy} title={t("copy")} aria-label={t("copy")}>
+            <Button type="button" size="icon" variant="ghost" className="rounded-full shrink-0" onClick={handleCopy} title={t("copy")} aria-label={t("copy")}>
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
