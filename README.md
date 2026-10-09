@@ -112,7 +112,7 @@ flowchart TB
         GS[generate-script]
         EP[enhance-prompt]
     end
-    AI[(🤖 AI models via<br/>Lovable AI Gateway)]
+    AI[(🤖 Groq · OpenRouter · Lovable<br/>automatic fallback)]
 
     UI -- supabase.functions.invoke --> GS
     OUT -- supabase.functions.invoke --> EP
@@ -144,7 +144,7 @@ flowchart TB
 |---|---|
 | **UI** | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui (Radix), Framer Motion, Lucide icons |
 | **Backend** | Supabase Edge Functions (Deno): `generate-script`, `enhance-prompt` |
-| **AI** | Lovable AI Gateway (chat completion models) |
+| **AI** | Open-weight models via **Groq** (`openai/gpt-oss-120b`, free tier) → **OpenRouter** free models → Lovable AI Gateway, with automatic fallback |
 | **Quality** | ESLint, Vitest, Testing Library, Playwright |
 | **Hosting** | Lovable |
 
@@ -177,10 +177,18 @@ npx supabase functions deploy generate-script
 npx supabase functions deploy enhance-prompt
 ```
 
-Set `LOVABLE_API_KEY` (the AI gateway key both functions read) as a Supabase secret — never in `.env` or in git:
+Both functions share `supabase/functions/_shared/ai.ts`, which tries each configured provider in order and moves on when one is out of credits, rate-limited or has retired a model. Set at least one key as a Supabase secret — never in `.env` or in git:
+
+| Secret | Provider | Default models (strongest first) |
+|---|---|---|
+| `GROQ_API_KEY` | [Groq](https://console.groq.com/keys) — free tier | `openai/gpt-oss-120b`, `openai/gpt-oss-20b`; images: `meta-llama/llama-4-scout-17b-16e-instruct` |
+| `OPENROUTER_API_KEY` | [OpenRouter](https://openrouter.ai/keys) — free models | `openai/gpt-oss-120b:free`, `deepseek/deepseek-chat-v3.1:free` |
+| `LOVABLE_API_KEY` | Lovable AI Gateway (paid credits) | `google/gemini-3-flash-preview` |
+
+Override any model list with comma-separated `GROQ_MODELS`, `GROQ_VISION_MODELS`, `OPENROUTER_MODELS` or `OPENROUTER_VISION_MODELS`.
 
 ```bash
-npx supabase secrets set LOVABLE_API_KEY=your-key
+npx supabase secrets set GROQ_API_KEY=your-groq-key
 ```
 
 </details>
