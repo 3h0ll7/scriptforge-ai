@@ -28,8 +28,6 @@ export type ChatResult =
   | { ok: true; provider: string; model: string; data: any }
   | { ok: false; status: number; error: string };
 
-/** Errors worth moving to the next provider for. */
-const NEXT_PROVIDER = new Set([401, 402, 403, 408, 429, 500, 502, 503, 504]);
 /** Errors that usually mean this model (or its input) was rejected; try the provider's next model. */
 const NEXT_MODEL = new Set([400, 404, 413, 422]);
 
@@ -45,7 +43,7 @@ function providers(): Provider[] {
       url: "https://api.groq.com/openai/v1/chat/completions",
       key: groq,
       textModels: list(Deno.env.get("GROQ_MODELS"), ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]),
-      visionModels: list(Deno.env.get("GROQ_VISION_MODELS"), ["meta-llama/llama-4-scout-17b-16e-instruct"]),
+      visionModels: list(Deno.env.get("GROQ_VISION_MODELS"), ["qwen/qwen3.8-27b", "meta-llama/llama-4-scout-17b-16e-instruct"]),
     });
   }
   const openrouter = Deno.env.get("OPENROUTER_API_KEY");
@@ -99,38 +97,44 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
     return { ok: false, status: 500, error: "AI is not configured. Set GROQ_API_KEY (free) or another provider key." };
   }
 
-  const textOnly = withoutImages(req.messages);
+  // With an image, every provider's vision models are tried before any text-only fallback,
+  // so a retired vision model on one provider doesn't silently drop the image.
+  const passes: Array<{ models: (p: Provider) => string[]; messages: Message[] }> = [
+    ...(req.hasImage ? [{ models: (p: Provider) => p.visionModels, messages: req.messages }] : []),
+    { models: (p: Provider) => p.textModels, messages: withoutImages(req.messages) },
+  ];
   let lastStatus = 503;
+  const failures: string[] = [];
 
-  for (const provider of all) {
-    // With an image: vision models first, then text models without the image.
-    const attempts = [
-      ...(req.hasImage ? provider.visionModels.map((model) => ({ model, messages: req.messages })) : []),
-      ...provider.textModels.map((model) => ({ model, messages: textOnly })),
-    ];
+  for (const pass of passes) {
+    for (const provider of all) {
+      for (const model of pass.models(provider)) {
+        try {
+          const res = await post(provider, model, pass.messages, req);
+          if (res.ok) return { ok: true, provider: provider.name, model, data: await res.json() };
 
-    for (const attempt of attempts) {
-      try {
-        const res = await post(provider, attempt.model, attempt.messages, req);
-        if (res.ok) return { ok: true, provider: provider.name, model: attempt.model, data: await res.json() };
-
-        lastStatus = res.status;
-        console.error(`${provider.name}/${attempt.model} error ${res.status}: ${(await res.text()).slice(0, 500)}`);
-        if (NEXT_MODEL.has(res.status)) continue;
-        if (NEXT_PROVIDER.has(res.status)) break;
-        break;
-      } catch (e) {
-        lastStatus = 502;
-        console.error(`${provider.name}/${attempt.model} request failed:`, e);
-        break;
+          lastStatus = res.status;
+          failures.push(`${provider.name} ${res.status}`);
+          console.error(`${provider.name}/${model} error ${res.status}: ${(await res.text()).slice(0, 500)}`);
+          if (NEXT_MODEL.has(res.status)) continue;
+          break;
+        } catch (e) {
+          lastStatus = 502;
+          failures.push(`${provider.name} network`);
+          console.error(`${provider.name}/${model} request failed:`, e);
+          break;
+        }
       }
     }
   }
 
+  // Provider/status codes only (no response bodies) so the owner can tell a bad key (401)
+  // from a retired model (404) or exhausted credits (402) straight from the toast.
+  const detail = failures.length ? ` (${[...new Set(failures)].join(", ")})` : "";
   if (lastStatus === 429) {
-    return { ok: false, status: 429, error: "The AI is busy right now. Please try again in a minute." };
+    return { ok: false, status: 429, error: `The AI is busy right now. Please try again in a minute.${detail}` };
   }
-  return { ok: false, status: 503, error: "The AI service is temporarily unavailable. Please try again later." };
+  return { ok: false, status: 503, error: `The AI service is temporarily unavailable. Please try again later.${detail}` };
 }
 
 /** Reads structured output from a forced tool call, falling back to JSON in the message text. */

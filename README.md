@@ -181,7 +181,7 @@ Both functions share `supabase/functions/_shared/ai.ts`, which tries each config
 
 | Secret | Provider | Default models (strongest first) |
 |---|---|---|
-| `GROQ_API_KEY` | [Groq](https://console.groq.com/keys) — free tier | `openai/gpt-oss-120b`, `openai/gpt-oss-20b`; images: `meta-llama/llama-4-scout-17b-16e-instruct` |
+| `GROQ_API_KEY` | [Groq](https://console.groq.com/keys) — free tier | `openai/gpt-oss-120b`, `openai/gpt-oss-20b`; images: `qwen/qwen3.8-27b` → `llama-4-scout` |
 | `OPENROUTER_API_KEY` | [OpenRouter](https://openrouter.ai/keys) — free models | `openai/gpt-oss-120b:free`, `deepseek/deepseek-chat-v3.1:free` |
 | `LOVABLE_API_KEY` | Lovable AI Gateway (paid credits) | `google/gemini-3-flash-preview` |
 
