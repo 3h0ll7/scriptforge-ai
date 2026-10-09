@@ -13,7 +13,7 @@ export default {
       },
     },
     fontFamily: {
-      sans: ["Space Grotesk", "system-ui", "sans-serif"],
+      sans: ["Space Grotesk", "system-ui", "Segoe UI", "Tahoma", "sans-serif"],
     },
     extend: {
       colors: {
@@ -50,6 +50,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: "hsl(var(--brand))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

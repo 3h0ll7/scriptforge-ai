@@ -23,6 +23,25 @@ const translations: Record<string, Record<Language, string>> = {
   "new_script": { en: "New script", ar: "سكربت جديد" },
   "results": { en: "Results", ar: "النتائج" },
   "workspace": { en: "Workspace", ar: "مساحة العمل" },
+  "explore": { en: "Explore", ar: "استكشف" },
+  "start_new_script": { en: "New script", ar: "سكربت جديد" },
+
+  // Hero & gallery
+  "hero_title_1": { en: "Discover ideas.", ar: "اكتشف الأفكار." },
+  "hero_title_2": { en: "Forge scripts.", ar: "واصنع السكربتات." },
+  "hero_search_placeholder": { en: "What's your next video about?", ar: "عن ماذا سيكون فيديوك القادم؟" },
+  "trending": { en: "Trending:", ar: "رائج:" },
+  "trend_ai": { en: "AI tools", ar: "أدوات الذكاء الاصطناعي" },
+  "trend_productivity": { en: "Productivity", ar: "الإنتاجية" },
+  "trend_health": { en: "Health tips", ar: "نصائح صحية" },
+  "trend_money": { en: "Personal finance", ar: "التمويل الشخصي" },
+  "explore_ideas": { en: "Explore script ideas", ar: "استكشف أفكار السكربتات" },
+  "explore_ideas_subtitle": { en: "Pick a starter idea and the form fills itself in.", ar: "اختر فكرة جاهزة وسيُملأ النموذج تلقائياً." },
+  "filter_by_platform": { en: "Filter by platform", ar: "التصفية حسب المنصة" },
+  "all": { en: "All", ar: "الكل" },
+  "use_idea": { en: "Use this idea", ar: "استخدم هذه الفكرة" },
+  "workspace_title": { en: "Shape your script", ar: "شكّل سكربتك" },
+  "scenes": { en: "scenes", ar: "مشاهد" },
 
   // Index
   "craft_scripts": { en: "Craft Scripts", ar: "اصنع نصوصاً" },

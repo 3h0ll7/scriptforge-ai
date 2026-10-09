@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Clapperboard, Sparkles, Link2, FileText, ImagePlus, X } from "lucide-react";
@@ -50,9 +50,16 @@ const languages = [
   { value: "both", label: "Both", chip: "chip-purple" },
 ];
 
+export interface ScriptPreset {
+  /** Changes on every request so the same preset can be applied twice. */
+  id: number;
+  values: Partial<ScriptInput>;
+}
+
 interface Props {
   onGenerate: (input: ScriptInput) => void;
   isLoading: boolean;
+  preset?: ScriptPreset | null;
 }
 
 function ChipSelect({ options, value, onChange, label }: {
@@ -63,7 +70,7 @@ function ChipSelect({ options, value, onChange, label }: {
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium text-muted-foreground">{label}</p>
+      <p className="text-sm font-semibold text-foreground">{label}</p>
       <div className="flex flex-wrap gap-2" role="group" aria-label={label}>
         {options.map((opt) => (
           <Button
@@ -73,10 +80,10 @@ function ChipSelect({ options, value, onChange, label }: {
             size="sm"
             aria-pressed={value === opt.value}
             onClick={() => onChange(opt.value)}
-            className={`px-3 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-4 rounded-full text-xs font-semibold transition-all ${
               value === opt.value
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                : "bg-card border border-border text-foreground/80 hover:border-foreground/30 hover:bg-card hover:text-foreground"
             }`}
           >
             {opt.label}
@@ -87,7 +94,7 @@ function ChipSelect({ options, value, onChange, label }: {
   );
 }
 
-export default function ScriptForm({ onGenerate, isLoading }: Props) {
+export default function ScriptForm({ onGenerate, isLoading, preset }: Props) {
   const { t } = useAppSettings();
   const [form, setForm] = useState<ScriptInput>({
     topic: "",
@@ -103,6 +110,13 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     videoPrompt: "",
   });
   const fileRef = useRef<HTMLInputElement>(null);
+  const topicRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!preset) return;
+    setForm((f) => ({ ...f, ...preset.values }));
+    topicRef.current?.focus({ preventScroll: true });
+  }, [preset]);
 
   const update = (key: keyof ScriptInput, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
@@ -121,7 +135,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
     onGenerate(form);
   };
 
-  const inputCls = "w-full rounded-lg border border-input bg-muted/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all";
+  const inputCls = "w-full rounded-xl border border-transparent bg-muted px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground hover:bg-card hover:border-input focus:bg-card focus:border-transparent focus:outline-none focus:ring-4 focus:ring-ring/20 focus:shadow-[0_0_0_1px_hsl(var(--ring))] transition-all";
 
   return (
     <motion.form
@@ -129,18 +143,19 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit}
-      className="space-y-6 rounded-xl border border-border bg-card p-5 md:p-7 shadow-card"
+      className="space-y-6 rounded-2xl border border-border bg-card p-5 md:p-7 shadow-card"
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="p-2.5 rounded-lg gradient-primary">
-          <Clapperboard className="w-5 h-5 text-primary-foreground" />
+        <div className="w-10 h-10 rounded-full bg-accent grid place-items-center">
+          <Clapperboard className="w-5 h-5 text-accent-foreground" />
         </div>
-        <h2 className="text-xl font-bold text-foreground">{t("script_parameters")}</h2>
+        <h2 className="text-xl font-bold text-foreground tracking-tight">{t("script_parameters")}</h2>
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="script-topic" className="text-sm font-medium text-muted-foreground">{t("topic")} *</label>
+        <label htmlFor="script-topic" className="text-sm font-semibold text-foreground">{t("topic")} <span className="text-secondary">*</span></label>
         <input
+          ref={topicRef}
           id="script-topic"
           required
           value={form.topic}
@@ -156,7 +171,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       <ChipSelect label={t("language")} options={languages} value={form.language} onChange={(v) => update("language", v)} />
 
       <div className="space-y-2">
-        <label htmlFor="script-audience" className="text-sm font-medium text-muted-foreground">{t("target_audience")}</label>
+        <label htmlFor="script-audience" className="text-sm font-semibold text-foreground">{t("target_audience")}</label>
         <input
           id="script-audience"
           value={form.audience}
@@ -167,7 +182,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="script-message" className="text-sm font-medium text-muted-foreground">{t("key_message")}</label>
+        <label htmlFor="script-message" className="text-sm font-semibold text-foreground">{t("key_message")}</label>
         <textarea
           id="script-message"
           value={form.keyMessage}
@@ -179,7 +194,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
       </div>
 
       <div className="space-y-3 border-t border-border pt-5">
-        <p className="text-sm font-medium text-muted-foreground">{t("attachments")}</p>
+        <p className="text-sm font-semibold text-foreground">{t("attachments")}</p>
         <div className="relative">
           <Link2 className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input type="url" aria-label={t("video_link")} value={form.videoUrl} onChange={(e) => update("videoUrl", e.target.value)} placeholder={t("video_link_placeholder")} className={`${inputCls} ps-11`} />
@@ -203,7 +218,7 @@ export default function ScriptForm({ onGenerate, isLoading }: Props) {
         )}
       </div>
 
-      <Button type="submit" variant="glow" size="lg" className="w-full rounded-lg" disabled={isLoading || !form.topic.trim()}>
+      <Button type="submit" variant="glow" size="lg" className="w-full rounded-full h-12" disabled={isLoading || !form.topic.trim()}>
         {isLoading ? (
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
             <Sparkles className="w-5 h-5" />

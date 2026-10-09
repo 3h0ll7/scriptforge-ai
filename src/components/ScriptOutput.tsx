@@ -6,6 +6,7 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { Button } from "@/components/ui/button";
 import VideoPromptBuilder from "@/components/VideoPromptBuilder";
 import type { ScriptInput } from "@/components/ScriptForm";
+import { platformLabels } from "@/lib/ideaTemplates";
 
 export interface ScriptSection {
   timestamp: string;
@@ -64,37 +65,50 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       transition={{ duration: 0.5, delay: 0.1 }}
       className="space-y-5"
     >
-      {/* Titles */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-3 relative">
-        <div className="flex items-center gap-2">
-          <Type className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase">{t("title_options")}</h3>
-          <Button type="button" variant="ghost" size="icon" className="ms-auto shrink-0 bg-muted" onClick={handleCopy} title={t("copy_script")} aria-label={t("copy_script")}>
-            {copied ? <Check className="text-secondary" /> : <Copy className="text-muted-foreground" />}
-          </Button>
-        </div>
-        {result.titleOptions.map((title, i) => (
-          <div key={i} className="px-4 py-2.5 bg-muted rounded-lg text-foreground font-medium text-sm">
-            {i + 1}. {title}
+      {/* Cover: lead title + hook, styled like a featured shot */}
+      <div className="rounded-2xl overflow-hidden border border-border bg-card shadow-card">
+        <div className="gradient-accent p-6 md:p-7 space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-card text-xs font-bold text-foreground">{platformLabels[input.platform] ?? input.platform}</span>
+            <span className="px-3 py-1 rounded-full bg-card text-xs font-semibold text-muted-foreground">{input.targetDuration}</span>
+            <span className="px-3 py-1 rounded-full bg-card text-xs font-semibold text-muted-foreground">~{result.estimatedWordCount} {t("words")}</span>
+            <Button type="button" variant="default" size="sm" className="ms-auto shrink-0 rounded-full" onClick={handleCopy} title={t("copy_script")}>
+              {copied ? <Check /> : <Copy />}
+              <span>{copied ? t("copied") : t("copy_script")}</span>
+            </Button>
           </div>
-        ))}
-      </div>
-
-      {/* Hook */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-2">
-        <div className="flex items-center gap-2">
-          <Target className="w-4 h-4" />
-          <h3 className="text-sm font-semibold uppercase tracking-wider">{t("hook")} — {result.hook.hookType.replace("_", " ")}</h3>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">{result.titleOptions[0]}</h2>
+          <div className="flex items-start gap-3">
+            <span className="mt-1 w-8 h-8 shrink-0 rounded-full bg-secondary text-secondary-foreground grid place-items-center"><Target className="w-4 h-4" /></span>
+            <div className="min-w-0">
+              <p className="text-xs font-bold uppercase text-accent-foreground">{t("hook")} · {result.hook.hookType.replace("_", " ")}</p>
+              <p className="text-foreground text-base md:text-lg font-medium leading-relaxed">"{result.hook.text}"</p>
+            </div>
+          </div>
         </div>
-        <p className="text-foreground text-lg font-medium leading-relaxed">"{result.hook.text}"</p>
+
+        {result.titleOptions.length > 1 && (
+          <div className="p-5 md:p-6 space-y-2 border-t border-border">
+            <div className="flex items-center gap-2 mb-1">
+              <Type className="w-4 h-4 text-secondary" />
+              <h3 className="text-sm font-bold text-foreground">{t("title_options")}</h3>
+            </div>
+            {result.titleOptions.map((title, i) => (
+              <div key={i} className="flex items-start gap-3 px-4 py-2.5 bg-muted rounded-xl text-foreground font-medium text-sm">
+                <span className="text-muted-foreground font-bold">{String(i + 1).padStart(2, "0")}</span>
+                <span className="min-w-0">{title}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Script Sections */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-1">
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card space-y-1">
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <Film className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("full_script")}</h3>
-          <span className="ms-auto text-xs text-muted-foreground">~{result.estimatedWordCount} {t("words")}</span>
+          <h3 className="text-sm font-bold text-foreground">{t("full_script")}</h3>
+          <span className="ms-auto text-xs text-muted-foreground">{result.script.length} {t("scenes")}</span>
         </div>
         <div className="space-y-4">
           {result.script.map((s, i) => (
@@ -103,7 +117,7 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="border-s-2 border-primary/30 ps-4 space-y-1.5"
+              className="rounded-xl bg-muted/60 p-4 space-y-1.5"
             >
               <div className="flex flex-wrap items-center gap-2">
                 <Clock className="w-3 h-3 text-muted-foreground" />
@@ -127,16 +141,16 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       </div>
 
       {/* CTA */}
-      <div className="rounded-xl bg-primary text-primary-foreground p-6 shadow-card space-y-2">
-        <h3 className="text-sm font-semibold uppercase tracking-wider">{t("call_to_action")}</h3>
-        <p className="text-primary-foreground font-medium">{result.cta}</p>
+      <div className="rounded-2xl gradient-primary text-white p-6 shadow-glow space-y-2">
+        <h3 className="text-xs font-bold uppercase text-white/85">{t("call_to_action")}</h3>
+        <p className="text-white text-lg font-semibold leading-snug">{result.cta}</p>
       </div>
 
       {/* SEO Tags */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-3">
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card space-y-3">
         <div className="flex items-center gap-2">
           <Hash className="w-4 h-4 text-secondary" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("seo_tags")}</h3>
+          <h3 className="text-sm font-bold text-foreground">{t("seo_tags")}</h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {result.seoTags.map((tag, i) => {
@@ -151,10 +165,10 @@ export default function ScriptOutput({ result, input }: { result: ScriptResult; 
       </div>
 
       {/* Retention Notes */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-card space-y-2">
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card space-y-2">
         <div className="flex items-center gap-2">
-          <Lightbulb className="w-4 h-4 text-accent-foreground" />
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">{t("retention_strategy")}</h3>
+          <Lightbulb className="w-4 h-4 text-secondary" />
+          <h3 className="text-sm font-bold text-foreground">{t("retention_strategy")}</h3>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">{result.retentionStrategyNotes}</p>
       </div>
