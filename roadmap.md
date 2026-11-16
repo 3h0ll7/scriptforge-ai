@@ -10,5 +10,5 @@
 - [x] Verify anonymous generation and preview health.
 
 ## Groq generation
-- [ ] Switch both generation tools exclusively to Groq using the saved secret.
-- [ ] Deploy and verify real script and detailed prompt results with no donation section.
+- [x] Switch both generation tools exclusively to Groq using the saved secret.
+- [x] Deploy and verify real script and detailed prompt results with no donation section.
