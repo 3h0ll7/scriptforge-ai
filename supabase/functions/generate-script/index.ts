@@ -92,7 +92,7 @@ Return the result using the generate_script tool.`;
                       },
                       dialogue: { type: "string", description: "What to say" },
                       visualDirection: { type: "string", description: "What the viewer sees" },
-                      bRollSuggestion: { type: "string", description: "B-roll idea or null" },
+                      bRollSuggestion: { type: ["string", "null"], description: "B-roll idea or null" },
                     },
                     required: ["timestamp", "section", "dialogue", "visualDirection"],
                   },
