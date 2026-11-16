@@ -1,8 +1,7 @@
-// Chat-completion client with provider and model fallback.
-// Order: Groq (free tier, open-weight models) → OpenRouter (free open models)
-// → Lovable AI Gateway. A provider is skipped when its key is missing; the next
-// model or provider is tried on retired models, out-of-credits, rate limits or
-// server errors. Every model can be overridden with an env var.
+// Server-only Groq client shared by script and video-prompt generation.
+// Never fall back to a credit-funded provider or silently discard image input.
+
+declare const Deno: { env: { get(name: string): string | undefined } };
 
 type Message = { role: "system" | "user" | "assistant"; content: unknown };
 
@@ -28,8 +27,6 @@ export type ChatResult =
   | { ok: true; provider: string; model: string; data: any }
   | { ok: false; status: number; error: string };
 
-/** Errors worth moving to the next provider for. */
-const NEXT_PROVIDER = new Set([401, 402, 403, 408, 429, 500, 502, 503, 504]);
 /** Errors that usually mean this model (or its input) was rejected; try the provider's next model. */
 const NEXT_MODEL = new Set([400, 404, 413, 422]);
 
@@ -46,26 +43,6 @@ function providers(): Provider[] {
       key: groq,
       textModels: list(Deno.env.get("GROQ_MODELS"), ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]),
       visionModels: list(Deno.env.get("GROQ_VISION_MODELS"), ["meta-llama/llama-4-scout-17b-16e-instruct"]),
-    });
-  }
-  const openrouter = Deno.env.get("OPENROUTER_API_KEY");
-  if (openrouter) {
-    result.push({
-      name: "openrouter",
-      url: "https://openrouter.ai/api/v1/chat/completions",
-      key: openrouter,
-      textModels: list(Deno.env.get("OPENROUTER_MODELS"), ["openai/gpt-oss-120b:free", "deepseek/deepseek-chat-v3.1:free"]),
-      visionModels: list(Deno.env.get("OPENROUTER_VISION_MODELS"), ["google/gemma-3-27b-it:free"]),
-    });
-  }
-  const lovable = Deno.env.get("LOVABLE_API_KEY");
-  if (lovable) {
-    result.push({
-      name: "lovable",
-      url: "https://ai.gateway.lovable.dev/v1/chat/completions",
-      key: lovable,
-      textModels: ["google/gemini-3-flash-preview"],
-      visionModels: ["google/gemini-3-flash-preview"],
     });
   }
   return result;
@@ -90,24 +67,24 @@ function post(provider: Provider, model: string, messages: Message[], req: ChatR
       ...(req.tools ? { tools: req.tools, tool_choice: req.tool_choice } : {}),
       ...(req.temperature !== undefined ? { temperature: req.temperature } : {}),
     }),
+    signal: AbortSignal.timeout(90_000),
   });
 }
 
 export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
   const all = providers();
   if (all.length === 0) {
-    return { ok: false, status: 500, error: "AI is not configured. Set GROQ_API_KEY (free) or another provider key." };
+    return { ok: false, status: 503, error: "Groq is not configured. Please configure GROQ_API_KEY." };
   }
 
   const textOnly = withoutImages(req.messages);
   let lastStatus = 503;
+  let lastError = "Groq is temporarily unavailable. Please try again later.";
 
   for (const provider of all) {
-    // With an image: vision models first, then text models without the image.
-    const attempts = [
-      ...(req.hasImage ? provider.visionModels.map((model) => ({ model, messages: req.messages })) : []),
-      ...provider.textModels.map((model) => ({ model, messages: textOnly })),
-    ];
+    const attempts = req.hasImage
+      ? provider.visionModels.map((model) => ({ model, messages: req.messages }))
+      : provider.textModels.map((model) => ({ model, messages: textOnly }));
 
     for (const attempt of attempts) {
       try {
@@ -115,9 +92,14 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
         if (res.ok) return { ok: true, provider: provider.name, model: attempt.model, data: await res.json() };
 
         lastStatus = res.status;
-        console.error(`${provider.name}/${attempt.model} error ${res.status}: ${(await res.text()).slice(0, 500)}`);
+        const errorBody = await res.text();
+        console.error(`${provider.name}/${attempt.model} error ${res.status}: ${errorBody.slice(0, 500)}`);
+        try {
+          lastError = JSON.parse(errorBody)?.error?.message || lastError;
+        } catch {
+          lastError = "Groq could not complete this request. Please try again.";
+        }
         if (NEXT_MODEL.has(res.status)) continue;
-        if (NEXT_PROVIDER.has(res.status)) break;
         break;
       } catch (e) {
         lastStatus = 502;
@@ -128,9 +110,9 @@ export async function chatCompletion(req: ChatRequest): Promise<ChatResult> {
   }
 
   if (lastStatus === 429) {
-    return { ok: false, status: 429, error: "The AI is busy right now. Please try again in a minute." };
+    return { ok: false, status: 429, error: "Groq is busy or its usage limit was reached. Please try again in a minute." };
   }
-  return { ok: false, status: 503, error: "The AI service is temporarily unavailable. Please try again later." };
+  return { ok: false, status: lastStatus, error: lastError };
 }
 
 /** Reads structured output from a forced tool call, falling back to JSON in the message text. */

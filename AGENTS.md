@@ -4,3 +4,4 @@
 - Structure the primary page as a sticky top navigation, hero, idea gallery, and workspace, styled with the Dribbble-inspired semantic design tokens in `index.css`; this keeps navigation stable while supporting RTL, dark mode, and mobile layouts.
 - Keep pre-generation starters (hero topic, idea gallery) feeding `ScriptForm` through its `preset` prop instead of duplicating form state.
 - Keep the public workspace independent of the auth provider and user-specific history writes; this prevents account state from blocking anonymous generation while preserving existing private records.
+- Route script and video-prompt completions exclusively through the shared server-side Groq client; this avoids dependence on Lovable AI credits and keeps credentials out of the browser.

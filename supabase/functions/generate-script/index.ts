@@ -1,11 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { chatCompletion, readToolArguments } from "../_shared/ai.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -97,7 +92,7 @@ Return the result using the generate_script tool.`;
                       },
                       dialogue: { type: "string", description: "What to say" },
                       visualDirection: { type: "string", description: "What the viewer sees" },
-                      bRollSuggestion: { type: "string", description: "B-roll idea or null" },
+                      bRollSuggestion: { type: ["string", "null"], description: "B-roll idea or null" },
                     },
                     required: ["timestamp", "section", "dialogue", "visualDirection"],
                   },
