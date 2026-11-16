@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { chatCompletion } from "../../supabase/functions/_shared/ai";
 

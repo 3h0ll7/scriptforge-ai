@@ -1,6 +1,8 @@
 // Server-only Groq client shared by script and video-prompt generation.
 // Never fall back to a credit-funded provider or silently discard image input.
 
+declare const Deno: { env: { get(name: string): string | undefined } };
+
 type Message = { role: "system" | "user" | "assistant"; content: unknown };
 
 interface Provider {
