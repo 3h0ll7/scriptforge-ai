@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { chatCompletion } from "../../supabase/functions/_shared/ai";
 
@@ -6,6 +5,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 function configureGroq(key = "test-key") {
   vi.stubGlobal("Deno", { env: { get: (name: string) => name === "GROQ_API_KEY" ? key : name === "LOVABLE_API_KEY" ? "unused-key" : undefined } });
+  vi.stubGlobal("AbortSignal", { timeout: () => new AbortController().signal });
 }
 
 describe("Groq generation", () => {
