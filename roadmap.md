@@ -8,3 +8,7 @@
 - [x] Remove login UI and authentication gate without deleting existing user data.
 - [x] Make script and prompt generation public without a five-attempt quota.
 - [x] Verify anonymous generation and preview health.
+
+## Groq generation
+- [ ] Switch both generation tools exclusively to Groq using the saved secret.
+- [ ] Deploy and verify real script and detailed prompt results with no donation section.
